@@ -1,0 +1,5 @@
+pip
+setuptools
+wheel
+bumpversion
+-r requirements.txt
