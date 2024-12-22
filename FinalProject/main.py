@@ -10,8 +10,12 @@ from windows.main_window import MainWindow
 
 def main():
     """
-    Initializes and runs the application. Includes error handling for initialization
-    and window setup processes.
+    Initializes and runs the Qt application. Handles the creation and display of the main window,
+    and includes error handling for the application initialization and window setup processes.
+
+    Raises:
+        Exception: Any exception encountered during application initialization or window setup is
+                   caught and logged, after which the program exits with an error code.
     """
     try:
         # Try to create and run the application

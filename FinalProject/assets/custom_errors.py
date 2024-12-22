@@ -120,7 +120,7 @@ class UserNotFoundError(Exception):
     def __str__(self):
         # Return a string representation that includes the message and the email.
         return (
-            f"UserNotFoundError: An error occurred while searching for a user.\n"
+            "UserNotFoundError: An error occurred while searching for a user.\n"
             f" - Suggested action: Verify the email address and ensure it is registered."
         )
 

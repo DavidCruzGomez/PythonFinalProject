@@ -21,6 +21,9 @@ def load_users_db() -> dict:
 
     Returns:
         dict: A dictionary with the loaded users, or an empty dictionary if loading fails.
+
+    Raises:
+        DatabaseError: If there is an issue reading or decoding the database file.
     """
     if not os.path.exists(DB_FILE):
         print("📁 [INFO] Database file not found. Returning an empty user database.")
@@ -50,6 +53,9 @@ def save_users_db(users_db: dict) -> None:
 
     Args:
         users_db (dict): The dictionary of users to save.
+
+    Raises:
+        DatabaseError: If there is an issue saving the database.
     """
     try:
         os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)  # Ensure directory exists
@@ -70,10 +76,18 @@ def add_user_to_db(username: str, email: str, password: str) -> None:
     """
     Add a new user to the database.
 
+    This function validates the email and checks whether the username and email are already taken.
+    If valid, it hashes the user's password and adds the new user to the database.
+    If any validation fails, an error is raised.
+
     Args:
         username (str): The username.
         email (str): The user's email address.
         password (str): The user's password (hashed before saving).
+
+    Raises:
+        ValidationError: If the email format is invalid or the username/email already exists.
+        DatabaseError: If there is an issue saving the database or interacting with it.
     """
     email = email.strip().lower()
 
@@ -127,6 +141,9 @@ def get_user_by_username(username: str) -> dict | None:
 
     Returns:
         dict | None: The user's data, or None if not found.
+
+    Raises:
+        DatabaseError: If there is an issue accessing the database.
     """
     try:
         users_db = load_users_db()
@@ -154,6 +171,9 @@ def get_user_by_email(email: str) -> dict | None:
 
     Returns:
         dict | None: The user's data, or None if not found.
+
+    Raises:
+        DatabaseError: If there is an issue accessing the database.
     """
     try:
         # Validate the email format using the regex

@@ -9,7 +9,33 @@ from FinalProject.styles.styles import create_title, create_input_field, create_
 
 
 class RegistrationWindow(QWidget):
+    """
+    User Registration Window.
+
+    This class handles the user registration UI, including real-time validation
+    of the username and password fields, and user registration in the database.
+
+    Attributes:
+        username_input (QLineEdit): Input field for the username.
+        email_input (QLineEdit): Input field for the email address.
+        password_input (QLineEdit): Input field for the password.
+        password_validator (PasswordValidator): Validator for the password.
+        username_validator (UsernameValidator): Validator for the username.
+        register_button (QPushButton): Button for user registration.
+        is_closing (bool): Flag to track if the window is closing.
+        is_registered (bool): Flag to track if the user has successfully registered.
+    """
     def __init__(self) -> None:
+        """
+        Initializes the user registration window.
+
+        Sets up the UI, including input fields, buttons, and validators for
+        the username and password. It also connects the text fields to their
+        respective validation functions.
+
+        Calls validation methods to provide real-time feedback as the user types
+        in the input fields.
+        """
         super().__init__()
         self.setWindowTitle("User Registration")
         self.setGeometry(100, 100, 400, 300)
@@ -64,7 +90,15 @@ class RegistrationWindow(QWidget):
 
     def closeEvent(self, event):
         """
-        Stop the timer and validation when the registration window is closed.
+        Handles the window close event.
+
+        Stops the validation timers when the registration window is closed,
+        ensuring that validation does not continue in the background. Also ensures
+        that no further validation occurs if the window is closing or if the
+        registration has already been completed.
+
+        Args:
+            event (QCloseEvent): The close event of the window.
         """
         self.is_closing = True  # Mark that the window is closing
         if not self.is_registered:
@@ -76,9 +110,17 @@ class RegistrationWindow(QWidget):
     def validate_password(self) -> None:
         """
         Validates the password in real-time as the user types.
-        Shows individual password requirements with visual feedback.
+
+        Displays password requirements and validates that the password meets
+        security criteria. If the password does not meet the requirements, it shows
+        the corresponding error labels.
+
+        It also restarts the timer to hide the error labels after a period of inactivity.
+
+        Only validates if the window is not closing and if the registration is not successful.
         """
-        if self.is_closing or  self.is_registered:  # Do not validate if the window is closing or the registration is successful
+        if self.is_closing or  self.is_registered:  # Do not validate if the window is closing or
+            # the registration is successful
             return
 
         password = self.password_input.text().strip()
@@ -94,9 +136,17 @@ class RegistrationWindow(QWidget):
     def validate_username(self) -> None:
         """
         Validates the username in real-time as the user types.
-        Provides feedback based on validity.
+
+        Displays username requirements and validates that the username meets
+        the necessary criteria. If the username is invalid, it shows the corresponding
+        error labels.
+
+        It also restarts the timer to hide the error labels after a period of inactivity.
+
+        Only validates if the window is not closing and if the registration is not successful.
         """
-        if self.is_closing or self.is_registered:  # Do not validate if the window is closing or the registration is successful
+        if self.is_closing or self.is_registered:  # Do not validate if the window is closing or
+            # the registration is successful
             return
 
         username = self.username_input.text().strip()
@@ -111,6 +161,17 @@ class RegistrationWindow(QWidget):
     def on_register(self) -> None:
         """
         Handles user registration, including password hashing.
+
+        Validates the input fields (username, email, and password), and if all are valid,
+        attempts to register the user in the database. If registration is successful, it shows
+        a success message and closes the window.
+
+        If an error occurs during registration, an appropriate error message is shown.
+
+        It also clears the input fields and hides the validation labels after successful registration.
+
+        Raises:
+            ValueError: If user registration fails (e.g., due to database issues).
         """
         username = self.username_input.text().strip()
         email = self.email_input.text().strip()
@@ -137,7 +198,7 @@ class RegistrationWindow(QWidget):
         # Attempt to register the user in the database
         try:
             add_user_to_db(username, email, password)
-            show_message( self,"Success", f"User {username} registered successfully!")
+            show_message(self, "Success", f"User {username} registered successfully!")
 
             # Mark as successfully registered
             self.is_registered = True

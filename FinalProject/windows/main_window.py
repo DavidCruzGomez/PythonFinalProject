@@ -5,7 +5,9 @@ from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QSpacer
 # Local project-specific imports
 from FinalProject.assets.users_db import get_user_by_username, check_password_hash
 from FinalProject.assets.utils import show_message
-from FinalProject.styles.styles import STYLES, create_title, create_input_field, create_button, style_feedback_label
+from FinalProject.styles.styles import (
+    STYLES, create_title, create_input_field, create_button, style_feedback_label
+)
 from .dashboard_window import DashboardWindow
 from .recovery_window import RecoveryWindow
 from .registration_window import RegistrationWindow
@@ -13,23 +15,24 @@ from .registration_window import RegistrationWindow
 
 class MainWindow(QMainWindow):
     """
-    MainWindow class represents the primary window for the application.
+    Represents the main window for the login functionality of the application.
 
-    It manages the layout, widgets, and user interactions for login functionality,
-    including displaying messages, opening other windows (registration, password recovery),
-    and handling the login logic.
+    This window allows users to log in, sign up, or recover their password. It includes:
+    - Input fields for username/email and password
+    - Buttons for login and registration
+    - A feedback label for displaying success/error messages
+    - Links to open registration and password recovery windows
     """
     def __init__(self) -> None:
         """
-        Initializes the main window by setting up the layout, creating widgets
-        (input fields, buttons, labels), and managing window properties.
+        Initializes the main window with required widgets, layout, and event handlers.
 
-        The window contains:
-        - A title
-        - Username/email and password input fields
+        This method sets up the user interface elements like:
+        - Title label
+        - Input fields for username/email and password
         - Login and sign-up buttons
-        - A feedback label for showing success or error messages
-        - A link for password recovery
+        - A feedback label for showing status messages
+        - A password recovery link
         """
         super().__init__()
 
@@ -48,7 +51,9 @@ class MainWindow(QMainWindow):
         layout.setSpacing(20) # Add space between widgets for better UI clarity
 
         # Add a spacer item for vertical spacing at the top
-        layout.addSpacerItem(QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        layout.addSpacerItem(
+            QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
 
         # Create and add the title label using the 'create_title' helper function
         self.title_label = create_title("Impulse Buying Factors on TikTok Shop")
@@ -81,7 +86,9 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.recover_password_label)
 
         # Add another spacer item for vertical spacing at the bottom
-        layout.addSpacerItem(QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        layout.addSpacerItem(
+            QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        )
 
         # Create the central widget, set its layout, and set it as the central widget for the main window
         central_widget = QWidget()
@@ -94,18 +101,25 @@ class MainWindow(QMainWindow):
 
     def on_login(self) -> None:
         """
-        Handles the login process. Verifies user credentials and provides feedback.
-        If successful, opens the dashboard window.
+        Handles the login process by verifying the user's credentials and providing feedback.
+
+        If the credentials are valid, it opens the dashboard window. If there is any issue,
+        it displays the appropriate error message.
+
+        Raises:
+            WidgetError: If there is an error retrieving user data or verifying credentials.
         """
         try:
             # Get user inputs (username/email and password)
             username = self.username_input.text()
             password = self.password_input.text()
 
-            print(f"🔑 [INFO] Attempting to log in with Username/Email: '{username}' and Password: '[PROTECTED]'")
+            print(f"🔑 [INFO] Attempting to log in with Username/Email: '{username}' "
+                  f"and Password: '[PROTECTED]'")
 
             if not self.are_credentials_valid(username, password):
-                print("❌ [ERROR] Invalid credentials provided. Username and password cannot be empty.")
+                print("❌ [ERROR] Invalid credentials provided. Username and "
+                      "password cannot be empty.")
                 return
 
             # Try to retrieve the user by their username/email
@@ -113,8 +127,11 @@ class MainWindow(QMainWindow):
                 user = get_user_by_username(username)
             except Exception as e:
                 print(f"❌ [ERROR] Failed to fetch user data: {e}")
-                style_feedback_label(self.feedback_label,
-                                     "An error occurred while retrieving user data. Please try again.", "error")
+                style_feedback_label(
+                    self.feedback_label,
+                    "An error occurred while retrieving user data. Please try again.",
+                    "error"
+                )
                 return
 
             # Print the result of the user retrieval to check the structure
@@ -128,11 +145,22 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"❌ [ERROR] An unexpected error occurred during login: {e}")
-            style_feedback_label(self.feedback_label, "An unexpected error occurred. Please try again later.", "error")
+            style_feedback_label(
+                self.feedback_label,
+                "An unexpected error occurred. Please try again later.",
+                "error"
+            )
 
     def are_credentials_valid(self, username: str, password: str) -> bool:
         """
-        Validates the username and password inputs.
+        Validates the username and password input fields.
+
+        Args:
+            username (str): The username or email entered by the user.
+            password (str): The password entered by the user.
+
+        Returns:
+            bool: True if both fields are valid (non-empty), False otherwise.
         """
         if not username:
             style_feedback_label(self.feedback_label, "Username cannot be empty.", "error")
@@ -150,6 +178,9 @@ class MainWindow(QMainWindow):
         - Displays a success message.
         - Opens the dashboard window.
         - Closes the login window.
+
+        Raises:
+            WidgetError: If there is an issue opening the dashboard window.
         """
         show_message(self, "Success", "Login successful!")
         print("✅ [SUCCESS] 🎉 Login successful. Opening the dashboard window.")
@@ -161,11 +192,17 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"❌ [ERROR] Failed to open dashboard window: {e}")
-            style_feedback_label(self.feedback_label, "Failed to open dashboard window. Please try again later.",
-                                 "error")
+            style_feedback_label(
+                self.feedback_label,
+                "Failed to open dashboard window. Please try again later.",
+                "error"
+            )
     def handle_login_error(self, user) -> None:
         """
-        Handles login errors, providing appropriate feedback to the user.
+        Handles login errors, providing feedback based on whether the user was found or not.
+
+        Args:
+            user (dict or None): The user data retrieved from the database, or None if not found.
         """
         if not user:
             style_feedback_label(self.feedback_label, "User not found. Please try again.", "error")
@@ -175,7 +212,10 @@ class MainWindow(QMainWindow):
 
     def open_registration_window(self) -> None:
         """
-        Opens the registration window allowing users to create a new account.
+        Opens the registration window for users to create a new account.
+
+        Raises:
+            WidgetError: If there is an issue opening the registration window.
         """
         try:
             print("🔑 [INFO] Opening user registration window.")
@@ -184,12 +224,18 @@ class MainWindow(QMainWindow):
             self.registration_window.show() # Show the registration window
         except Exception as e:
             print(f"❌ [ERROR] Failed to open registration window: {e}")
-            style_feedback_label(self.feedback_label, "Failed to open registration window. Please try again later.",
-                                 "error")
+            style_feedback_label(
+                self.feedback_label,
+                "Failed to open registration window. Please try again later.",
+                "error"
+            )
 
     def open_recovery_window(self) -> None:
         """
-        Opens the password recovery window for users who forgot their password.
+        Opens the password recovery window for users who have forgotten their password.
+
+        Raises:
+            WidgetError: If there is an issue opening the recovery window.
         """
         try:
             print("🔑 [INFO] Opening user recovery window.")
@@ -198,5 +244,8 @@ class MainWindow(QMainWindow):
             self.recovery_window.show()
         except Exception as e:
             print(f"❌ [ERROR] Failed to open recovery window: {e}")
-            style_feedback_label(self.feedback_label, "Failed to open recovery window. Please try again later.",
-                                 "error")
+            style_feedback_label(
+                self.feedback_label,
+                "Failed to open recovery window. Please try again later.",
+                "error"
+            )

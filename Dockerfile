@@ -1,5 +1,5 @@
 # Usa una imagen base de Python
-FROM python:3.12
+FROM python:3.10
 
 # Autor del proyecto
 LABEL authors="David Cruz Gómez"

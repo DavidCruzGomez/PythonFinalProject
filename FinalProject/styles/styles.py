@@ -71,13 +71,16 @@ DEFAULT_BUTTON_HEIGHT = 50
 
 def create_title(title_text: str) -> QLabel:
     """
-    Creates a QLabel to display the title with the defined style.
+    Creates and returns a QLabel to display the title with the defined style.
 
     Args:
-        title_text (str): The title text.
+        title_text (str): The text to display on the title label.
 
     Returns:
-        QLabel: A QLabel with the text and applied style.
+        QLabel: A QLabel widget with the title and applied style.
+
+    Raises:
+        WidgetError: If there is an issue creating the label.
     """
     try:
         title = QLabel(title_text)
@@ -97,16 +100,19 @@ def create_title(title_text: str) -> QLabel:
 def create_input_field(placeholder: str, is_password: bool = False,
                        width: int = DEFAULT_INPUT_WIDTH, height: int = DEFAULT_INPUT_HEIGHT) -> QLineEdit:
     """
-    Creates a styled text input field.
+    Creates and returns a styled text input field.
 
     Args:
-        placeholder (str): The placeholder text.
-        is_password (bool): If True, hides the text for passwords.
+        placeholder (str): The placeholder text to display in the input field.
+        is_password (bool): If True, the text will be hidden (for password input).
         width (int): The width of the input field.
         height (int): The height of the input field.
 
     Returns:
-        QLineEdit: A styled text input field.
+        QLineEdit: A QLineEdit widget with the specified style.
+
+    Raises:
+        WidgetError: If there is an issue creating the input field.
     """
     try:
         input_field = QLineEdit()
@@ -129,16 +135,19 @@ def create_input_field(placeholder: str, is_password: bool = False,
 def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUTTON_WIDTH,
                   height: int = DEFAULT_BUTTON_HEIGHT) -> QPushButton:
     """
-    Creates a button with custom text, style, and size.
+    Creates and returns a QPushButton with custom text, style, and size.
 
     Args:
-        button_text (str): The text of the button.
-        callback (callable): The function that will be called when clicked.
+        button_text (str): The text to display on the button.
+        callback (callable): The function to be executed when the button is clicked.
         width (int): The width of the button.
         height (int): The height of the button.
 
     Returns:
-        QPushButton: A styled button.
+        QPushButton: A QPushButton widget with the specified text and style.
+
+    Raises:
+        WidgetError: If there is an issue creating the button.
     """
     try:
         button = QPushButton(button_text)
@@ -148,10 +157,6 @@ def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUT
         button.clicked.connect(callback)
         return button
 
-    except InputValidationError as e:
-        print(f"❌ [ERROR] {e.message}")
-        raise
-
     except Exception as e:
         print(f"❌ [ERROR] Failed to create button with text '{button_text}': {e}")
         raise WidgetError(f"Failed to create button with text '{button_text}': {e}")
@@ -159,12 +164,15 @@ def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUT
 
 def style_feedback_label(label: QLabel, message: str, message_type: str = "info") -> None:
     """
-    Updates and styles the feedback label with the corresponding message and style.
+    Updates and styles the feedback label with the specified message and style.
 
     Args:
-        label (QLabel): The feedback label to update.
+        label (QLabel): The label to update with the message.
         message (str): The message to display in the label.
         message_type (str): The type of message ("success", "error", or "info").
+
+    Raises:
+        InputValidationError: If the message type is invalid.
     """
     try:
         if message_type not in STYLES["feedback"]:

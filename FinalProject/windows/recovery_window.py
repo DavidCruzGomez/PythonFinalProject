@@ -14,7 +14,9 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
 from FinalProject.styles.styles import STYLES
 from FinalProject.assets.utils import show_message
 from FinalProject.assets.regex import email_regex
-from FinalProject.assets.custom_errors import DatabaseError, EmailConfigError, EmailSendingError, UserNotFoundError
+from FinalProject.assets.custom_errors import (
+    DatabaseError, EmailConfigError, EmailSendingError, UserNotFoundError
+)
 
 
 # Path to the user database and email configuration file
@@ -27,7 +29,11 @@ def load_config() -> dict:
     Loads email configuration settings from a JSON file.
 
     Returns:
-        dict: A dictionary containing the email configuration settings.
+        dict: A dictionary containing the email configuration settings, including
+              `sender_email` and `sender_password`.
+
+    Raises:
+        EmailConfigError: If the configuration file is missing, invalid, or incomplete.
     """
     if os.path.exists(EMAIL_CONFIG_FILE):
         try:
@@ -41,7 +47,7 @@ def load_config() -> dict:
                 if not sender_email or not sender_password:
                     raise EmailConfigError("Missing email or password in the configuration file.")
 
-                print(f"ℹ️ [INFO] Email config file loaded successfully.")
+                print("ℹ️ [INFO] Email config file loaded successfully.")
                 return config  # Return the config if both fields are present
 
         except json.JSONDecodeError as e:
@@ -58,20 +64,34 @@ def load_config() -> dict:
 
 class EmailSender:
     """
-    Class responsible for sending password recovery emails.
-    It handles creating and sending an email with a recovery link or password.
+    A class responsible for sending password recovery emails.
+
+    This class manages the creation and sending of emails with password recovery information,
+    including handling the connection to the SMTP server and email formatting.
+
+    Attributes:
+        smtp_server (str): The address of the SMTP server.
+        smtp_port (int): The port used by the SMTP server.
+        sender_email (str): The email address used to send recovery emails.
+        sender_password (str): The password associated with the sender's email address.
     """
-    def __init__(self, smtp_server: str, smtp_port: int, sender_email: str, sender_password: str) -> None:
+    def __init__(
+            self, smtp_server: str, smtp_port: int,
+            sender_email: str, sender_password: str
+    ) -> None:
         """
-        Initialize the email sender with necessary SMTP details.
+        Initializes the EmailSender instance with necessary SMTP details.
 
         Args:
             smtp_server (str): The SMTP server address.
             smtp_port (int): The SMTP server port.
-            sender_email (str): The email address used to send the emails.
-            sender_password (str): The password for the sender's email.
+            sender_email (str): The email address to send recovery emails from.
+            sender_password (str): The password of the sender's email address.
         """
-        print(f"🔄 [INFO] Initializing EmailSender with SMTP server {smtp_server} and port {smtp_port}.")
+        print(
+            f"🔄 [INFO] Initializing EmailSender with SMTP server {smtp_server} "
+            f"and port {smtp_port}."
+        )
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
         self.sender_email = sender_email
@@ -84,6 +104,9 @@ class EmailSender:
         Args:
             recipient_email (str): The email address of the user requesting password recovery.
             username (str): The username of the user requesting recovery.
+
+        Raises:
+            EmailSendingError: If an error occurs while sending the email.
         """
         # Email subject and body content
         subject = "Password Recovery"
@@ -98,7 +121,10 @@ class EmailSender:
         msg["Subject"] = subject
         msg.attach(MIMEText(body, "plain"))
 
-        print(f"⏳ [INFO] Preparing to send recovery email to {recipient_email} for the user '{username}'.")
+        print(
+            f"⏳ [INFO] Preparing to send recovery email to {recipient_email} "
+            f"for the user '{username}'."
+        )
 
         try:
             # Connect to the SMTP server and send the email
@@ -122,13 +148,22 @@ class EmailSender:
 
 class RecoveryWindow(QWidget):
     """
-    Window for password recovery via email.
+    A window for password recovery via email.
 
-    This class defines the user interface and functionality for recovering a user's password
-    through an email-based recovery process. It allows users to input their email, check if
-    the email exists, and send them their password if the email is valid.
+    This class defines the user interface and functionality for users to recover their passwords
+    by entering their email. It checks if the email is valid, finds the corresponding user, and sends
+    a recovery email with their password (hashed) to the provided email address.
+
+    Attributes:
+        email_sender (EmailSender): An instance of the EmailSender class for sending recovery emails.
     """
     def __init__(self) -> None:
+        """
+        Initializes the RecoveryWindow instance.
+
+        Sets up the UI elements, validates email configuration, and initializes the
+        EmailSender with SMTP details from the configuration file.
+        """
         super().__init__()
 
         # Set the window's title and initial geometry
@@ -164,18 +199,22 @@ class RecoveryWindow(QWidget):
             sender_password = config.get("sender_password")
 
             if not sender_email or not sender_password:
-                print(f"❌ [ERROR] Missing email or password in the configuration file.")
-                show_message(self, "Configuration Error", "Missing email or password in configuration file.")
+                print("❌ [ERROR] Missing email or password in the configuration file.")
+                show_message(
+                    self, "Configuration Error",
+                    "Missing email or password in configuration file."
+                )
                 raise EmailConfigError("Missing email or password in configuration file.")
 
             print("ℹ️ [INFO] Email configuration loaded successfully.")
 
             # Initialize the EmailSender with necessary SMTP details
-            self.email_sender = EmailSender(smtp_server="smtp.gmail.com",
-                                            smtp_port=587,
-                                            sender_email=sender_email,
-                                            sender_password=sender_password
-                                            )
+            self.email_sender = EmailSender(
+                smtp_server="smtp.gmail.com",
+                smtp_port=587,
+                sender_email=sender_email,
+                sender_password=sender_password
+            )
 
         except EmailConfigError as e:
             show_message(self, "Configuration Error", str(e))
@@ -184,11 +223,11 @@ class RecoveryWindow(QWidget):
 
     def recover_password(self) -> None:
         """
-        Trigger password recovery via email.
+        Triggers the password recovery process by sending an email.
 
-        This method checks whether the provided email is valid and corresponds to an existing user.
-        If so, it sends a password recovery email to that email address. If the email is not found,
-        it informs the user and clears the input field.
+        This method retrieves the email entered by the user, validates the email address,
+        checks if the user exists in the system, and if so, sends them a recovery email.
+        If the email is not found, the user is notified and the input field is cleared.
         """
         email = self.email_input.text() # Get the email entered by the user
 
@@ -214,16 +253,19 @@ class RecoveryWindow(QWidget):
     @staticmethod
     def find_user_by_email(email: str) -> str | None:
         """
-        Find a user by their email.
+        Finds a user by their email.
 
-        Searches through the users database to find a match for the provided email.
-        If a match is found, returns the username; otherwise, returns None.
+        Searches through the user database for the provided email address. If found,
+        returns the username associated with the email. Otherwise, returns None.
 
         Args:
-            email (str): The email to search for.
+            email (str): The email address to search for.
 
         Returns:
-            str or None: The username if found, else None.
+            str or None: The username if found, otherwise None.
+
+        Raises:
+            UserNotFoundError: If no user is found with the given email address.
         """
         email = email.strip().lower()
         users_db = RecoveryWindow.load_users_db() # Load the user database
@@ -235,18 +277,21 @@ class RecoveryWindow(QWidget):
         raise UserNotFoundError(email)
 
     @staticmethod
-    def validate_users_db(db: dict) -> bool:
+    def validate_users_db(users_db: dict) -> bool:
         """
         Validates the structure of the user's database.
 
         Args:
-            db (dict): The user's database.
+            users_db (dict): The user's database.
 
         Returns:
-            bool: True if the database is valid, False otherwise.
+            bool: `True` if the database is valid, `False` if it is not.
+
+        Raises:
+            DatabaseError: If the database structure is invalid or missing required fields.
         """
         print("⏳ [INFO] Validating the structure of the users database...")
-        for username, details in db.items():
+        for username, details in users_db.items():
             # Ensure 'email' and 'password_hash' are present for each user
             if "email" not in details or "password_hash" not in details:
                 raise DatabaseError(f"Missing fields for user '{username}': {details}")
@@ -265,6 +310,10 @@ class RecoveryWindow(QWidget):
 
         Returns:
             dict: A dictionary containing the users, or an empty dictionary if loading fails.
+
+        Raises:
+            DatabaseError: If the users database file cannot be found, is not readable, or is
+                            improperly formatted.
         """
         print("⏳ [INFO] Loading users database...")
         try:
@@ -296,5 +345,3 @@ class RecoveryWindow(QWidget):
             show_message(None, "Error", f"Unexpected error: {e}")
 
         return {}  # Return an empty dictionary if any error occurs
-
-

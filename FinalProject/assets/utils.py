@@ -17,6 +17,9 @@ def show_message(parent, title: str, message: str) -> None:
         parent: The parent widget (e.g., the main window).
         title (str): The title of the message.
         message (str): The message to be displayed in the message box.
+
+    Raises:
+        Exception: If an error occurs while displaying the message box.
     """
     try:
         msg_box = QMessageBox(parent)
@@ -31,8 +34,28 @@ class ValidatorBase:
     """
     Base class for validators (e.g., PasswordValidator, UsernameValidator).
     Handles shared functionality like label creation and visibility management.
+
+    Attributes:
+        labels (list[QLabel]): List of QLabel objects to display validation requirements.
+        timer (QTimer): Timer used to hide labels after a period of inactivity.
+        requirements (list[str]): List of requirement descriptions for validation.
+        validation_state (list[bool]): List to store the validation status of each requirement.
+
+    Methods:
+        create_labels(): Creates and returns requirement labels.
+        show_labels(): Displays all requirement labels.
+        hide_labels(): Hides all requirement labels and stops the timer.
+        validate_input(input_text, regex_list, validation_status): Validates the input based on regex rules.
     """
     def __init__(self, requirements: list[str], timer_interval=2000):
+        """
+        Initializes the validator with given requirements and timer interval.
+
+        Args:
+            requirements (list[str]): List of validation requirements.
+            timer_interval (int): Interval in milliseconds to hide labels after inactivity.
+                Defaults to 2000ms.
+        """
         self.labels = []
         self.timer = QTimer()
         self.timer.setInterval(timer_interval)  # Hide labels after inactivity
@@ -43,27 +66,36 @@ class ValidatorBase:
 
     def create_labels(self) -> list[QLabel]:
         """
-        Creates and returns requirement labels.
+        Creates and returns requirement labels for validation.
+
+        Returns:
+            list[QLabel]: List of QLabel objects created for the validation requirements.
+
+        Raises:
+            Exception: If there is an error creating the labels.
         """
-        try:
-            if not self.labels:
-                self.labels = [QLabel(text) for text in self.requirements]
+        if not self.labels:
+            try:
+                # Create labels for each requirement and set initial style
+                self.labels = [QLabel(req) for req in self.requirements]
                 for label in self.labels:
                     label.setStyleSheet("color: red;")
                     label.hide()  # Initially hide all labels
                 print(f"✅ [SUCCESS] Created {len(self.labels)} requirement labels.")
+            except Exception as e:
+                print(f"❌ [ERROR] Failed to create labels for requirements. Error: {e}")
+                return []
+        else:
+            print("⚠️ [WARNING] Labels already created. Skipping creation.")
 
-            else:
-                print("⚠️ [WARNING] Labels already created. Skipping creation.")
-            return self.labels
-
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to create labels for requirements. Error: {e}")
-            return []
+        return self.labels
 
     def show_labels(self) -> None:
         """
-        Shows all labels.
+        Displays all validation labels.
+
+        Raises:
+            Exception: If there is an error displaying the labels.
         """
         try:
             for label in self.labels:
@@ -73,7 +105,10 @@ class ValidatorBase:
 
     def hide_labels(self) -> None:
         """
-        Hides all labels and stops the timer.
+        Hides all validation labels and stops the timer.
+
+        Raises:
+            Exception: If there is an error hiding the labels or stopping the timer.
         """
         try:
             for label in self.labels:
@@ -83,33 +118,32 @@ class ValidatorBase:
             print(f"❌ [ERROR] Failed to hide labels. Error: {e}")
 
     @staticmethod
-    def validate_input(input_text: str, regex_list: list[tuple[str, QLabel]], validation_status: list[bool]) -> bool:
+    def validate_input(input_text: str, regex_list: list[tuple[str, QLabel]],
+                       validation_status: list[bool]) -> bool:
         """
         Validates the input using provided regex rules and updates label styles.
 
         Args:
             input_text (str): The input text to validate.
-            regex_list (list[tuple[str, QLabel]]): A list of tuples containing regex patterns and corresponding labels.
-            validation_status (list[bool]): The status of validation for each requirement.
+            regex_list (list[tuple[str, QLabel]]): A list of tuples containing regex patterns and
+                corresponding QLabel objects.
+            validation_status (list[bool]): A list of validation statuses, updated for each requirement.
 
         Returns:
-            bool: True if all requirements are met, otherwise False.
+            bool: True if all validation requirements are met, otherwise False.
+
+        Raises:
+            re.error: If there is a regular expression error.
+            Exception: If an unexpected error occurs during validation.
         """
         try:
             all_requirements_met = True
             for index, (regex, label) in enumerate(regex_list):
                 is_valid = bool(re.search(regex, input_text))
-
-                if is_valid and not validation_status[index]:
-                    label.setStyleSheet("color: green;")
-                    print(f"✅ [SUCCESS] Requirement met: {label.text()}")
-
-                elif not is_valid and validation_status[index]:
-                    label.setStyleSheet("color: red;")
-                    print(f"❌ [ERROR] Requirement not met: {label.text()}")
-
-                validation_status[index] = is_valid  # Update validation status for this requirement
-                all_requirements_met &= is_valid  # If any requirement is not met, set all_requirements_met to False
+                validation_status[index] = is_valid # Update the validation status for this requirement
+                label.setStyleSheet("color: green;" if is_valid else "color: red;")
+                all_requirements_met &= is_valid
+                print(f"{'✅ [SUCCESS]' if is_valid else '❌ [ERROR]'} Requirement: {label.text()}")
             return all_requirements_met
 
         except re.error as regex_error:
@@ -122,10 +156,19 @@ class ValidatorBase:
 
 class PasswordValidator(ValidatorBase):
     """
-    Specific validator for passwords, inherits from ValidatorBase.
-    Validates a password in real-time.
+    Validator for passwords, inheriting from ValidatorBase.
+    Validates password in real-time to ensure it meets specified requirements.
+
+    Methods:
+        validate_password(password: str): Validates the password using regex patterns and
+            updates label styles.
     """
     def __init__(self):
+        """
+        Initializes the password validator with predefined password requirements.
+
+        Inherits from ValidatorBase and sets up specific validation rules for passwords.
+        """
         super().__init__([
             "At least one uppercase letter (A-Z).",
             "At least one lowercase letter (a-z).",
@@ -139,7 +182,15 @@ class PasswordValidator(ValidatorBase):
     def validate_password(self, password: str) -> bool:
         """
         Validates the password and updates label styles in real-time.
-        Returns True if all requirements are met, otherwise False.
+
+        Args:
+            password (str): The password to validate.
+
+        Returns:
+            bool: True if all password requirements are met, otherwise False.
+
+        Raises:
+            Exception: If an error occurs during password validation.
         """
         try:
             if not self.validation_started:
@@ -162,10 +213,19 @@ class PasswordValidator(ValidatorBase):
 
 class UsernameValidator(ValidatorBase):
     """
-    Specific validator for usernames, inherits from ValidatorBase.
-    Validates a username in real-time.
+    Validator for usernames, inheriting from ValidatorBase.
+    Validates username in real-time to ensure it meets specified requirements.
+
+    Methods:
+        validate_username(username: str): Validates the username using regex patterns and
+            updates label styles.
     """
     def __init__(self):
+        """
+        Initializes the username validator with predefined username requirements.
+
+        Inherits from ValidatorBase and sets up specific validation rules for usernames.
+        """
         super().__init__([
             "Length between 3 and 18 characters.",
             "Only alphanumeric characters, dots, hyphens, and underscores.",
@@ -177,8 +237,16 @@ class UsernameValidator(ValidatorBase):
 
     def validate_username(self, username: str) -> bool:
         """
-        Validates the username using `username_regex` and updates label styles in real-time.
-        Returns True if all requirements are met, otherwise False.
+        Validates the username and updates label styles in real-time.
+
+        Args:
+            username (str): The username to validate.
+
+        Returns:
+            bool: True if all username requirements are met, otherwise False.
+
+        Raises:
+            Exception: If an error occurs during username validation.
         """
         try:
             if not self.validation_started:
