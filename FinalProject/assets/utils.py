@@ -6,7 +6,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMessageBox, QLabel
 
 # Local imports
-from FinalProject.assets.regex import password_regex, username_regex
+from FinalProject.assets.regex import PASSWORD_REGEX, USERNAME_REGEX
 
 
 def show_message(parent, title: str, message: str) -> None:
@@ -58,10 +58,10 @@ class ValidatorBase:
         """
         self.labels = []
         self.timer = QTimer()
-        self.timer.setInterval(timer_interval)  # Hide labels after inactivity
+        self.timer.setInterval(timer_interval) # Hide labels after inactivity
         self.timer.timeout.connect(self.hide_labels)
-        self.requirements = requirements  # List of requirement descriptions
-        self.validation_state = [False] * len(requirements)  # Store validation state for each requirement
+        self.requirements = requirements # List of requirement descriptions
+        self.validation_state = [False] * len(requirements) # Store validation state for each requirement
         print(f"🔄 [INFO] Validator initialized with {len(requirements)} requirements.")
 
     def create_labels(self) -> list[QLabel]:
@@ -127,7 +127,8 @@ class ValidatorBase:
             input_text (str): The input text to validate.
             regex_list (list[tuple[str, QLabel]]): A list of tuples containing regex patterns and
                 corresponding QLabel objects.
-            validation_status (list[bool]): A list of validation statuses, updated for each requirement.
+            validation_status (list[bool]): A list of validation statuses,
+                                            updated for each requirement.
 
         Returns:
             bool: True if all validation requirements are met, otherwise False.
@@ -140,10 +141,17 @@ class ValidatorBase:
             all_requirements_met = True
             for index, (regex, label) in enumerate(regex_list):
                 is_valid = bool(re.search(regex, input_text))
-                validation_status[index] = is_valid # Update the validation status for this requirement
-                label.setStyleSheet("color: green;" if is_valid else "color: red;")
-                all_requirements_met &= is_valid
-                print(f"{'✅ [SUCCESS]' if is_valid else '❌ [ERROR]'} Requirement: {label.text()}")
+
+                if is_valid and not validation_status[index]:
+                    label.setStyleSheet("color: green;")
+                    print(f"✅ [SUCCESS] Requirement met: {label.text()}")
+
+                elif not is_valid and validation_status[index]:
+                    label.setStyleSheet("color: red;")
+                    print(f"❌ [ERROR] Requirement not met: {label.text()}")
+
+                validation_status[index] = is_valid # Update validation status for this requirement
+                all_requirements_met &= is_valid # If any requirement is not met, set all_requirements_met to False
             return all_requirements_met
 
         except re.error as regex_error:
@@ -198,11 +206,11 @@ class PasswordValidator(ValidatorBase):
                 self.validation_started = True
 
             requirements = [
-                (password_regex['upper'], self.labels[0]),
-                (password_regex['lower'], self.labels[1]),
-                (password_regex['number'], self.labels[2]),
-                (password_regex['special'], self.labels[3]),
-                (password_regex['length'], self.labels[4]),
+                (PASSWORD_REGEX['upper'], self.labels[0]),
+                (PASSWORD_REGEX['lower'], self.labels[1]),
+                (PASSWORD_REGEX['number'], self.labels[2]),
+                (PASSWORD_REGEX['special'], self.labels[3]),
+                (PASSWORD_REGEX['length'], self.labels[4]),
             ]
             return self.validate_input(password, requirements, self.validation_state)
 
@@ -254,10 +262,10 @@ class UsernameValidator(ValidatorBase):
                 self.validation_started = True
 
             requirements = [
-                (username_regex['length'], self.labels[0]),         # Validate length
-                (username_regex['valid_chars'], self.labels[1]),    # Validate valid characters
-                (username_regex['start_alnum'], self.labels[2]),    # Validate start with alphanumeric
-                (username_regex['end_alnum'], self.labels[3]),      # Validate end with alphanumeric
+                (USERNAME_REGEX['length'], self.labels[0]),       # Validate length
+                (USERNAME_REGEX['valid_chars'], self.labels[1]),  # Validate valid characters
+                (USERNAME_REGEX['start_alnum'], self.labels[2]),  # Validate start with alphanumeric
+                (USERNAME_REGEX['end_alnum'], self.labels[3]),    # Validate end with alphanumeric
             ]
             return self.validate_input(username, requirements, self.validation_state)
 

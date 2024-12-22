@@ -13,14 +13,14 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
 # Local project-specific imports
 from FinalProject.styles.styles import STYLES
 from FinalProject.assets.utils import show_message
-from FinalProject.assets.regex import email_regex
+from FinalProject.assets.regex import EMAIL_REGEX
 from FinalProject.assets.custom_errors import (
     DatabaseError, EmailConfigError, EmailSendingError, UserNotFoundError
 )
 
 
 # Path to the user database and email configuration file
-DB_FILE = os.path.join(os.getcwd(),"assets", "users_db.json")
+DB_FILE = os.path.join(os.getcwd(), "assets", "users_db.json")
 EMAIL_CONFIG_FILE = os.path.join(os.getcwd(), "assets", "email_config.json")
 
 
@@ -151,8 +151,8 @@ class RecoveryWindow(QWidget):
     A window for password recovery via email.
 
     This class defines the user interface and functionality for users to recover their passwords
-    by entering their email. It checks if the email is valid, finds the corresponding user, and sends
-    a recovery email with their password (hashed) to the provided email address.
+    by entering their email. It checks if the email is valid, finds the corresponding user,
+    and sends a recovery email with their password (hashed) to the provided email address.
 
     Attributes:
         email_sender (EmailSender): An instance of the EmailSender class for sending recovery emails.
@@ -296,7 +296,7 @@ class RecoveryWindow(QWidget):
             if "email" not in details or "password_hash" not in details:
                 raise DatabaseError(f"Missing fields for user '{username}': {details}")
             # Validate the email format using regex
-            if not re.fullmatch(email_regex, details["email"]):
+            if not re.fullmatch(EMAIL_REGEX, details["email"]):
                 raise DatabaseError(f"Invalid email format for user '{username}': {details['email']}")
         print("✅ [SUCCESS] The users database structure is valid.")
         return True # Return True if all users are valid

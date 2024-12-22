@@ -7,7 +7,7 @@ import re
 import bcrypt
 
 # Local imports
-from FinalProject.assets.regex import email_regex
+from FinalProject.assets.regex import EMAIL_REGEX
 from FinalProject.assets.custom_errors import DatabaseError, ValidationError
 
 
@@ -58,9 +58,9 @@ def save_users_db(users_db: dict) -> None:
         DatabaseError: If there is an issue saving the database.
     """
     try:
-        os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)  # Ensure directory exists
+        os.makedirs(os.path.dirname(DB_FILE), exist_ok=True) # Ensure directory exists
         with open(DB_FILE, "w", encoding='utf-8') as file:
-            json.dump(users_db, file, indent=4, ensure_ascii=False)  # Save with 4 spaces indentation
+            json.dump(users_db, file, indent=4, ensure_ascii=False) # Save with 4 spaces indentation
         print("✅ [SUCCESS] Database saved successfully.")
 
     except (IOError, json.JSONDecodeError) as e:
@@ -92,7 +92,7 @@ def add_user_to_db(username: str, email: str, password: str) -> None:
     email = email.strip().lower()
 
     # Validate the email format using the regex
-    if not re.fullmatch(email_regex, email):
+    if not re.fullmatch(EMAIL_REGEX, email):
         print(f"❌ [ERROR] Invalid email format: '{email}'")
         raise ValueError(f"Invalid email format: {email}")
 
@@ -177,7 +177,7 @@ def get_user_by_email(email: str) -> dict | None:
     """
     try:
         # Validate the email format using the regex
-        if not re.fullmatch(email_regex, email):
+        if not re.fullmatch(EMAIL_REGEX, email):
             print(f"❌ [ERROR] Invalid email format: '{email}'")
             return None
 

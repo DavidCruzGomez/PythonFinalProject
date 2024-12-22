@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         self.recover_password_label = QLabel('<a href="#">Forgot your password?</a>')
         self.recover_password_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.recover_password_label.setStyleSheet(STYLES["password_recovery_link"])
-        self.recover_password_label.linkActivated.connect(self.open_recovery_window)  # Link click handler
+        self.recover_password_label.linkActivated.connect(self.open_recovery_window) # Link click handler
         layout.addWidget(self.recover_password_label)
 
         # Add another spacer item for vertical spacing at the bottom

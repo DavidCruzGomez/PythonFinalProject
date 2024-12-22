@@ -88,7 +88,7 @@ class RegistrationWindow(QWidget):
 
         print("📝 [INFO] Registration Window Initialized.")
 
-    def closeEvent(self, event):
+    def close_event(self, event):
         """
         Handles the window close event.
 
@@ -98,7 +98,7 @@ class RegistrationWindow(QWidget):
         registration has already been completed.
 
         Args:
-            event (QCloseEvent): The close event of the window.
+            event (QClose_event): The close event of the window.
         """
         self.is_closing = True  # Mark that the window is closing
         if not self.is_registered:

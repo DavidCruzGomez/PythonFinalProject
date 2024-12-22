@@ -3,8 +3,10 @@ class DatabaseError(Exception):
     Exception raised when there is an issue with the user database.
 
     Attributes:
-        message (str): Description of the database error. Default is "An error occurred with the database." (optional).
-        suggestion (str): Suggested action to resolve the error. Default is "Check database connectivity and logs." (optional).
+        message (str): Description of the database error.
+                        Default is "An error occurred with the database." (optional).
+        suggestion (str): Suggested action to resolve the error.
+                            Default is "Check database connectivity and logs." (optional).
     """
     def __init__(self, message: str = "An error occurred with the database.",
                  suggestion: str = "Check database connectivity and logs."):
@@ -25,8 +27,10 @@ class ValidationError(Exception):
     Attributes:
         field (str): The name of the field that failed validation.
         value (str): The invalid value provided.
-        message (str): Description of the validation error. Default is "Validation failed." (optional).
-        suggestion (str): Suggested action to resolve the error. Default is "Check the field value and format." (optional).
+        message (str): Description of the validation error.
+                       Default is "Validation failed." (optional).
+        suggestion (str): Suggested action to resolve the error.
+                          Default is "Check the field value and format." (optional).
     """
     def __init__(self, field: str, value: str, message: str = "Validation failed.",
                  suggestion: str = "Check the field value and format."):
@@ -49,7 +53,8 @@ class WidgetError(Exception):
     Base class for widget-related errors.
 
     Attributes:
-        message (str): Description of the widget error. Default is "An error occurred with the widget." (optional).
+        message (str): Description of the widget error.
+                       Default is "An error occurred with the widget." (optional).
     """
     def __init__(self, message: str = "An error occurred with the widget."):
         self.message = message
@@ -64,7 +69,8 @@ class InputValidationError(WidgetError):
 
     Attributes:
         input_value (any): The invalid input provided.
-        suggestion (str): Suggested action to resolve the error. Default is "Check the input value and format." (optional).
+        suggestion (str): Suggested action to resolve the error.
+                          Default is "Check the input value and format." (optional).
     """
     def __init__(self, input_value: any, message: str = "Invalid input provided in the widget.",
                  suggestion: str = "Check the input value and format."):
@@ -85,8 +91,10 @@ class EmailConfigError(Exception):
 
     Attributes:
         file_path (str): Path to the configuration file.
-        message (str): Description of the email configuration error. Default is "Error in the email configuration." (optional).
-        suggestion (str): Suggested action to resolve the error. Default is "Verify the configuration file and its format." (optional).
+        message (str): Description of the email configuration error.
+                       Default is "Error in the email configuration." (optional).
+        suggestion (str): Suggested action to resolve the error.
+                          Default is "Verify the configuration file and its format." (optional).
     """
     def __init__(self, file_path: str, message: str = "Error in the email configuration.",
                  suggestion: str = "Verify the configuration file and its format."):
@@ -108,9 +116,11 @@ class UserNotFoundError(Exception):
 
     Attributes:
         email (str): The email address that was not found.
-        suggestion (str): Suggested action to resolve the error. Default is "Verify the email address and ensure it is registered." (optional).
+        suggestion (str): Suggested action to resolve the error. Default is
+                          "Verify the email address and ensure it is registered." (optional).
     """
-    def __init__(self, email: str, suggestion: str = "Verify the email address and ensure it is registered."):
+    def __init__(self, email: str,
+                 suggestion: str = "Verify the email address and ensure it is registered."):
         # Construct the message directly in the initializer.
         self.email = email # Still keep the email for potential logging or further handling.
         self.suggestion = suggestion
@@ -121,7 +131,7 @@ class UserNotFoundError(Exception):
         # Return a string representation that includes the message and the email.
         return (
             "UserNotFoundError: An error occurred while searching for a user.\n"
-            f" - Suggested action: Verify the email address and ensure it is registered."
+            " - Suggested action: Verify the email address and ensure it is registered."
         )
 
 class EmailSendingError(Exception):
@@ -130,8 +140,10 @@ class EmailSendingError(Exception):
 
     Attributes:
         email (str): The recipient email address.
-        message (str): Description of the email sending error. Default is "Failed to send the email." (optional).
-        suggestion (str): Suggested action to resolve the error. Default is "Check the email address and server configuration." (optional).
+        message (str): Description of the email sending error.
+                       Default is "Failed to send the email." (optional).
+        suggestion (str): Suggested action to resolve the error.
+                          Default is "Check the email address and server configuration." (optional).
     """
     def __init__(self, email: str, message: str = "Failed to send the email.",
                  suggestion: str = "Check the email address and server configuration."):
