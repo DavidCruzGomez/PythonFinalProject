@@ -89,7 +89,7 @@ def create_title(title_text: str) -> QLabel:
         return title
 
     except InputValidationError as e:
-        print(f"❌ [ERROR] {e.message}")
+        print(f"❌ [ERROR] {e}")
         raise
 
     except Exception as e:
@@ -98,7 +98,8 @@ def create_title(title_text: str) -> QLabel:
 
 
 def create_input_field(placeholder: str, is_password: bool = False,
-                       width: int = DEFAULT_INPUT_WIDTH, height: int = DEFAULT_INPUT_HEIGHT) -> QLineEdit:
+                       width: int = DEFAULT_INPUT_WIDTH, height: int = DEFAULT_INPUT_HEIGHT
+                       ) -> QLineEdit:
     """
     Creates and returns a styled text input field.
 
@@ -124,7 +125,7 @@ def create_input_field(placeholder: str, is_password: bool = False,
         return input_field
 
     except InputValidationError as e:
-        print(f"❌ [ERROR] {e.message}")
+        print(f"❌ [ERROR] {e}")
         raise
 
     except Exception as e:
@@ -182,7 +183,7 @@ def style_feedback_label(label: QLabel, message: str, message_type: str = "info"
         label.setStyleSheet(STYLES["feedback"].get(message_type, STYLES["feedback"]["info"]))
 
     except InputValidationError as e:
-        print(f"❌ [ERROR] {e.message}")
+        print(f"❌ [ERROR] {e}")
         label.setText("Error: Invalid message type.")
         label.setStyleSheet(STYLES["feedback"]["error"])
 

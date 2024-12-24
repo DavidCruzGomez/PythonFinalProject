@@ -8,12 +8,37 @@ import bcrypt
 
 # Local imports
 from FinalProject.assets.regex import EMAIL_REGEX
-from FinalProject.assets.custom_errors import DatabaseError, ValidationError
+from FinalProject.assets.custom_errors import DatabaseError, ValidationError, UserNotFoundError
 
 
 # Path to the file simulating the user's database
 DB_FILE = os.path.join(os.getcwd(), "assets", "users_db.json")
 
+
+def validate_users_db(users_db: dict) -> bool:
+    """
+    Validates the structure of the user's database.
+
+    Args:
+        users_db (dict): The user's database.
+
+    Returns:
+        bool: `True` if the database is valid, `False` if it is not.
+
+    Raises:
+        DatabaseError: If the database structure is invalid or missing required fields.
+    """
+    print("⏳ [INFO] Validating the structure of the users database...")
+    for username, details in users_db.items():
+        # Ensure 'email' and 'password_hash' are present for each user
+        if "email" not in details or "password_hash" not in details:
+            raise DatabaseError(f"Missing fields for user '{username}': {details}")
+        # Validate the email format using regex
+        if not re.fullmatch(EMAIL_REGEX, details["email"]):
+            raise DatabaseError(f"Invalid email format for user '{username}': "
+                                f"{details['email']}")
+    print("✅ [SUCCESS] The users database structure is valid.")
+    return True  # Return True if all users are valid
 
 def load_users_db() -> dict:
     """
@@ -23,16 +48,27 @@ def load_users_db() -> dict:
         dict: A dictionary with the loaded users, or an empty dictionary if loading fails.
 
     Raises:
-        DatabaseError: If there is an issue reading or decoding the database file.
+        DatabaseError: If the users database file cannot be found, is not readable,
+                       cannot be decoded or is improperly formatted.
     """
+    print("⏳ [INFO] Loading users database...")
+    # Check if the database file exists
     if not os.path.exists(DB_FILE):
         print("📁 [INFO] Database file not found. Returning an empty user database.")
         return {}
 
     try:
         with open(DB_FILE, "r", encoding='utf-8') as file:
-            print("✅ [SUCCESS] Database loaded successfully.")
-            return json.load(file)
+            data = json.load(file)
+
+            # Validate the structure of the database
+            if not validate_users_db(data):
+                print("❌ [ERROR] Invalid user database structure.")
+                raise DatabaseError("Invalid user database structure.")
+            return data
+
+        print("✅ [SUCCESS] Database loaded successfully.")
+        return json.load(file)
 
     except json.JSONDecodeError as e:
         print(f"❌ [ERROR] Failed to decode JSON from the database: {e}")
@@ -167,13 +203,14 @@ def get_user_by_email(email: str) -> dict | None:
     Get the data of a user by their email.
 
     Args:
-        email (str): The email address.
+        email (str): The email address to search for.
 
     Returns:
         dict | None: The user's data, or None if not found.
 
     Raises:
         DatabaseError: If there is an issue accessing the database.
+        UserNotFoundError: If no user is found with the given email address.
     """
     try:
         # Validate the email format using the regex
@@ -182,13 +219,13 @@ def get_user_by_email(email: str) -> dict | None:
             return None
 
         users_db = load_users_db()
-        for user_data in users_db.values():
-            if user_data["email"] == email:
-                print(f"✅ [INFO] User with email '{email}' found.")
-                return user_data
+        for username, details in users_db.items():
+            if details.get("email").strip().lower() == email.strip().lower():
+                print(f"🔍 [INFO] User '{username}' found with email {email}.")
+                return details
 
         print(f"❌ [ERROR] No user found with email '{email}'.")
-        return None
+        raise UserNotFoundError(email)
 
 
     except DatabaseError as e:

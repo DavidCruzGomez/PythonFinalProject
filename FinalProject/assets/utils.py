@@ -36,16 +36,17 @@ class ValidatorBase:
     Handles shared functionality like label creation and visibility management.
 
     Attributes:
-        labels (list[QLabel]): List of QLabel objects to display validation requirements.
-        timer (QTimer): Timer used to hide labels after a period of inactivity.
-        requirements (list[str]): List of requirement descriptions for validation.
-        validation_state (list[bool]): List to store the validation status of each requirement.
+        _labels (list[QLabel]): List of QLabel objects to display validation requirements.
+        _timer (QTimer): Timer used to hide labels after a period of inactivity.
+        _requirements (list[str]): List of requirement descriptions for validation.
+        _validation_state (list[bool]): List to store the validation status of each requirement.
 
     Methods:
         create_labels(): Creates and returns requirement labels.
         show_labels(): Displays all requirement labels.
         hide_labels(): Hides all requirement labels and stops the timer.
-        validate_input(input_text, regex_list, validation_status): Validates the input based on regex rules.
+        validate_input(input_text, regex_list, validation_status): Validates the input based on
+                                                                   regex rules.
     """
     def __init__(self, requirements: list[str], timer_interval=2000):
         """
@@ -56,12 +57,12 @@ class ValidatorBase:
             timer_interval (int): Interval in milliseconds to hide labels after inactivity.
                 Defaults to 2000ms.
         """
-        self.labels = []
-        self.timer = QTimer()
-        self.timer.setInterval(timer_interval) # Hide labels after inactivity
-        self.timer.timeout.connect(self.hide_labels)
-        self.requirements = requirements # List of requirement descriptions
-        self.validation_state = [False] * len(requirements) # Store validation state for each requirement
+        self._labels = []
+        self._timer = QTimer()
+        self._timer.setInterval(timer_interval) # Hide labels after inactivity
+        self._timer.timeout.connect(self.hide_labels)
+        self._requirements = requirements # List of requirement descriptions
+        self._validation_state = [False] * len(requirements) # Store requirement´s validation
         print(f"🔄 [INFO] Validator initialized with {len(requirements)} requirements.")
 
     def create_labels(self) -> list[QLabel]:
@@ -74,21 +75,30 @@ class ValidatorBase:
         Raises:
             Exception: If there is an error creating the labels.
         """
-        if not self.labels:
+        if not self._labels:
             try:
                 # Create labels for each requirement and set initial style
-                self.labels = [QLabel(req) for req in self.requirements]
-                for label in self.labels:
+                self._labels = [QLabel(req) for req in self._requirements]
+                for label in self._labels:
                     label.setStyleSheet("color: red;")
                     label.hide()  # Initially hide all labels
-                print(f"✅ [SUCCESS] Created {len(self.labels)} requirement labels.")
+                print(f"✅ [SUCCESS] Created {len(self._labels)} requirement labels.")
             except Exception as e:
                 print(f"❌ [ERROR] Failed to create labels for requirements. Error: {e}")
                 return []
         else:
             print("⚠️ [WARNING] Labels already created. Skipping creation.")
 
-        return self.labels
+        return self._labels
+
+    def get_labels(self) -> list[QLabel]:
+        """
+        Getter to retrieve the validation labels.
+
+        Returns:
+            list[QLabel]: List of validation labels.
+        """
+        return self._labels
 
     def show_labels(self) -> None:
         """
@@ -98,7 +108,7 @@ class ValidatorBase:
             Exception: If there is an error displaying the labels.
         """
         try:
-            for label in self.labels:
+            for label in self._labels:
                 label.show()
         except Exception as e:
             print(f"❌ [ERROR] Failed to show labels. Error: {e}")
@@ -111,9 +121,9 @@ class ValidatorBase:
             Exception: If there is an error hiding the labels or stopping the timer.
         """
         try:
-            for label in self.labels:
+            for label in self._labels:
                 label.hide()
-            self.timer.stop()
+            self._timer.stop()
         except Exception as e:
             print(f"❌ [ERROR] Failed to hide labels. Error: {e}")
 
@@ -151,7 +161,8 @@ class ValidatorBase:
                     print(f"❌ [ERROR] Requirement not met: {label.text()}")
 
                 validation_status[index] = is_valid # Update validation status for this requirement
-                all_requirements_met &= is_valid # If any requirement is not met, set all_requirements_met to False
+                all_requirements_met &= is_valid # If any requirement is not met,
+                                                    # set all_requirements_met to False
             return all_requirements_met
 
         except re.error as regex_error:
@@ -160,6 +171,15 @@ class ValidatorBase:
         except Exception as e:
             print(f"❌ [ERROR] Unexpected error during input validation: {e}")
             return False
+
+    def get_timer(self) -> QTimer:
+        """
+        Getter for the timer.
+
+        Returns:
+            QTimer: The timer used for label hiding after inactivity.
+        """
+        return self._timer
 
 
 class PasswordValidator(ValidatorBase):
@@ -206,13 +226,13 @@ class PasswordValidator(ValidatorBase):
                 self.validation_started = True
 
             requirements = [
-                (PASSWORD_REGEX['upper'], self.labels[0]),
-                (PASSWORD_REGEX['lower'], self.labels[1]),
-                (PASSWORD_REGEX['number'], self.labels[2]),
-                (PASSWORD_REGEX['special'], self.labels[3]),
-                (PASSWORD_REGEX['length'], self.labels[4]),
+                (PASSWORD_REGEX['upper'], self.get_labels()[0]),
+                (PASSWORD_REGEX['lower'], self.get_labels()[1]),
+                (PASSWORD_REGEX['number'], self.get_labels()[2]),
+                (PASSWORD_REGEX['special'], self.get_labels()[3]),
+                (PASSWORD_REGEX['length'], self.get_labels()[4]),
             ]
-            return self.validate_input(password, requirements, self.validation_state)
+            return self.validate_input(password, requirements, self._validation_state)
 
         except Exception as e:
             print(f"❌ [ERROR] Unexpected error during password validation. Error: {e}")
@@ -240,7 +260,7 @@ class UsernameValidator(ValidatorBase):
             "Starts with alphanumeric.",
             "Ends with alphanumeric."
         ])
-        self.validation_started = False
+        self._validation_started = False
         print("🔄 [INFO] UsernameValidator initialized.")
 
     def validate_username(self, username: str) -> bool:
@@ -257,17 +277,17 @@ class UsernameValidator(ValidatorBase):
             Exception: If an error occurs during username validation.
         """
         try:
-            if not self.validation_started:
+            if not self._validation_started:
                 print("🔍 [INFO] Starting username validation.")
-                self.validation_started = True
+                self._validation_started = True
 
             requirements = [
-                (USERNAME_REGEX['length'], self.labels[0]),       # Validate length
-                (USERNAME_REGEX['valid_chars'], self.labels[1]),  # Validate valid characters
-                (USERNAME_REGEX['start_alnum'], self.labels[2]),  # Validate start with alphanumeric
-                (USERNAME_REGEX['end_alnum'], self.labels[3]),    # Validate end with alphanumeric
+                (USERNAME_REGEX['length'], self.get_labels()[0]),       # Validate length
+                (USERNAME_REGEX['valid_chars'], self.get_labels()[1]),  # Validate valid characters
+                (USERNAME_REGEX['start_alnum'], self.get_labels()[2]),  # Validate start with alphanumeric
+                (USERNAME_REGEX['end_alnum'], self.get_labels()[3]),    # Validate end with alphanumeric
             ]
-            return self.validate_input(username, requirements, self.validation_state)
+            return self.validate_input(username, requirements, self._validation_state)
 
         except Exception as e:
             print(f"❌ [ERROR] Unexpected error during username validation. Error: {e}")
