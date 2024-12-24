@@ -99,7 +99,7 @@ def create_title(title_text: str) -> QLabel:
 
 def create_input_field(placeholder: str, is_password: bool = False,
                        width: int = DEFAULT_INPUT_WIDTH, height: int = DEFAULT_INPUT_HEIGHT
-                       ) -> QLineEdit:
+                      ) -> QLineEdit:
     """
     Creates and returns a styled text input field.
 

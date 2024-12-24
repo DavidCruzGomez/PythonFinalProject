@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QSpacerItem, QSizePolicy
 
 # Local project-specific imports
-from FinalProject.assets.users_db import get_user_by_username,get_user_by_email, check_password_hash
+from FinalProject.assets.users_db import get_user_by_username, get_user_by_email, check_password_hash
 from FinalProject.assets.utils import show_message
 from FinalProject.styles.styles import (
     STYLES, create_title, create_input_field, create_button, style_feedback_label

@@ -162,7 +162,7 @@ class ValidatorBase:
 
                 validation_status[index] = is_valid # Update validation status for this requirement
                 all_requirements_met &= is_valid # If any requirement is not met,
-                                                    # set all_requirements_met to False
+                                                 # set all_requirements_met to False
             return all_requirements_met
 
         except re.error as regex_error:
