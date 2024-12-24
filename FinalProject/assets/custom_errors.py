@@ -8,8 +8,8 @@ class DatabaseError(Exception):
     """
     def __init__(self, message: str = "An error occurred with the database.",
                  suggestion: str = "Check database connectivity and logs."):
-        super().__init__(message)
         self._suggestion = suggestion
+        Exception.__init__(self, message)
 
     def __str__(self):
         return (
@@ -29,10 +29,10 @@ class ValidationError(Exception):
     """
     def __init__(self, field: str, value: str, message: str = "Validation failed.",
                  suggestion: str = "Check the field value and format."):
-        super().__init__(message)
         self._field = field
         self._value = value
         self._suggestion = suggestion
+        Exception.__init__(self, message)
 
     def __str__(self):
         return (
@@ -47,7 +47,7 @@ class WidgetError(Exception):
     Base class for widget-related errors.
     """
     def __init__(self, message: str = "An error occurred with the widget."):
-        super().__init__(message)
+        Exception.__init__(self, message)
 
     def __str__(self):
         return f"WidgetError: {super().__str__()}"
@@ -65,7 +65,7 @@ class InputValidationError(WidgetError):
                  suggestion: str = "Check the input value and format."):
         self._input_value = input_value
         self._suggestion = suggestion
-        super().__init__(message)
+        WidgetError.__init__(self, message)
 
     def __str__(self):
         return (
@@ -85,9 +85,9 @@ class EmailConfigError(Exception):
     """
     def __init__(self, file_path: str, message: str = "Error in the email configuration.",
                  suggestion: str = "Verify the configuration file and its format."):
-        super().__init__(message)
         self._file_path = file_path
         self._suggestion = suggestion
+        Exception.__init__(self, message)
 
     def __str__(self):
         return (
@@ -111,7 +111,7 @@ class UserNotFoundError(Exception):
         self._email = email # Still keep the email for potential logging or further handling.
         self._suggestion = suggestion
         message = f"User not found for email: {email}"
-        super().__init__(message) # Pass the message directly to the parent Exception class.
+        Exception.__init__(self, message)
 
     def __str__(self):
         # Return a string representation that includes the message and the email.
@@ -133,7 +133,7 @@ class EmailSendingError(Exception):
                  suggestion: str = "Check the email address and server configuration."):
         self._email = email
         self._suggestion = suggestion
-        super().__init__(message)
+        Exception.__init__(self, message)
 
     def __str__(self):
         return (
