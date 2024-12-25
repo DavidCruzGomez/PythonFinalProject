@@ -88,13 +88,13 @@ def create_title(title_text: str) -> QLabel:
         title.setStyleSheet(STYLES["title"])
         return title
 
-    except InputValidationError as e:
-        print(f"❌ [ERROR] {e}")
+    except InputValidationError as in_val_err:
+        print(f"❌ [ERROR] {in_val_err}")
         raise
 
-    except Exception as e:
-        print(f"❌ [ERROR] Failed to create title label: {e}")
-        raise WidgetError(f"Failed to create title label: {e}")
+    except Exception as gen_err:
+        print(f"❌ [ERROR] Failed to create title label: {gen_err}")
+        raise WidgetError(f"Failed to create title label: {gen_err}")
 
 
 def create_input_field(placeholder: str, is_password: bool = False,
@@ -124,13 +124,14 @@ def create_input_field(placeholder: str, is_password: bool = False,
         input_field.setFixedSize(width, height)
         return input_field
 
-    except InputValidationError as e:
-        print(f"❌ [ERROR] {e}")
+    except InputValidationError as in_val_err:
+        print(f"❌ [ERROR] {in_val_err}")
         raise
 
-    except Exception as e:
-        print(f"❌ [ERROR] Failed to create input field: {e}")
-        raise WidgetError(f"Failed to create input field with placeholder '{placeholder}': {e}")
+    except Exception as gen_err:
+        print(f"❌ [ERROR] Failed to create input field: {gen_err}")
+        raise WidgetError(f"Failed to create input field with placeholder "
+                          f"'{placeholder}': {gen_err}")
 
 
 def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUTTON_WIDTH,
@@ -158,9 +159,9 @@ def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUT
         button.clicked.connect(callback)
         return button
 
-    except Exception as e:
-        print(f"❌ [ERROR] Failed to create button with text '{button_text}': {e}")
-        raise WidgetError(f"Failed to create button with text '{button_text}': {e}")
+    except Exception as gen_err:
+        print(f"❌ [ERROR] Failed to create button with text '{button_text}': {gen_err}")
+        raise WidgetError(f"Failed to create button with text '{button_text}': {gen_err}")
 
 
 def style_feedback_label(label: QLabel, message: str, message_type: str = "info") -> None:
@@ -182,12 +183,12 @@ def style_feedback_label(label: QLabel, message: str, message_type: str = "info"
         label.setText(message)
         label.setStyleSheet(STYLES["feedback"].get(message_type, STYLES["feedback"]["info"]))
 
-    except InputValidationError as e:
-        print(f"❌ [ERROR] {e}")
+    except InputValidationError as in_val_err:
+        print(f"❌ [ERROR] {in_val_err}")
         label.setText("Error: Invalid message type.")
         label.setStyleSheet(STYLES["feedback"]["error"])
 
-    except Exception as e:
-        print(f"❌ [ERROR] An error occurred while styling feedback label: {e}")
+    except Exception as gen_err:
+        print(f"❌ [ERROR] An error occurred while styling feedback label: {gen_err}")
         label.setText("An unexpected error occurred.")
         label.setStyleSheet(STYLES["feedback"]["error"])

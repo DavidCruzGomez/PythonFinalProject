@@ -2,6 +2,7 @@
 import json
 import os
 import smtplib
+from smtplib import SMTPException
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -20,7 +21,7 @@ DB_FILE = os.path.join(os.getcwd(), "assets", "users_db.json")
 EMAIL_CONFIG_FILE = os.path.join(os.getcwd(), "assets", "email_config.json")
 
 
-def load_config() -> dict:
+def load_email_config() -> dict:
     """
     Loads email configuration settings from a JSON file.
 
@@ -46,10 +47,10 @@ def load_config() -> dict:
                 print("ℹ️ [INFO] Email config file loaded successfully.")
                 return config  # Return the config if both fields are present
 
-        except json.JSONDecodeError as e:
-            print(f"❌ [ERROR] Error decoding email config file: {e}")
-            show_message(None, "Configuration Error", f"Failed to decode email config: {e}")
-            raise EmailConfigError(f"Failed to decode email config: {e}")
+        except json.JSONDecodeError as json_err:
+            print(f"❌ [ERROR] Error decoding email config file: {json_err}")
+            show_message(None, "Configuration Error", f"Failed to decode email config: {json_err}")
+            raise EmailConfigError(f"Failed to decode email config: {json_err}")
 
     else:
         print(f"❌ [ERROR] Email config file not found at {EMAIL_CONFIG_FILE}")
@@ -115,9 +116,9 @@ class EmailSender:
             print("❌ [ERROR] Unable to connect to SMTP server.")
             raise EmailSendingError("Connection error: Could not connect to SMTP server.")
 
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to send email: {e}")
-            raise EmailSendingError(f"Failed to send the recovery email: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to send email: {gen_err}")
+            raise EmailSendingError(f"Failed to send the recovery email: {gen_err}")
 
     def send_recovery_email(self, recipient_email: str, username: str) -> None:
         """
@@ -147,9 +148,15 @@ class EmailSender:
             f"⏳ [INFO] Preparing to send recovery email to {recipient_email} "
             f"for the user '{username}'.")
 
-        # Call the private method to connect and send the email
-        self._connect_and_send_email(recipient_email, msg)
+        try:
+            # Call the private method to connect and send the email
+            self._connect_and_send_email(recipient_email, msg)
 
+        except SMTPException as smtp_err:
+                # Catch any errors related to email sending
+                print(f"❌ [ERROR] Failed to send email: {smtp_err}")
+                raise EmailSendingError("Failed to send recovery email to"
+                                        f" {recipient_email}.") from smtp_err
 
 class RecoveryWindow(QWidget):
     """
@@ -199,7 +206,7 @@ class RecoveryWindow(QWidget):
 
         try:
             # Load email configuration from the config file
-            config = load_config()
+            config = load_email_config()
             sender_email = config.get("sender_email")
             sender_password = config.get("sender_password")
 
@@ -221,10 +228,10 @@ class RecoveryWindow(QWidget):
                 sender_password=sender_password
             )
 
-        except EmailConfigError as e:
-            show_message(self, "Configuration Error", str(e))
-            print(f"❌ [ERROR] {e}")
-            raise e
+        except EmailConfigError as email_err:
+            show_message(self, "Configuration Error", str(email_err))
+            print(f"❌ [ERROR] {email_err}")
+            raise email_err
 
     def _recover_password(self) -> None:
         """
@@ -247,9 +254,11 @@ class RecoveryWindow(QWidget):
                 show_message(self, "Success", "A recovery email has been sent.")
                 self.close() # Close the recovery window after sending the email
                 print("📝 [INFO] Recovery window closed.")
-            except Exception as e:
-                show_message(self, "Error", str(e))
-                print(f"❌ [ERROR] Failed to send recovery email: {e}")
+            except Exception as email_err:
+                show_message(self, "Error", str(email_err))
+                print(f"❌ [ERROR] Failed to send recovery email: {email_err}")
+                raise EmailSendingError(f"Failed to send recovery email to {email}.") from email_err
+
         else:
             # If email not found, notify the user and clear the email input
             print(f"❌ [ERROR] No user found with email {email}.")

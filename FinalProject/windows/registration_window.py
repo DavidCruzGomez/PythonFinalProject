@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 # Local project-specific imports
 from FinalProject.assets.users_db import add_user_to_db
 from FinalProject.assets.utils import show_message, PasswordValidator, UsernameValidator
+from FinalProject.assets.custom_errors import InputValidationError, WidgetError
 from FinalProject.styles.styles import create_title, create_input_field, create_button
 
 
@@ -39,7 +40,6 @@ class RegistrationWindow(QWidget):
         super().__init__()
         self.setWindowTitle("User Registration")
         self.setGeometry(100, 100, 400, 300)
-
 
         # Create layout and center widgets
         layout = QVBoxLayout()
@@ -88,6 +88,7 @@ class RegistrationWindow(QWidget):
 
         print("📝 [INFO] Registration Window Initialized.")
 
+
     def close_event(self, event):
         """
         Handles the window close event.
@@ -101,11 +102,25 @@ class RegistrationWindow(QWidget):
             event (QClose_event): The close event of the window.
         """
         self._is_closing = True  # Mark that the window is closing
+
         if not self._is_registered:
             print("⚠️ [WARNING] Closing registration window, stopping validation.")
-        self.password_validator.get_timer().stop()  # Stop the password validation timer
-        self.username_validator.get_timer().stop()  # Stop the username validation timer
+
+        try:
+            self.password_validator.get_timer().stop()  # Stop the password validation timer
+            self.username_validator.get_timer().stop()  # Stop the username validation timer
+
+        except AttributeError as att_err:
+            # Handle missing get_timer() or uninitialized password_validator
+            print(f"❌ [ERROR] Failed to access timer or validator: {att_err}")
+            raise InputValidationError(f"Failed to stop validation timers: {att_err}")
+
+        except Exception as gen_err:
+            print("❌ [ERROR] An unexpected error occurred while"
+                  f" stopping validation timers: {gen_err}")
+            raise InputValidationError(f"Unexpected error while stopping timers: {gen_err}")
         event.accept()
+
 
     def _validate_password(self) -> None:
         """
@@ -130,7 +145,12 @@ class RegistrationWindow(QWidget):
         self.password_validator.validate_password(password)
 
         # Restart the timer to hide labels after inactivity
-        self.password_validator.get_timer().start()
+        timer = self.password_validator.get_timer()
+
+        if timer:
+            timer.start()
+        else:
+            raise WidgetError("Failed to retrieve the password validation timer.")
 
 
     def _validate_username(self) -> None:
@@ -156,7 +176,13 @@ class RegistrationWindow(QWidget):
         self.username_validator.validate_username(username)
 
         # Restart the timer to hide labels after inactivity
-        self.username_validator.get_timer().start()
+        timer = self.username_validator.get_timer()
+
+        if timer:
+            timer.start()
+        else:
+            raise WidgetError("Failed to retrieve the username validation timer.")
+
 
     def _on_register(self) -> None:
         """
@@ -218,6 +244,6 @@ class RegistrationWindow(QWidget):
             self.close()
             print("📝 [INFO] Registration window closed.")
 
-        except ValueError as e:
-            show_message(self, "Error", str(e))  # Show error message to the user
-            print(f"❌ [ERROR] Registration failed: {str(e)}")
+        except ValueError as value_err:
+            show_message(self, "Error", str(value_err))  # Show error message to the user
+            print(f"❌ [ERROR] Registration failed: {str(value_err)}")

@@ -23,9 +23,9 @@ def main():
         window = MainWindow()
         window.show()  # Display the main window on the screen
         sys.exit(app.exec())  # Ensures the program exits cleanly after closing
-    except Exception as e:
+    except Exception as gen_err:
         # Catch any exception that occurs during the application startup
-        print(f"❌ [ERROR] An error occurred while initializing the application: {e}")
+        print(f"❌ [ERROR] An error occurred while initializing the application: {gen_err}")
         # Provide additional information for the error
         print("⚠️ [WARNING] The application encountered an issue and will now exit.")
         sys.exit(1)  # Exit the program with an error code

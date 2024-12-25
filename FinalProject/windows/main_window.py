@@ -8,6 +8,7 @@ from FinalProject.assets.utils import show_message
 from FinalProject.styles.styles import (
     STYLES, create_title, create_input_field, create_button, style_feedback_label
 )
+from FinalProject.assets.custom_errors import WidgetError
 from FinalProject.windows.dashboard_window import DashboardWindow
 from FinalProject.windows.recovery_window import RecoveryWindow
 from FinalProject.windows.registration_window import RegistrationWindow
@@ -125,18 +126,18 @@ class MainWindow(QMainWindow):
             # Try to retrieve the user by their username or email
             try:
                 user = get_user_by_username(username_or_email)
-            except Exception as e:
-                print(f"❌ [ERROR] Failed to fetch user by username: {e}")
+            except Exception as gen_err:
+                print(f"❌ [ERROR] Failed to fetch user by username: {gen_err}")
                 user = None
 
             if not user:
                 try:
                     user = get_user_by_email(username_or_email)
-                except Exception as e:
-                    print(f"❌ [ERROR] Failed to fetch user by email: {e}")
+                except Exception as gen_err:
+                    print(f"❌ [ERROR] Failed to fetch user by email: {gen_err}")
                     user = None
 
-                # Print the result of the user retrieval to check the structure
+            # Print the result of the user retrieval to check the structure
             print(f"🔍 [DEBUG] Retrieved user: {user}")
 
             # If the user exists, verify the password hash
@@ -145,13 +146,15 @@ class MainWindow(QMainWindow):
             else:
                 self._handle_login_error(user)
 
-        except Exception as e:
-            print(f"❌ [ERROR] An unexpected error occurred during login: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] An unexpected error occurred during login: {gen_err}")
             style_feedback_label(
                 self._feedback_label,
                 "An unexpected error occurred. Please try again later.",
                 "error"
             )
+            raise WidgetError("An unexpected error occurred. Please try again later.") from gen_err
+
 
     def _are_credentials_valid(self, username: str, password: str) -> bool:
         """
@@ -168,11 +171,14 @@ class MainWindow(QMainWindow):
             style_feedback_label(self._feedback_label, "Username cannot be empty.", "error")
             print("⚠️ [WARNING] Username is empty.")
             return False
+
         if not password:
             style_feedback_label(self._feedback_label, "Password cannot be empty.", "error")
             print("⚠️ [WARNING] Password is empty.")
             return False
+
         return True
+
 
     def _login_successful(self) -> None:
         """
@@ -186,19 +192,27 @@ class MainWindow(QMainWindow):
         """
         show_message(self, "Success", "Login successful!")
         print("✅ [SUCCESS] 🎉 Login successful. Opening the dashboard window.")
+
         try:
-            if not self._dashboard_window:
+            # Check if the object does not have the attribute '_dashboard_window',
+            # or if the attribute exists but its value is falsy
+            if not hasattr(self, '_dashboard_window') or not self._dashboard_window:
                 self.dashboard_window = DashboardWindow()
+
             self._dashboard_window.show()
             self.close()
 
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to open dashboard window: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to open dashboard window: {gen_err}")
             style_feedback_label(
                 self._feedback_label,
                 "Failed to open dashboard window. Please try again later.",
                 "error"
             )
+            raise WidgetError(
+                "Failed to open dashboard window. Please try again later.") from gen_err
+
+
     def _handle_login_error(self, user) -> None:
         """
         Handles login errors, providing feedback based on whether the user was found or not.
@@ -208,6 +222,7 @@ class MainWindow(QMainWindow):
         """
         if not user:
             style_feedback_label(self._feedback_label, "User not found. Please try again.", "error")
+
         else:
             style_feedback_label(self._feedback_label, "Incorrect password. Please try again.", "error")
 
@@ -221,16 +236,22 @@ class MainWindow(QMainWindow):
         """
         try:
             print("🔑 [INFO] Opening user registration window.")
-            if not self._registration_window:
+            # Check if the object does not have the attribute '_registration_window',
+            # or if the attribute exists but its value is falsy
+            if not hasattr(self, '_registration_window') or not self._registration_window:
                 self._registration_window = RegistrationWindow()
             self._registration_window.show() # Show the registration window
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to open registration window: {e}")
+
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to open registration window: {gen_err}")
             style_feedback_label(
                 self._feedback_label,
                 "Failed to open registration window. Please try again later.",
                 "error"
             )
+            raise WidgetError(
+                "An error occurred while opening the registration window.") from gen_err
+
 
     def _open_recovery_window(self) -> None:
         """
@@ -241,13 +262,18 @@ class MainWindow(QMainWindow):
         """
         try:
             print("🔑 [INFO] Opening user recovery window.")
-            if not self._recovery_window:
+            # Check if the object does not have the attribute '_recovery_window',
+            # or if the attribute exists but its value is falsy
+            if not hasattr(self, '_recovery_window') or not self._recovery_window:
                 self._recovery_window = RecoveryWindow()
             self._recovery_window.show()
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to open recovery window: {e}")
+
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to open recovery window: {gen_err}")
             style_feedback_label(
                 self._feedback_label,
                 "Failed to open recovery window. Please try again later.",
                 "error"
             )
+            raise WidgetError(
+                            "An error occurred while opening the registration window.") from gen_err

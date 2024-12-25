@@ -27,8 +27,9 @@ def show_message(parent, title: str, message: str) -> None:
         msg_box.setText(message)
         msg_box.exec()
         print(f"📢 [INFO] Displayed message box: {title} - {message}")
-    except Exception as e:
-        print(f"❌ [ERROR] Failed to display message box. Error: {e}")
+    except Exception as gen_err:
+        print(f"❌ [ERROR] Failed to display message box. Error: {gen_err}")
+
 
 class ValidatorBase:
     """
@@ -46,7 +47,7 @@ class ValidatorBase:
         show_labels(): Displays all requirement labels.
         hide_labels(): Hides all requirement labels and stops the timer.
         validate_input(input_text, regex_list, validation_status): Validates the input based on
-                                                                   regex rules.
+            regex rules.
     """
     def __init__(self, requirements: list[str], timer_interval=2000):
         """
@@ -64,6 +65,7 @@ class ValidatorBase:
         self._requirements = requirements # List of requirement descriptions
         self._validation_state = [False] * len(requirements) # Store requirement´s validation
         print(f"🔄 [INFO] Validator initialized with {len(requirements)} requirements.")
+
 
     def create_labels(self) -> list[QLabel]:
         """
@@ -83,13 +85,14 @@ class ValidatorBase:
                     label.setStyleSheet("color: red;")
                     label.hide()  # Initially hide all labels
                 print(f"✅ [SUCCESS] Created {len(self._labels)} requirement labels.")
-            except Exception as e:
-                print(f"❌ [ERROR] Failed to create labels for requirements. Error: {e}")
+            except Exception as gen_err:
+                print(f"❌ [ERROR] Failed to create labels for requirements. Error: {gen_err}")
                 return []
         else:
             print("⚠️ [WARNING] Labels already created. Skipping creation.")
 
         return self._labels
+
 
     def get_labels(self) -> list[QLabel]:
         """
@@ -99,6 +102,7 @@ class ValidatorBase:
             list[QLabel]: List of validation labels.
         """
         return self._labels
+
 
     def show_labels(self) -> None:
         """
@@ -110,8 +114,8 @@ class ValidatorBase:
         try:
             for label in self._labels:
                 label.show()
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to show labels. Error: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to show labels. Error: {gen_err}")
 
     def hide_labels(self) -> None:
         """
@@ -124,8 +128,9 @@ class ValidatorBase:
             for label in self._labels:
                 label.hide()
             self._timer.stop()
-        except Exception as e:
-            print(f"❌ [ERROR] Failed to hide labels. Error: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Failed to hide labels. Error: {gen_err}")
+
 
     @staticmethod
     def validate_input(input_text: str, regex_list: list[tuple[str, QLabel]],
@@ -138,7 +143,7 @@ class ValidatorBase:
             regex_list (list[tuple[str, QLabel]]): A list of tuples containing regex patterns and
                 corresponding QLabel objects.
             validation_status (list[bool]): A list of validation statuses,
-                                            updated for each requirement.
+                updated for each requirement.
 
         Returns:
             bool: True if all validation requirements are met, otherwise False.
@@ -161,15 +166,15 @@ class ValidatorBase:
                     print(f"❌ [ERROR] Requirement not met: {label.text()}")
 
                 validation_status[index] = is_valid # Update validation status for this requirement
-                all_requirements_met &= is_valid # If any requirement is not met,
-                                                 # set all_requirements_met to False
+                # If any requirement is not met, set all_requirements_met to False
+                all_requirements_met &= is_valid
             return all_requirements_met
 
         except re.error as regex_error:
             print(f"❌ [ERROR] Regular expression error during input validation: {regex_error}")
             return False
-        except Exception as e:
-            print(f"❌ [ERROR] Unexpected error during input validation: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Unexpected error during input validation: {gen_err}")
             return False
 
     def get_timer(self) -> QTimer:
@@ -234,8 +239,8 @@ class PasswordValidator(ValidatorBase):
             ]
             return self.validate_input(password, requirements, self._validation_state)
 
-        except Exception as e:
-            print(f"❌ [ERROR] Unexpected error during password validation. Error: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Unexpected error during password validation. Error: {gen_err}")
             return False
 
 
@@ -289,6 +294,6 @@ class UsernameValidator(ValidatorBase):
             ]
             return self.validate_input(username, requirements, self._validation_state)
 
-        except Exception as e:
-            print(f"❌ [ERROR] Unexpected error during username validation. Error: {e}")
+        except Exception as gen_err:
+            print(f"❌ [ERROR] Unexpected error during username validation. Error: {gen_err}")
             return False
