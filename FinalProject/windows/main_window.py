@@ -3,7 +3,9 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QSpacerItem, QSizePolicy
 
 # Local project-specific imports
-from FinalProject.assets.users_db import get_user_by_username, get_user_by_email, check_password_hash
+from FinalProject.assets.users_db import (
+    get_user_by_username, get_user_by_email, check_password_hash
+)
 from FinalProject.assets.utils import show_message
 from FinalProject.styles.styles import (
     STYLES, create_title, create_input_field, create_button, style_feedback_label
@@ -224,7 +226,8 @@ class MainWindow(QMainWindow):
             style_feedback_label(self._feedback_label, "User not found. Please try again.", "error")
 
         else:
-            style_feedback_label(self._feedback_label, "Incorrect password. Please try again.", "error")
+            style_feedback_label(self._feedback_label, "Incorrect password. Please try again.",
+                                 "error")
 
 
     def _open_registration_window(self) -> None:
@@ -276,4 +279,4 @@ class MainWindow(QMainWindow):
                 "error"
             )
             raise WidgetError(
-                            "An error occurred while opening the registration window.") from gen_err
+                "An error occurred while opening the registration window.") from gen_err

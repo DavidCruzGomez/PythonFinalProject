@@ -231,11 +231,11 @@ class PasswordValidator(ValidatorBase):
                 self.validation_started = True
 
             requirements = [
-                (PASSWORD_REGEX['upper'], self.get_labels()[0]),
-                (PASSWORD_REGEX['lower'], self.get_labels()[1]),
-                (PASSWORD_REGEX['number'], self.get_labels()[2]),
-                (PASSWORD_REGEX['special'], self.get_labels()[3]),
-                (PASSWORD_REGEX['length'], self.get_labels()[4]),
+                (PASSWORD_REGEX['upper'], self.get_labels()[0]),   # At least one uppercase
+                (PASSWORD_REGEX['lower'], self.get_labels()[1]),   # At least one lowercase
+                (PASSWORD_REGEX['number'], self.get_labels()[2]),  # At least one number
+                (PASSWORD_REGEX['special'], self.get_labels()[3]), # At least one special character
+                (PASSWORD_REGEX['length'], self.get_labels()[4]),  # At least 8 characters
             ]
             return self.validate_input(password, requirements, self._validation_state)
 
@@ -287,10 +287,10 @@ class UsernameValidator(ValidatorBase):
                 self._validation_started = True
 
             requirements = [
-                (USERNAME_REGEX['length'], self.get_labels()[0]),       # Validate length
-                (USERNAME_REGEX['valid_chars'], self.get_labels()[1]),  # Validate valid characters
-                (USERNAME_REGEX['start_alnum'], self.get_labels()[2]),  # Validate start with alphanumeric
-                (USERNAME_REGEX['end_alnum'], self.get_labels()[3]),    # Validate end with alphanumeric
+                (USERNAME_REGEX['length'], self.get_labels()[0]),       # length
+                (USERNAME_REGEX['valid_chars'], self.get_labels()[1]),  # valid characters
+                (USERNAME_REGEX['start_alnum'], self.get_labels()[2]),  # start with alphanumeric
+                (USERNAME_REGEX['end_alnum'], self.get_labels()[3]),    # end with alphanumeric
             ]
             return self.validate_input(username, requirements, self._validation_state)
 

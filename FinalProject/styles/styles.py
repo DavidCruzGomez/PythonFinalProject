@@ -94,7 +94,7 @@ def create_title(title_text: str) -> QLabel:
 
     except Exception as gen_err:
         print(f"❌ [ERROR] Failed to create title label: {gen_err}")
-        raise WidgetError(f"Failed to create title label: {gen_err}")
+        raise WidgetError(f"Failed to create title label: {gen_err}") from gen_err
 
 
 def create_input_field(placeholder: str, is_password: bool = False,
@@ -131,7 +131,7 @@ def create_input_field(placeholder: str, is_password: bool = False,
     except Exception as gen_err:
         print(f"❌ [ERROR] Failed to create input field: {gen_err}")
         raise WidgetError(f"Failed to create input field with placeholder "
-                          f"'{placeholder}': {gen_err}")
+                          f"'{placeholder}': {gen_err}") from gen_err
 
 
 def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUTTON_WIDTH,
@@ -161,7 +161,8 @@ def create_button(button_text: str, callback: callable, width: int = DEFAULT_BUT
 
     except Exception as gen_err:
         print(f"❌ [ERROR] Failed to create button with text '{button_text}': {gen_err}")
-        raise WidgetError(f"Failed to create button with text '{button_text}': {gen_err}")
+        raise WidgetError(f"Failed to create button with text '{button_text}': {gen_err}")\
+            from gen_err
 
 
 def style_feedback_label(label: QLabel, message: str, message_type: str = "info") -> None:

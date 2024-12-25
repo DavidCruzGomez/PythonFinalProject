@@ -127,7 +127,8 @@ class EmailSendingError(Exception):
     Attributes:
         _email (str): The recipient email address.
         _suggestion (str): Suggested action to resolve the error.
-                           Default is "Check the email address and server configuration." (optional).
+                           Default is "Check the email address and server configuration."
+                           (optional).
     """
     def __init__(self, email: str, message: str = "Failed to send the email.",
                  suggestion: str = "Check the email address and server configuration."):

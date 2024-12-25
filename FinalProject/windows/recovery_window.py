@@ -50,7 +50,7 @@ def load_email_config() -> dict:
         except json.JSONDecodeError as json_err:
             print(f"❌ [ERROR] Error decoding email config file: {json_err}")
             show_message(None, "Configuration Error", f"Failed to decode email config: {json_err}")
-            raise EmailConfigError(f"Failed to decode email config: {json_err}")
+            raise EmailConfigError(f"Failed to decode email config: {json_err}") from json_err
 
     else:
         print(f"❌ [ERROR] Email config file not found at {EMAIL_CONFIG_FILE}")
@@ -107,18 +107,19 @@ class EmailSender:
                 server.sendmail(self._sender_email, recipient_email, msg.as_string())
             print(f"✅ [SUCCESS] Recovery email successfully sent to {recipient_email}.")
 
-        except smtplib.SMTPAuthenticationError:
+        except smtplib.SMTPAuthenticationError as auth_err:
             print("❌ [ERROR] Authentication error, check the email server credentials.")
             raise EmailSendingError(
-                "Authentication error: Unable to authenticate with SMTP server.")
+                "Authentication error: Unable to authenticate with SMTP server.") from auth_err
 
-        except smtplib.SMTPConnectError:
+        except smtplib.SMTPConnectError as conn_err:
             print("❌ [ERROR] Unable to connect to SMTP server.")
-            raise EmailSendingError("Connection error: Could not connect to SMTP server.")
+            raise EmailSendingError(
+                "Connection error: Could not connect to SMTP server.") from conn_err
 
         except Exception as gen_err:
             print(f"❌ [ERROR] Failed to send email: {gen_err}")
-            raise EmailSendingError(f"Failed to send the recovery email: {gen_err}")
+            raise EmailSendingError(f"Failed to send the recovery email: {gen_err}") from gen_err
 
     def send_recovery_email(self, recipient_email: str, username: str) -> None:
         """
@@ -153,10 +154,10 @@ class EmailSender:
             self._connect_and_send_email(recipient_email, msg)
 
         except SMTPException as smtp_err:
-                # Catch any errors related to email sending
-                print(f"❌ [ERROR] Failed to send email: {smtp_err}")
-                raise EmailSendingError("Failed to send recovery email to"
-                                        f" {recipient_email}.") from smtp_err
+            # Catch any errors related to email sending
+            print(f"❌ [ERROR] Failed to send email: {smtp_err}")
+            raise EmailSendingError("Failed to send recovery email to"
+                                    f" {recipient_email}.") from smtp_err
 
 class RecoveryWindow(QWidget):
     """
@@ -195,7 +196,7 @@ class RecoveryWindow(QWidget):
         # Create and configure the "Send Recovery Email" button
         self._recover_button = QPushButton("Send Recovery Email")
         self._recover_button.setStyleSheet(STYLES["button"])
-        self._recover_button.clicked.connect(self._recover_password) # Connect button click to method
+        self._recover_button.clicked.connect(self._recover_password) # Link button click to method
 
         # Add input field and button to the layout
         layout.addWidget(self._email_input)

@@ -113,12 +113,13 @@ class RegistrationWindow(QWidget):
         except AttributeError as att_err:
             # Handle missing get_timer() or uninitialized password_validator
             print(f"❌ [ERROR] Failed to access timer or validator: {att_err}")
-            raise InputValidationError(f"Failed to stop validation timers: {att_err}")
+            raise InputValidationError(f"Failed to stop validation timers: {att_err}") from att_err
 
         except Exception as gen_err:
             print("❌ [ERROR] An unexpected error occurred while"
                   f" stopping validation timers: {gen_err}")
-            raise InputValidationError(f"Unexpected error while stopping timers: {gen_err}")
+            raise InputValidationError("Unexpected error while stopping timers:"
+                                       f" {gen_err}") from gen_err
         event.accept()
 
 
