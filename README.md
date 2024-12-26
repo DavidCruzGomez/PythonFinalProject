@@ -22,21 +22,43 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 ## Directory Structure
 
 ```plaintext
-FinalProject/
-├── assets/
-│   ├── users_db.json             # User database
-│   ├── email_config.json         # Email configuration (SMTP)
-│   ├── regex.py                  # Regular expressions (e.g., for validating emails)
-│   └── utils.py                  # Utility functions (e.g., displaying messages)
-├── styles/
-│   ├── styles.py                 # Styles for the GUI (buttons, text fields, etc.)
-│   └── __init__.py               # Empty file to import the styles module
-├── windows/
-│   ├── main_window.py            # Main window for login
-│   ├── dashboard_window.py       # User dashboard window
-│   ├── registration_window.py    # User registration window
-│   ├── recovery_window.py        # Password recovery window
-│   └── __init__.py               # Empty file to import the windows module
-├── requirements.txt              # Project dependencies
-├── main.py                       # Main file to run the application
-└── README.md                     # This file
+.
+├── FinalProject/
+│   ├── assets/
+│   │   ├── custom_errors.py            # Custom error classes
+│   │   ├── email_cofig.json            # Email configuration (SMTP)
+│   │   ├── regex.py                    # Regular expressions (e.g., for validating emails)
+│   │   ├── users_db.json               # User database
+│   │   ├── users_db.py                 # User database functions
+│   │   ├── utils.py                    # Utility functions (e.g., displaying messages)
+│   │   └── __init__.py                 # Empty file to import the assets module
+│   ├── styles/
+│   │   ├── styles.py                   # Styles for the GUI (buttons, text fields, etc.)
+│   │   └── __init__.py                 # Empty file to import the styles module
+│   ├── windows/
+│   │   ├── main_window.py              # Main window for login
+│   │   ├── dashboard_window.py         # User dashboard window
+│   │   ├── registration_window.py      # User registration window
+│   │   ├── recovery_window.py          # Password recovery window
+│   │   └── __init__.py                 # Empty file to import the windows module
+│   ├── main.py                         # Main file to run the application
+│   └── __init__.py                     # Empty file to import the main package
+├── tests/
+│   ├── tests_assets/
+│   │   ├── test_custom_errors.py       # Tests for custom errors
+│   │   ├── test_email_config.py        # Tests for email configuration
+│   │   ├── test_regex.py               # Tests for regular expressions
+│   │   ├── test_users_db.py            # Tests for user database functions
+│   │   ├── test_utils.py               # Tests for utility functions
+│   │   └── __init__.py                 # Empty file to import the tests_assets module
+│   └── __init__.py                     # Empty file to import the tests package
+│ 
+├── CHANGELOG.md                        # Project change log
+├── LICENSE.md                          # License for the project
+├── README.md                           # This file
+├── requeriments.txt                    # Project dependencies
+├── requeriments_dev.txt                # Development dependencies
+├── setup.cfg                           # Configuration for packaging the project
+├── setup.py                            # Script to install the project
+├── VERSION.txt                         # Current version of the project
+└── Dockerfile                          # Docker configuration for the project
