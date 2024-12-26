@@ -27,8 +27,10 @@ class ValidationError(Exception):
         _suggestion (str): Suggested action to resolve the error.
                            Default is "Check the field value and format." (optional).
     """
-    def __init__(self, field: str, value: str, message: str = "Validation failed.",
-                 suggestion: str = "Check the field value and format."):
+    def __init__(self, field: str, value: str = "Invalid value",
+                 message: str = "Validation failed.",
+                 suggestion: str = "Check the field value and format."
+                 ):
         self._field = field
         self._value = value
         self._suggestion = suggestion
@@ -69,7 +71,7 @@ class InputValidationError(WidgetError):
 
     def __str__(self):
         return (
-            f"InputValidationError: {super().__str__()}\n"
+            f"InputValidationError: {self.args[0]}\n"
             f" - Input value: {self._input_value}\n"
             f" - Suggested action: {self._suggestion}"
         )

@@ -33,8 +33,8 @@ USERNAME_REGEX = {
     'end_alnum': r'[A-Za-z0-9]$',           # Ends with alphanumeric
     'all': (
         r"^[A-Za-z0-9]"              # Start with an alphanumeric character
-        r"[A-Za-z0-9._-]{1,18}"      # Allows alphanumeric, dot, dash, and underscore
-                                     # (1 to 18 characters)
+        r"[A-Za-z0-9._-]{2,16}"      # Allows alphanumeric, dot, dash, and underscore
+                                     # (2 to 16 characters)
         r"[A-Za-z0-9]$"              # End with an alphanumeric character
     )
 }

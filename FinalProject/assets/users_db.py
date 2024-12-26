@@ -135,18 +135,18 @@ def add_user_to_db(username: str, email: str, password: str) -> None:
     # Validate the email format using the regex
     if not re.fullmatch(EMAIL_REGEX, email):
         print(f"❌ [ERROR] Invalid email format: '{email}'")
-        raise ValueError(f"Invalid email format: {email}")
+        raise ValidationError(f"Invalid email format: {email}")
 
     try:
         users_db = load_users_db()
 
         if username in users_db:
             print(f"❌ [ERROR] Username '{username}' already exists.")
-            raise ValueError(f"Username '{username}' already exists.")
+            raise ValidationError(f"Username '{username}' already exists.")
 
         if any(user_data["email"] == email for user_data in users_db.values()):
             print(f"❌ [ERROR] Email '{email}' already exists.")
-            raise ValueError(f"Email '{email}' already exists.")
+            raise ValidationError(f"Email '{email}' already exists.")
 
         # Create a password hash using bcrypt
         password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
