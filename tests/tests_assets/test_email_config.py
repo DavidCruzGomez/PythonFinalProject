@@ -6,7 +6,7 @@ import os
 
 class TestEmailConfig(unittest.TestCase):
     def setUp(self):
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
         file_path = os.path.join(base_dir, 'FinalProject', 'assets', 'email_config.json')
         print(f"Attempting to open: {os.path.abspath(file_path)}")
         with open(file_path, 'r') as file:
