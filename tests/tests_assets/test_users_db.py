@@ -1,15 +1,17 @@
 # Standard library imports
+import json
 import unittest
 from unittest.mock import patch, mock_open
+
+# Third-party imports
 import bcrypt
-import json
 
 # Local imports
+from FinalProject.assets.custom_errors import DatabaseError, ValidationError
 from FinalProject.assets.users_db import (
     validate_users_db, load_users_db, save_users_db, add_user_to_db,
     get_user_by_username, get_user_by_email, check_password_hash, username_exists
 )
-from FinalProject.assets.custom_errors import DatabaseError, ValidationError
 
 
 class TestUsersDb(unittest.TestCase):
@@ -110,7 +112,7 @@ class TestUsersDb(unittest.TestCase):
             save_users_db({"user": {"email": "test@example.com", "password_hash": "hash"}})
         except DatabaseError:
             # Verifying that no error is raised
-            self.fail("save_users_db() raised DatabaseError unexpectedly!")# Verifying that no error is raised
+            self.fail("save_users_db() raised DatabaseError unexpectedly!")
 
 
     # Mocks adding a new user to the database

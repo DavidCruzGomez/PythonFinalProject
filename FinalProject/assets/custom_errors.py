@@ -30,7 +30,7 @@ class ValidationError(Exception):
     def __init__(self, field: str, value: str = "Invalid value",
                  message: str = "Validation failed.",
                  suggestion: str = "Check the field value and format."
-                 ):
+                ):
         self._field = field
         self._value = value
         self._suggestion = suggestion

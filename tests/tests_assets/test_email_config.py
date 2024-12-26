@@ -46,5 +46,6 @@ class TestEmailConfig(unittest.TestCase):
         self.assertIn('sender_password', self.config)
         self.assertEqual(self.config['sender_password'], "kgoo jtms eplt njvj")
 
+
 if __name__ == '__main__':
     unittest.main()
