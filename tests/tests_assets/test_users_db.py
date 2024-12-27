@@ -1,3 +1,49 @@
+"""
+Unit tests for user database management functions.
+
+This test suite contains unit tests for various functions related to managing
+the user database in the application. The tests ensure the correct functionality
+of operations such as loading, saving, validating, and adding users to the database,
+as well as retrieving user information based on different attributes (username and email).
+
+Key tests include:
+
+- `test_load_users_db_file_not_found`: Verifies that the users database returns an empty dictionary
+if the file does not exist.
+
+- `test_load_users_db_success`: Ensures that the users database is loaded correctly when the file
+contains valid JSON data.
+
+- `test_load_users_db_invalid_json`: Simulates and tests the handling of
+invalid JSON in the database file.
+
+- `test_validate_users_db_valid`: Ensures that a well-structured users database passes validation.
+
+- `test_validate_users_db_missing_fields`: Verifies that the validation function raises an error
+when required fields are missing in the database.
+
+- `test_save_users_db`: Ensures the users database can be saved correctly without errors.
+
+- `test_add_user_to_db`: Verifies the successful addition of a new user to the database.
+
+- `test_add_user_to_db_existing_user`: Ensures that attempting to add a user
+with an existing username raises a validation error.
+
+- `test_get_user_by_username`: Verifies that the correct user is retrieved by username.
+
+- `test_get_user_by_email`: Verifies that the correct user is retrieved by email.
+
+- `test_check_password_hash`: Ensures the correct verification of passwords against stored hashes.
+
+- `test_username_exists`: Verifies that the system correctly identifies
+whether a username exists in the database.
+
+The tests use Python's `unittest` framework, along with mocking techniques,
+to simulate various scenarios such as loading data from a file,
+validating data structure, and handling errors, without the need
+for a real database or filesystem operations.
+"""
+
 # Standard library imports
 import json
 import unittest

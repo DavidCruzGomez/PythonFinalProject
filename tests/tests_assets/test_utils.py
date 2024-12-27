@@ -1,9 +1,49 @@
+"""
+Unit tests for the utility functions and classes in
+the `FinalProject.assets.utils` module.
+
+This test suite ensures that various utility functions and validators
+work as expected.
+
+The tests mock necessary Qt components, such as `QMessageBox` and `QLabel`,
+to verify their behavior without requiring a full graphical environment.
+
+Key tests include:
+
+- `test_show_message`: Verifies that `show_message` correctly uses `QMessageBox`
+to display messages.
+
+- `test_validator_base_create_labels`: Ensures `ValidatorBase` creates
+validation labels with appropriate styles.
+
+- `test_validator_base_show_hide_labels`: Confirms that `ValidatorBase` toggles
+label visibility based on validation status.
+
+- `test_validator_base_validate_input`: Verifies that `ValidatorBase` updates
+label styles and validation status correctly.
+
+- `test_password_validator`: Ensures `PasswordValidator` validates passwords
+according to defined criteria.
+
+- `test_username_validator`: Verifies that `UsernameValidator` checks usernames
+against specified rules.
+
+The tests use Python's `unittest` framework, along with mocking techniques,
+to simulate and test functionality without the need
+for a full graphical environment or actual user input.
+"""
+
+# Standard library imports
 import unittest
 from unittest.mock import MagicMock, patch
-from PySide6.QtWidgets import QMessageBox, QLabel, QApplication
-from PySide6.QtCore import QTimer
+
+# Third-party imports
+from PySide6.QtWidgets import QApplication
+
+# Local imports
 from FinalProject.assets.utils import (show_message, ValidatorBase, PasswordValidator,
                                        UsernameValidator)
+
 
 class TestUtils(unittest.TestCase):
     """

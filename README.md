@@ -51,6 +51,9 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 │   │   ├── test_users_db.py            # Tests for user database functions
 │   │   ├── test_utils.py               # Tests for utility functions
 │   │   └── __init__.py                 # Empty file to import the tests_assets module
+│   ├── tests_styles/
+│   │   ├── test_styles.py              
+│   │   └── __init__.py                 # Empty file to import the tests_styles module
 │   └── __init__.py                     # Empty file to import the tests package
 │ 
 ├── CHANGELOG.md                        # Project change log

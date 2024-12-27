@@ -177,10 +177,11 @@ def style_feedback_label(label: QLabel, message: str, message_type: str = "info"
     Raises:
         InputValidationError: If the message type is invalid.
     """
-    try:
-        if message_type not in STYLES["feedback"]:
-            raise InputValidationError(f"Invalid message type: {message_type}")
 
+    if message_type not in STYLES["feedback"]:
+        raise InputValidationError(f"Invalid message type: {message_type}")
+
+    try:
         label.setText(message)
         label.setStyleSheet(STYLES["feedback"].get(message_type, STYLES["feedback"]["info"]))
 

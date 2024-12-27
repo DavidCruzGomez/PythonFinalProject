@@ -1,3 +1,29 @@
+"""
+Unit tests for validating regular expression patterns.
+
+This test suite contains unit tests for validating the regular expressions
+used in the application to check the format of email addresses, passwords, and usernames.
+The tests ensure that the regular expressions correctly identify both valid and invalid inputs
+based on the specified format rules.
+
+Key tests include:
+
+- `test_email_regex`: Verifies that the email regular expression correctly matches
+valid email addresses and rejects invalid ones.
+
+- `test_password_regex`: Ensures that the password regular expression correctly matches
+valid passwords that meet criteria such as length, special characters, and numeric digits,
+while rejecting invalid passwords.
+
+- `test_username_regex`: Tests the username regular expression to ensure it correctly matches
+valid usernames (alphanumeric, underscores, hyphens, periods) and rejects invalid ones (e.g.,
+too short, containing special characters, or ending with a special character).
+
+The tests use Python's `unittest` framework and the `re.match` function
+to apply each regex pattern to a list of valid and invalid test cases,
+verifying that the patterns function as expected.
+"""
+
 # Standard library imports
 import unittest
 import re
@@ -76,6 +102,7 @@ class TestRegexPatterns(unittest.TestCase):
             self.assertTrue(re.match(USERNAME_REGEX['all'], username))
         for username in invalid_usernames:
             self.assertFalse(re.match(USERNAME_REGEX['all'], username))
+
 
 if __name__ == '__main__':
     unittest.main()

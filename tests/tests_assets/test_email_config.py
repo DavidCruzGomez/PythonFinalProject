@@ -1,3 +1,25 @@
+"""
+Unit tests for validating the email configuration file.
+
+This test suite verifies that the 'email_config.json' configuration file contains
+the necessary fields and that their values are correctly set.
+Specifically, it checks the presence and correctness of the sender's
+email and password entries in the configuration file.
+
+Key tests include:
+
+- `test_sender_email`: Ensures that the 'sender_email' key exists in the configuration file
+and that its value matches the expected sender email address.
+
+- `test_sender_password`: Verifies that the 'sender_password' key exists
+and that the value matches the expected encrypted password.
+
+The tests use Python's `unittest` framework and the `json` library
+to load the configuration file and check the values.
+The `setUp` method loads the configuration file before each test,
+making it available to the test methods for verification.
+"""
+
 # Standard library imports
 import unittest
 import json

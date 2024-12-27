@@ -1,3 +1,46 @@
+"""
+Unit tests for the custom error classes in the `FinalProject.assets.custom_errors` module.
+
+This test suite validates the error messages and formats for various custom exception classes
+used throughout the application. Each class represents a specific type of error
+and includes tailored error messages to assist with debugging and resolution.
+
+Key tests include:
+
+- `TestDatabaseError`: Verifies the default and custom error messages for
+the `DatabaseError` exception, ensuring it provides the correct message about
+database connectivity and suggested actions.
+
+- `TestValidationError`: Tests the `ValidationError` exception,
+verifying that error messages include field and value details,
+along with suggested actions to resolve the validation issue.
+
+- `TestWidgetError`: Ensures the default message for the `WidgetError` exception
+is correct, indicating,issues with the widget.
+
+- `TestInputValidationError`: Validates that the `InputValidationError` exception
+correctly includes the invalid input value and suggests actions to fix it.
+
+- `TestEmailConfigError`: Tests the `EmailConfigError` exception to ensure
+it correctly formats the error message with the path of the configuration file
+and suggests actions to resolve the email configuration issue.
+
+- `TestUserNotFoundError`: Verifies the default error message for
+the `UserNotFoundError` exception, which includes the email address
+that was not found, with suggestions for verification.
+
+- `TestEmailSendingError`: Validates the default error message for
+the `EmailSendingError` exception, confirming it includes the email address
+that failed during the sending process and suggests actions to resolve the issue.
+
+Each test ensures that the string representation of the error matches
+the expected format and includes relevant details like the error type,
+involved data (e.g., field, value, email), and suggested actions for resolution.
+
+The tests use Python's `unittest` framework to check that the error messages
+are generated correctly for each custom exception class.
+"""
+
 # Standard library imports
 import unittest
 
