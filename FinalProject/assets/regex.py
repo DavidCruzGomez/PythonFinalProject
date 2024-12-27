@@ -1,3 +1,29 @@
+"""
+Regular expressions for validating email addresses, passwords, and usernames.
+
+This module contains a set of regular expressions designed to validate user input
+for email addresses, passwords, and usernames. Each regular expression ensures
+that the input conforms to specific format requirements, such as proper structure,
+length constraints, and allowed characters.
+
+Key validations include:
+
+- `EMAIL_REGEX`: Validates the format of email addresses,
+ensuring proper structure with an optional subdomain, domain, and extension.
+
+- `PASSWORD_REGEX`: Defines a set of regular expressions for
+validating passwords based on specific criteria, including the presence of
+uppercase and lowercase letters, digits, special characters, and length constraints.
+
+- `USERNAME_REGEX`: Validates usernames to ensure they consist of alphanumeric
+characters, underscores, hyphens, and periods, with length and format rules
+to ensure they meet specific requirements.
+
+Each regular expression is customizable for different validation requirements
+and is used to ensure that input data conforms to expected patterns before being
+processed in the application.
+"""
+
 EMAIL_REGEX = (
     r"^"                        # Start of the string
     r"[a-zA-Z0-9._%+-]+"        # Username part (allowed alphanumeric and special characters)

@@ -44,7 +44,7 @@ from FinalProject.styles.styles import create_title, create_input_field, create_
     style_feedback_label, InputValidationError
 
 
-app = QApplication([])  # Necessary to initialize the widgets in PySide6
+APP = QApplication([])  # Necessary to initialize the widgets in PySide6
 
 class TestStyles(unittest.TestCase):
     """
@@ -123,6 +123,7 @@ class TestStyles(unittest.TestCase):
 
         # Dummy callback function to connect with the button's click signal
         def dummy_callback():
+            """Placeholder function for button tests, performing no action."""
             pass
 
         button = create_button(button_text, dummy_callback)
