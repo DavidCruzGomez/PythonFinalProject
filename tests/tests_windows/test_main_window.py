@@ -50,6 +50,8 @@ from unittest.mock import patch, MagicMock
 
 # Third-party imports
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
+from PySide6.QtTest import QTest
 
 # Local project-specific imports
 from FinalProject.windows.main_window import MainWindow
@@ -121,7 +123,10 @@ class TestMainWindow(unittest.TestCase):
 
         # Mock the _login_successful method to check if it gets called after a successful login
         with patch.object(self.window, '_login_successful') as mock_login_successful:
-            self.window._on_login()
+
+            # Simulate clicking the login button
+            QTest.mouseClick(self.window._login_button, Qt.LeftButton)
+
             mock_login_successful.assert_called_once()
 
     def test_empty_username(self):
@@ -135,7 +140,10 @@ class TestMainWindow(unittest.TestCase):
 
         # Patch the setText method of the feedback label to check the message
         with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
-            self.window._on_login()
+
+            # Simulate clicking the login button
+            QTest.mouseClick(self.window._login_button, Qt.LeftButton)
+
             mock_set_text.assert_called_with("Username cannot be empty.")
 
     def test_empty_password(self):
@@ -149,7 +157,10 @@ class TestMainWindow(unittest.TestCase):
 
         # Patch the setText method of the feedback label to check the message
         with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
-            self.window._on_login()
+
+            # Simulate clicking the login button
+            QTest.mouseClick(self.window._login_button, Qt.LeftButton)
+
             mock_set_text.assert_called_with("Password cannot be empty.")
 
     def test_invalid_credentials(self):
@@ -166,7 +177,10 @@ class TestMainWindow(unittest.TestCase):
 
             # Patch the setText method of the feedback label to check the message
             with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
-                self.window._on_login()
+
+                # Simulate clicking the login button
+                QTest.mouseClick(self.window._login_button, Qt.LeftButton)
+
                 mock_set_text.assert_called_with("User not found. Please try again.")
 
 
@@ -189,7 +203,9 @@ class TestMainWindow(unittest.TestCase):
 
             # Patch the setText method of the feedback label to check the message
             with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
-                self.window._on_login()
+
+                # Simulate clicking the login button
+                QTest.mouseClick(self.window._login_button, Qt.LeftButton)
                 mock_set_text.assert_called_with("Incorrect password. Please try again.")
 
 
