@@ -52,8 +52,13 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 │   │   ├── test_utils.py               # Tests for utility functions
 │   │   └── __init__.py                 # Empty file to import the tests_assets module
 │   ├── tests_styles/
-│   │   ├── test_styles.py              
+│   │   ├── test_styles.py              # Tests for the styles in `styles.py`
 │   │   └── __init__.py                 # Empty file to import the tests_styles module
+│   ├── tests_windows/
+│   │   ├── test_main_window.py         # Tests for the `main_window.py` (login window)
+│   │   ├── test_recovery_window.py     # Tests for the `recovery_window.py` (password recovery window)
+│   │   ├── test_registration_window.py # Tests for the `registration_window.py` (user registration window)         
+│   │   └── __init__.py                 # Empty file to import the tests_windows module
 │   └── __init__.py                     # Empty file to import the tests package
 │ 
 ├── CHANGELOG.md                        # Project change log
