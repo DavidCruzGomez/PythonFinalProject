@@ -42,6 +42,8 @@ from unittest.mock import patch, MagicMock
 
 # Third-party imports
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
+from PySide6.QtTest import QTest
 
 # Local project-specific imports
 from FinalProject.windows.registration_window import RegistrationWindow
@@ -115,8 +117,8 @@ class TestRegistrationWindow(unittest.TestCase):
         self.window.email_input.setText(email)
         self.window.password_input.setText(password)
 
-        # Call the registration method
-        self.window._on_register()
+        # Simulate a button click (which triggers _on_register)
+        QTest.mouseClick(self.window.register_button, Qt.LeftButton)
 
         # Check if the success message was displayed
         mock_show_message.assert_called_once_with(self.window, "Success",
@@ -136,7 +138,8 @@ class TestRegistrationWindow(unittest.TestCase):
         self.window.email_input.setText("")
         self.window.password_input.setText("")
 
-        self.window._on_register()
+        # Simulate clicking the register button
+        QTest.mouseClick(self.window.register_button, Qt.LeftButton)
 
         # Check if the error message is displayed
         mock_show_message.assert_called_with(self.window, "Error", "Please fill in all fields.")
@@ -156,11 +159,17 @@ class TestRegistrationWindow(unittest.TestCase):
         self.window.password_input.setText("ValidPassword123")
 
         # Mock username validator to return False (invalid)
-        with patch.object(self.window.username_validator, 'validate_username', return_value=False):
-            self.window._on_register()
+        with patch.object(
+                self.window.username_validator, 'validate_username', return_value=False
+        ):
+
+            # Simulate clicking the register button
+            QTest.mouseClick(self.window.register_button, Qt.LeftButton)
 
             # Check if the error message is displayed for invalid username
-            mock_show_message.assert_called_with(self.window, "Error", "Username does not meet all requirements.")
+            mock_show_message.assert_called_with(
+                self.window, "Error", "Username does not meet all requirements."
+            )
 
 
     # Mocks the `show_message` function to test message display
@@ -177,20 +186,31 @@ class TestRegistrationWindow(unittest.TestCase):
         self.window.password_input.setText("short")
 
         # Mock password validator to return False (invalid)
-        with patch.object(self.window.password_validator, 'validate_password', return_value=False):
-            self.window._on_register()
+        with patch.object(
+                self.window.password_validator,
+                'validate_password',
+                return_value=False
+        ):
+
+            # Simulate clicking the register button
+            QTest.mouseClick(self.window.register_button, Qt.LeftButton)
 
             # Check if the error message is displayed for invalid password
-            mock_show_message.assert_called_with(self.window, "Error", "Password does not meet all requirements.")
+            mock_show_message.assert_called_with(
+                self.window, "Error", "Password does not meet all requirements."
+            )
 
     def test_close_event(self):
         """
         Test the behavior when the registration window is closed.
-        This test ensures that any ongoing timers for the username and password validators are stopped.
+        This test ensures that any ongoing timers for
+         the username and password validators are stopped.
         """
         # Patch the timers for both validators
-        with patch.object(self.window.password_validator, 'get_timer', return_value=MagicMock()) as mock_password_timer, \
-             patch.object(self.window.username_validator, 'get_timer', return_value=MagicMock()) as mock_username_timer:
+        with patch.object(self.window.password_validator, 'get_timer',
+                          return_value=MagicMock()) as mock_password_timer, \
+             patch.object(self.window.username_validator, 'get_timer',
+                          return_value=MagicMock()) as mock_username_timer:
             event = MagicMock()
             self.window.close_event(event)
 

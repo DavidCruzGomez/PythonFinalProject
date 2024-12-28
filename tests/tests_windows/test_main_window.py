@@ -59,8 +59,9 @@ class TestMainWindow(unittest.TestCase):
     """
     Unit tests for the login window in the `FinalProject.windows.main_window` module.
 
-    This suite verifies the behavior of the login process, including input validation, error handling,
-    and UI interactions such as opening the registration and recovery windows.
+    This suite verifies the behavior of the login process,
+    including input validation, error handling, and UI interactions such
+    as opening the registration and recovery windows.
     """
 
     @classmethod
@@ -102,7 +103,9 @@ class TestMainWindow(unittest.TestCase):
     @patch('FinalProject.windows.main_window.get_user_by_email')
     # Mocking the check_password_hash function
     @patch('FinalProject.windows.main_window.check_password_hash')
-    def test_login_successful(self, mock_check_password_hash, mock_get_user_by_email, mock_get_user_by_username):
+    def test_login_successful(
+            self, mock_check_password_hash, mock_get_user_by_email, mock_get_user_by_username
+    ):
         """
         Test to check the behavior of login when the username and password are correct.
         """
