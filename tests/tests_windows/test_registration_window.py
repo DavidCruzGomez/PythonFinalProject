@@ -160,7 +160,7 @@ class TestRegistrationWindow(unittest.TestCase):
 
         # Mock username validator to return False (invalid)
         with patch.object(
-                self.window.username_validator, 'validate_username', return_value=False
+            self.window.username_validator, 'validate_username', return_value=False
         ):
 
             # Simulate clicking the register button
@@ -187,9 +187,9 @@ class TestRegistrationWindow(unittest.TestCase):
 
         # Mock password validator to return False (invalid)
         with patch.object(
-                self.window.password_validator,
-                'validate_password',
-                return_value=False
+            self.window.password_validator,
+            'validate_password',
+            return_value=False
         ):
 
             # Simulate clicking the register button

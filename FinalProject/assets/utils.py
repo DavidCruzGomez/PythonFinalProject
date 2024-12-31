@@ -1,7 +1,9 @@
 # Standard library imports
+import os
 import re
 
 # Third-party imports
+import pandas as pd
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMessageBox, QLabel
 
@@ -29,6 +31,36 @@ def show_message(parent, title: str, message: str) -> None:
         print(f"📢 [INFO] Displayed message box: {title} - {message}")
     except Exception as gen_err:
         print(f"❌ [ERROR] Failed to display message box. Error: {gen_err}")
+
+
+def read_xls_from_folder(folder_path=None):
+    if folder_path is None:
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        folder_path = os.path.join(project_root,
+                                   'Exploring factors influencing the impulse buying behavior of Vietnamese students on TikTok Shop')
+
+    # Search for .xls or .xlsx files in the folder
+    xls_files = [file for file in os.listdir(folder_path) if file.endswith('.xlsx')]
+
+    if not xls_files:
+        print("No Excel files found in the folder.")
+        return None
+
+    # Take the first Excel file found
+    xls_file = xls_files[0]
+    file_path = os.path.join(folder_path, xls_file)
+
+    # Read the Excel file using pandas
+    try:
+        df = pd.read_excel(file_path)
+        return df
+    except FileNotFoundError:
+        print(f"The file {file_path} was not found.")
+
+    except Exception as e:
+        print(f"An error occurred while reading the file: {e}")
+
+    return None
 
 
 class ValidatorBase:
