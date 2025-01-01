@@ -13,6 +13,19 @@ Key tests include:
 - `test_show_message`: Verifies that `show_message` correctly uses `QMessageBox`
 to display messages.
 
+- `test_read_xls_from_folder_no_files`: Ensures that when no files are found
+in the folder, `read_xls_from_folder` returns `None`.
+
+- `test_read_xls_from_folder_file_not_found`: Verifies that if the specified
+file is not found during reading, `read_xls_from_folder` correctly
+handles the `FileNotFoundError`.
+
+- `test_read_xls_from_folder_general_exception`: Confirms that `read_xls_from_folder`
+handles general exceptions correctly when reading an Excel file.
+
+- `test_read_xls_from_folder_success`: Ensures that `read_xls_from_folder`
+successfully reads and returns the data from an Excel file when present.
+
 - `test_validator_base_create_labels`: Ensures `ValidatorBase` creates
 validation labels with appropriate styles.
 
@@ -34,15 +47,18 @@ for a full graphical environment or actual user input.
 """
 
 # Standard library imports
+import os
 import unittest
 from unittest.mock import MagicMock, patch
+from unittest import mock
 
 # Third-party imports
 from PySide6.QtWidgets import QApplication
+import pandas as pd
 
 # Local imports
 from FinalProject.assets.utils import (show_message, ValidatorBase, PasswordValidator,
-                                       UsernameValidator)
+                                       UsernameValidator, read_xls_from_folder)
 
 
 class TestUtils(unittest.TestCase):
@@ -109,6 +125,88 @@ class TestUtils(unittest.TestCase):
         MockQMessageBox.return_value.setWindowTitle.assert_called_once_with("Test Title")
         MockQMessageBox.return_value.setText.assert_called_once_with("Test Message")
 
+
+    def mock_os_listdir(files):
+        """
+        Helper function to mock the os.listdir function.
+
+        This function simulates the behavior of os.listdir, which lists files in a directory,
+        and returns a specified list of files.
+        """
+        return mock.patch('os.listdir', return_value=files)
+
+
+    def mock_pd_read_excel(dataframe):
+        """
+        Helper function to mock pandas.read_excel function.
+
+        This function simulates reading an Excel file and returns a mock dataframe.
+        """
+        return mock.patch('pandas.read_excel', return_value=dataframe)
+
+    def test_read_xls_from_folder_no_files(self):
+        """
+        Test when no files are present in the folder.
+
+        This test simulates the scenario where the folder does not contain any files,
+        and ensures that the function returns None.
+        """
+        # Mock empty directory
+        with mock.patch('os.listdir', return_value=[]):
+
+            df = read_xls_from_folder('mock_folder')
+            # No files found
+            assert df is None
+            print("Test passed: No Excel files found in the folder.")
+
+    def test_read_xls_from_folder_file_not_found(self):
+        """
+        Test when the file is not found while reading the Excel file.
+
+        This test simulates an error when attempting to read a file that does not exist,
+        and ensures that the function handles the exception correctly.
+        """
+        # Simulate file presence
+        with mock.patch('os.listdir', return_value=['file.xlsx']):
+
+            with mock.patch('pandas.read_excel', side_effect=FileNotFoundError):
+                df = read_xls_from_folder('mock_folder')
+
+                # File not found
+                assert df is None
+                print("Test passed: FileNotFoundError handled correctly.")
+
+    def test_read_xls_from_folder_general_exception(self):
+        """
+        Test for a general exception when reading the Excel file.
+
+        This test simulates a general error when attempting to read an Excel file,
+        and ensures that the function handles the exception correctly.
+        """
+        with mock.patch('os.listdir', return_value=['file.xlsx']):
+            with mock.patch('pandas.read_excel', side_effect=Exception('General Error')):
+                df = read_xls_from_folder('mock_folder')
+                assert df is None
+                print("Test passed: General exception handled correctly.")
+
+    def test_read_xls_from_folder_success(self):
+        """
+        Test when the Excel file is successfully read.
+
+        This test simulates reading an Excel file that exists in the folder,
+        and ensures that the function returns the correct dataframe.
+        """
+        # Mock dataframe
+        mock_df = pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})
+
+        with mock.patch('os.listdir', return_value=['file.xlsx']):
+            with mock.patch('pandas.read_excel', return_value=mock_df):
+                df = read_xls_from_folder('mock_folder')
+                assert df is not None
+
+                # Ensure the returned dataframe matches the mock
+                assert df.equals(mock_df)
+                print("Test passed: Successfully read Excel file.")
 
     def test_validator_base_create_labels(self):
         """

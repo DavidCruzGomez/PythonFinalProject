@@ -37,7 +37,9 @@ def read_xls_from_folder(folder_path=None):
     if folder_path is None:
         project_root = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(project_root,
-                                   'Exploring factors influencing the impulse buying behavior of Vietnamese students on TikTok Shop')
+                                   'Exploring factors influencing the impulse buying'
+                                   ' behavior of Vietnamese students on TikTok Shop'
+                                   )
 
     # Search for .xls or .xlsx files in the folder
     xls_files = [file for file in os.listdir(folder_path) if file.endswith('.xlsx')]
@@ -57,8 +59,8 @@ def read_xls_from_folder(folder_path=None):
     except FileNotFoundError:
         print(f"The file {file_path} was not found.")
 
-    except Exception as e:
-        print(f"An error occurred while reading the file: {e}")
+    except Exception as gen_err:
+        print(f"An error occurred while reading the file: {gen_err}")
 
     return None
 
