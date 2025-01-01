@@ -51,5 +51,5 @@ def summary(df):
     # Display the summary
     print(summ)
 
-print(summary(df))
 
+print(summary(df))

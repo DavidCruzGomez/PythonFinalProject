@@ -47,14 +47,13 @@ for a full graphical environment or actual user input.
 """
 
 # Standard library imports
-import os
 import unittest
-from unittest.mock import MagicMock, patch
 from unittest import mock
+from unittest.mock import MagicMock, patch
 
+import pandas as pd
 # Third-party imports
 from PySide6.QtWidgets import QApplication
-import pandas as pd
 
 # Local imports
 from FinalProject.assets.utils import (show_message, ValidatorBase, PasswordValidator,

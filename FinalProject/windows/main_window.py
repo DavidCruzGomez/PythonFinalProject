@@ -199,7 +199,7 @@ class MainWindow(QMainWindow):
             # Check if the object does not have the attribute '_dashboard_window',
             # or if the attribute exists but its value is falsy
             if not hasattr(self, '_dashboard_window') or not self._dashboard_window:
-                self.dashboard_window = DashboardWindow()
+                self._dashboard_window = DashboardWindow()
 
             self._dashboard_window.show()
             self.close()
