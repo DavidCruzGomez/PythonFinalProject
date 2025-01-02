@@ -1,6 +1,11 @@
+import os
+
 # Third-party imports
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QLabel, QVBoxLayout, QWidget, QApplication
+from PySide6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QApplication,
+                               QMenuBar, QMessageBox, QWidgetAction, QPushButton)
+import subprocess
+import sys
 
 class DashboardWindow(QMainWindow):
     """
@@ -52,3 +57,49 @@ class DashboardWindow(QMainWindow):
         central_widget = QWidget()
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
+
+        # Create a menu bar
+        menu_bar = QMenuBar(self)
+        self.setMenuBar(menu_bar)
+
+        # Add a "File" menu
+        file_menu = menu_bar.addMenu("File")
+
+        # Create a custom widget action for the "Download XLSX" button
+        download_action = QWidgetAction(self)
+
+        # Create a custom QWidget (e.g., a button) to be added as an action
+        download_button = QPushButton("Download XLSX")
+        download_button.clicked.connect(self.download_xlsx)
+
+        # Set the widget (the button) into the QWidgetAction
+        download_action.setDefaultWidget(download_button)
+
+        # Add the action (button) to the "File" menu
+        file_menu.addAction(download_action)
+
+    def download_xlsx(self):
+        """Call the download_files.py script to download the latest XLSX file."""
+        try:
+            # Get the directory where the script is being executed
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+
+            # Build the relative path to the 'download_files.py' script
+            script_path = os.path.join(current_dir, "..", "assets", "download_files.py")
+
+            # Run the script using the same Python executable that's running the application
+            subprocess.run([sys.executable, script_path], check=True)
+
+            # If the download is successful, display a message
+            QMessageBox.information(self, "Download", "File downloaded successfully.")
+
+        except subprocess.CalledProcessError as e:
+            # If an error occurs during the script execution
+            print(f"An error occurred while downloading the file: {e}")
+            QMessageBox.critical(self, "Error",
+                                 f"An error occurred while downloading the file: {e}")
+
+        except FileNotFoundError:
+            print("File not found. Please check the path to the script.")
+        except Exception as e:
+            print(f"Unexpected error: {e}")

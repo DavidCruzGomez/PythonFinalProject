@@ -6,3 +6,7 @@ shiboken6~=6.8.1
 setuptools~=75.6.0
 pandas~=2.2.3
 selenium~=4.27.1
+numpy~=2.2.1
+seaborn~=0.13.2
+matplotlib~=3.10.0
+PyQt6~=6.8.0

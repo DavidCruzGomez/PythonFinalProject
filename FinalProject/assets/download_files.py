@@ -73,7 +73,7 @@ def download_file(driver, sleep_time=10):
         driver.get("https://www.kaggle.com/")
 
         # Wait for the login to be completed manually, and ensure the user has logged in
-        # input("Please log in to Kaggle and then press Enter to continue...")
+        input("Please log in to Kaggle and then press Enter to continue...")
 
         # After login, navigate to the dataset page
         driver.get(
