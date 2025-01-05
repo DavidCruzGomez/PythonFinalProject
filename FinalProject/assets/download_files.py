@@ -5,10 +5,10 @@ import zipfile
 
 # Third-party imports
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException, WebDriverException
 
 
 def unzip_file(zip_file_path, extract_to_folder):

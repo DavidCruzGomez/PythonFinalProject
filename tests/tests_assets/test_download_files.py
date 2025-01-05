@@ -24,8 +24,8 @@ are correctly addressed in the implementation of these functions.
 """
 
 # Standard library imports
-import unittest
 import zipfile
+import unittest
 from unittest.mock import patch, MagicMock
 
 # Local imports

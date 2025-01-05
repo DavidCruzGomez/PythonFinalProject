@@ -21,11 +21,13 @@ STYLES = {
             background-color: #1A91DA;
         }
     """,
+
     "main_window": """
         QMainWindow {
             background-color: #F5F5F5;
         }
     """,
+
     "text_field": """
         QLineEdit {
             background-color: white;
@@ -43,11 +45,13 @@ STYLES = {
             font-style: italic;
         }
     """,
+
     "feedback": {
         "success": "color: green; font-size: 16px;",
         "error": "color: red; font-size: 16px;",
         "info": "color: blue; font-size: 16px;",
     },
+
     "title": "font-size: 30px; color: #333;",
 
     "password_recovery_link": """
@@ -59,7 +63,181 @@ STYLES = {
         QLabel:hover {
             text-decoration: underline;
         }
-    """
+    """,
+
+    "scroll_area": """
+        QScrollArea {
+            background-color: white;
+            border: 4px solid #8ED0F8;
+            border-radius: 10px;
+            max-width: 800px;
+            max-height: 200px;
+        }
+    
+        QTableWidget {
+            width: 100%;
+            border: 1px solid #8ED0F8; /* Light borders around the table */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light background color */
+            gridline-color: #8ED0F8;
+        }
+    
+        QTableWidget::item {
+            padding: 8px;
+            font-size: 16px;
+            background-color: white;
+            border-right: 1px solid #e1e1e1; /* Separators between columns */
+            border-bottom: 1px solid #e1e1e1; /* Separators between rows */
+        }
+    
+        QTableWidget::item:selected {
+            background-color: #8ED0F8; /* Color when a cell is selected */
+            color: white;
+        }
+    
+        QHeaderView::section {
+            background-color: #1A91DA; /* Header background */
+            color: white;
+            font-size: 18px;
+            padding: 5px;
+        }
+    
+        QTableWidget QTableCornerButton::section {
+            background-color: transparent; /* No background color for corners */
+        }
+    
+        /* Customization of vertical scrollbar */
+        QScrollBar:vertical {
+            background: #f2f2f2;
+            width: 12px;
+            border-radius: 6px;
+        }
+    
+        QScrollBar::handle:vertical {
+            background: #8ED0F8;
+            border-radius: 6px;
+            min-height: 30px;
+        }
+    
+        QScrollBar::handle:vertical:hover {
+            background: #1A91DA;
+        }
+    
+        QScrollBar::add-line:vertical {
+            border: none;
+            background: #f2f2f2;
+            height: 0px;
+        }
+    
+        QScrollBar::sub-line:vertical {
+            border: none;
+            background: #f2f2f2;
+            height: 0px;
+        }
+    
+        QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+            border: none;
+            background: none;
+        }
+    
+        /* Customization of horizontal scrollbar */
+        QScrollBar:horizontal {
+            background: #f2f2f2;
+            height: 12px;
+            border-radius: 6px;
+        }
+    
+        QScrollBar::handle:horizontal {
+            background: #8ED0F8;
+            border-radius: 6px;
+            min-width: 30px;
+        }
+    
+        QScrollBar::handle:horizontal:hover {
+            background: #1A91DA;
+        }
+    
+        QScrollBar::add-line:horizontal {
+            border: none;
+            background: #f2f2f2;
+            width: 0px;
+        }
+    
+        QScrollBar::sub-line:horizontal {
+            border: none;
+            background: #f2f2f2;
+            width: 0px;
+        }
+    
+        QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+            border: none;
+            background: none;
+        }
+    """,
+
+    "menu_bar": """
+        QMenuBar {
+            background-color: #8ED0F8;
+            border: none;
+            font-size: 18px;
+            color: #333333; /* Color del texto */
+        }
+
+        QMenuBar::item {
+            background-color: transparent; /* Transparent background by default */
+            padding: 8px 15px;
+        }
+
+        QMenuBar::item:selected {
+            background-color: #1A91DA; /* Light blue background when an item is selected */
+            color: white; /* White text when selected */
+        }
+
+        QMenuBar::item:hover {
+            background-color: #1A91DA; /* Darker blue background when hovered */
+            color: white; /* White text when hovered */
+        }
+
+        QMenu {
+            background-color: #FFFFFF; /* White background for the menus */
+            border: 1px solid #8ED0F8; /* Light blue border */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        QMenu::item {
+            background-color: transparent; /* Transparent background for menu items */
+            padding: 8px 20px;
+            color: #333333; /* Color del texto */
+        }
+
+        QMenu::item:selected {
+            background-color: #8ED0F8; /* Light blue background when a menu item is selected */
+            color: white; /* White text when selected */
+        }
+
+        QMenu::item:hover {
+            background-color: #1A91DA; /* Darker blue background when hovered */
+            color: white; /* White text when hovered */
+        }
+    """,
+
+    "menu_button": """
+        QPushButton {
+            background-color: #1A91DA; /* Blue to match the menu */
+            color: white;
+            border: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            min-width: 150px;
+        }
+        QPushButton:hover {
+            background-color: #8ED0F8; /* Change to light blue when hovered */
+        }
+        QPushButton:pressed {
+            background-color: #1A91DA; /* Maintain the color when pressed */
+            opacity: 0.8; /* Visual effect when pressed */
+        }
+    """,
 }
 
 # Constants for input fields and button sizes
