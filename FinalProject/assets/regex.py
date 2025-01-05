@@ -24,7 +24,7 @@ and is used to ensure that input data conforms to expected patterns before being
 processed in the application.
 """
 
-EMAIL_REGEX = (
+EMAIL_REGEX: str = (
     r"^"                        # Start of the string
     r"[a-zA-Z0-9._%+-]+"        # Username part (allowed alphanumeric and special characters)
     r"@"                        # The "@" symbol is mandatory
@@ -35,7 +35,7 @@ EMAIL_REGEX = (
     r"[a-zA-Z]{2,}$"            # Domain extension (must be at least 2 letters)
 )
 
-PASSWORD_REGEX = {
+PASSWORD_REGEX: dict[str, str] = {
     'upper': r'[A-Z]',               # At least one uppercase letter
     'lower': r'[a-z]',               # At least one lowercase letter
     'number': r'\d',                 # At least one number
@@ -51,7 +51,7 @@ PASSWORD_REGEX = {
     )
 }
 
-USERNAME_REGEX = {
+USERNAME_REGEX: dict[str, str] = {
     'length': r'.{3,18}',                   # Length between 3 and 18 characters
     'valid_chars': r'^[A-Za-z0-9._-]+$',    # Only alphanumeric characters, dots, hyphens,
                                             # and underscores

@@ -71,7 +71,7 @@ class TestUtils(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """
         Setup method that runs once before all tests.
 
@@ -84,7 +84,7 @@ class TestUtils(unittest.TestCase):
 
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """
         Teardown method that runs once after all tests.
 
@@ -95,7 +95,7 @@ class TestUtils(unittest.TestCase):
 
 
     @patch('FinalProject.assets.utils.QMessageBox', autospec=True)  # patch the QMessageBox class
-    def test_show_message(self, MockQMessageBox):
+    def test_show_message(self, MockQMessageBox: MagicMock) -> None:
         """
         Test the show_message function.
 
@@ -125,7 +125,8 @@ class TestUtils(unittest.TestCase):
         MockQMessageBox.return_value.setText.assert_called_once_with("Test Message")
 
 
-    def mock_os_listdir(files):
+    @staticmethod
+    def mock_os_listdir(files: list[str]) -> patch:
         """
         Helper function to mock the os.listdir function.
 
@@ -135,7 +136,8 @@ class TestUtils(unittest.TestCase):
         return mock.patch('os.listdir', return_value=files)
 
 
-    def mock_pd_read_excel(dataframe):
+    @staticmethod
+    def mock_pd_read_excel(dataframe: pd.DataFrame) -> patch:
         """
         Helper function to mock pandas.read_excel function.
 
@@ -143,7 +145,7 @@ class TestUtils(unittest.TestCase):
         """
         return mock.patch('pandas.read_excel', return_value=dataframe)
 
-    def test_read_xls_from_folder_no_files(self):
+    def test_read_xls_from_folder_no_files(self) -> None:
         """
         Test when no files are present in the folder.
 
@@ -158,7 +160,7 @@ class TestUtils(unittest.TestCase):
             assert df is None
             print("Test passed: No Excel files found in the folder.")
 
-    def test_read_xls_from_folder_file_not_found(self):
+    def test_read_xls_from_folder_file_not_found(self) -> None:
         """
         Test when the file is not found while reading the Excel file.
 
@@ -175,7 +177,7 @@ class TestUtils(unittest.TestCase):
                 assert df is None
                 print("Test passed: FileNotFoundError handled correctly.")
 
-    def test_read_xls_from_folder_general_exception(self):
+    def test_read_xls_from_folder_general_exception(self) -> None:
         """
         Test for a general exception when reading the Excel file.
 
@@ -188,7 +190,7 @@ class TestUtils(unittest.TestCase):
                 assert df is None
                 print("Test passed: General exception handled correctly.")
 
-    def test_read_xls_from_folder_success(self):
+    def test_read_xls_from_folder_success(self) -> None:
         """
         Test when the Excel file is successfully read.
 
@@ -207,7 +209,7 @@ class TestUtils(unittest.TestCase):
                 assert df.equals(mock_df)
                 print("Test passed: Successfully read Excel file.")
 
-    def test_validator_base_create_labels(self):
+    def test_validator_base_create_labels(self) -> None:
         """
         Test the creation of validation labels in ValidatorBase.
 
@@ -228,7 +230,7 @@ class TestUtils(unittest.TestCase):
             self.assertFalse(label.isVisible())
 
 
-    def test_validator_base_show_hide_labels(self):
+    def test_validator_base_show_hide_labels(self) -> None:
         """
         Test the visibility of validation labels in ValidatorBase.
 
@@ -253,7 +255,7 @@ class TestUtils(unittest.TestCase):
             self.assertFalse(label.isVisible())
 
 
-    def test_validator_base_validate_input(self):
+    def test_validator_base_validate_input(self) -> None:
         """
         Test the input validation functionality of ValidatorBase.
 
@@ -282,7 +284,7 @@ class TestUtils(unittest.TestCase):
         self.assertTrue(validation_status[1])
 
 
-    def test_password_validator(self):
+    def test_password_validator(self) -> None:
         """
         Test the password validation functionality of PasswordValidator.
 
@@ -300,7 +302,7 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(validator.validate_password("pass"))
 
 
-    def test_username_validator(self):
+    def test_username_validator(self) -> None:
         """
         Test the username validation functionality of UsernameValidator.
 

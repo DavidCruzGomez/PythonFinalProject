@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication
 from windows.main_window import MainWindow
 
 
-def main():
+def main() -> None:
     """
     Initializes and runs the Qt application. Handles the creation and display of the main window,
     and includes error handling for the application initialization and window setup processes.

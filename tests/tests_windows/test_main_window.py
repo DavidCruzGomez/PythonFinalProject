@@ -67,21 +67,21 @@ class TestMainWindow(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """
         Set up the QApplication instance for testing the MainWindow.
         This is necessary for initializing the widgets properly in PySide6.
         """
         cls.app = QApplication([])
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Set up a fresh instance of the MainWindow for each test.
         This ensures each test starts with a clean state of the window.
         """
         self.window = MainWindow()
 
-    def test_initial_state(self):
+    def test_initial_state(self) -> None:
         """
         Test to check the initial state of the main window:
         - Window title.
@@ -107,7 +107,7 @@ class TestMainWindow(unittest.TestCase):
     @patch('FinalProject.windows.main_window.check_password_hash')
     def test_login_successful(
             self, mock_check_password_hash, mock_get_user_by_email, mock_get_user_by_username
-    ):
+    ) -> None:
         """
         Test to check the behavior of login when the username and password are correct.
         """
@@ -129,7 +129,7 @@ class TestMainWindow(unittest.TestCase):
 
             mock_login_successful.assert_called_once()
 
-    def test_empty_username(self):
+    def test_empty_username(self) -> None:
         """
         Test that simulates a login attempt with an empty username.
         Verifies the correct message is shown.
@@ -146,7 +146,7 @@ class TestMainWindow(unittest.TestCase):
 
             mock_set_text.assert_called_with("Username cannot be empty.")
 
-    def test_empty_password(self):
+    def test_empty_password(self) -> None:
         """
         Test that simulates a login attempt with an empty password.
         Verifies the correct message is shown.
@@ -163,7 +163,7 @@ class TestMainWindow(unittest.TestCase):
 
             mock_set_text.assert_called_with("Password cannot be empty.")
 
-    def test_invalid_credentials(self):
+    def test_invalid_credentials(self) -> None:
         """
         Test that simulates a login attempt with a valid username but an incorrect password.
         Verifies the correct "User not found" message is shown.
@@ -186,7 +186,7 @@ class TestMainWindow(unittest.TestCase):
 
     # Mock the get_user_by_email function
     @patch('FinalProject.windows.main_window.get_user_by_email')
-    def test_handle_login_error_incorrect_password(self, mock_get_user_by_email):
+    def test_handle_login_error_incorrect_password(self, mock_get_user_by_email) -> None:
         """
         Test that simulates a login attempt with a valid username and an incorrect password.
         Verifies the correct "Incorrect password" message is shown.
@@ -211,7 +211,7 @@ class TestMainWindow(unittest.TestCase):
 
     # Patching the RegistrationWindow to simulate opening the registration window.
     @patch('FinalProject.windows.main_window.RegistrationWindow')
-    def test_open_registration_window(self, MockRegistrationWindow):
+    def test_open_registration_window(self, MockRegistrationWindow) -> None:
         """
         Test to verify that the registration window opens correctly.
         """
@@ -227,7 +227,7 @@ class TestMainWindow(unittest.TestCase):
 
     # Patching the RecoveryWindow to simulate opening the recovery window.
     @patch('FinalProject.windows.main_window.RecoveryWindow')
-    def test_open_recovery_window(self, MockRecoveryWindow):
+    def test_open_recovery_window(self, MockRecoveryWindow) -> None:
         """
         Test to verify that the password recovery window opens correctly.
         """

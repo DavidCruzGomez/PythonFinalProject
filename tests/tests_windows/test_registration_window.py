@@ -62,21 +62,21 @@ class TestRegistrationWindow(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """
         Set up the QApplication instance for testing the RegistrationWindow.
         This is required by PySide6 to initialize the widgets correctly for testing.
         """
         cls.app = QApplication([])
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Set up the RegistrationWindow instance for each test case.
         This function is called before each individual test method is executed.
         """
         self.window = RegistrationWindow()
 
-    def test_initial_state(self):
+    def test_initial_state(self) -> None:
         """
         Test the initial state of the registration window to ensure
         that the title is correct and the input fields for username, email,
@@ -92,7 +92,7 @@ class TestRegistrationWindow(unittest.TestCase):
     # to mock message display during tests.
     @patch('FinalProject.assets.users_db.add_user_to_db', return_value=None)
     @patch('FinalProject.windows.registration_window.show_message')
-    def test_register_success(self, mock_show_message, mock_add_user_to_db):
+    def test_register_success(self, mock_show_message, mock_add_user_to_db) -> None:
         """
         Test the registration process when valid data is provided.
         This test ensures that when the username, email, and password are valid,
@@ -107,10 +107,10 @@ class TestRegistrationWindow(unittest.TestCase):
         self.window.password_validator.validate_password.return_value = True
 
         # Generate unique test data (username, email)
-        timestamp = int(time.time())
-        username = f"user_{timestamp}"
-        email = f"user_{timestamp}@example.com"
-        password = "ValidPassword123"
+        timestamp: int = int(time.time())
+        username: str = f"user_{timestamp}"
+        email: str = f"user_{timestamp}@example.com"
+        password: str = "ValidPassword123"
 
         # Set input fields with test data
         self.window.username_input.setText(username)
@@ -128,7 +128,7 @@ class TestRegistrationWindow(unittest.TestCase):
     # Patches the `show_message` function to mock message display
     # in the registration window during tests.
     @patch('FinalProject.windows.registration_window.show_message')
-    def test_register_empty_fields(self, mock_show_message):
+    def test_register_empty_fields(self, mock_show_message) -> None:
         """
         Test the registration process when one or more input fields are empty.
         This test ensures that an error message is shown when the fields are empty.
@@ -148,7 +148,7 @@ class TestRegistrationWindow(unittest.TestCase):
     # Mocks the `show_message` function to simulate message display
     # during registration process tests.
     @patch('FinalProject.windows.registration_window.show_message')
-    def test_register_invalid_username(self, mock_show_message):
+    def test_register_invalid_username(self, mock_show_message) -> None:
         """
         Test the registration process when the username does not meet the required validation rules.
         This test ensures that the correct error message is displayed for an invalid username.
@@ -175,7 +175,7 @@ class TestRegistrationWindow(unittest.TestCase):
     # Mocks the `show_message` function to test message display
     # without showing the actual UI message.
     @patch('FinalProject.windows.registration_window.show_message')
-    def test_register_invalid_password(self, mock_show_message):
+    def test_register_invalid_password(self, mock_show_message) -> None:
         """
         Test the registration process when the password is too short or invalid.
         This test ensures that the correct error message is shown for an invalid password.
@@ -200,7 +200,7 @@ class TestRegistrationWindow(unittest.TestCase):
                 self.window, "Error", "Password does not meet all requirements."
             )
 
-    def test_close_event(self):
+    def test_close_event(self) -> None:
         """
         Test the behavior when the registration window is closed.
         This test ensures that any ongoing timers for

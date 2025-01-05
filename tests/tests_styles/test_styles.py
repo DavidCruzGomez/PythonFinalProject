@@ -51,11 +51,11 @@ class TestStyles(unittest.TestCase):
     Test class for verifying the functionality of style-related functions for widgets.
     """
 
-    def test_create_title(self):
+    def test_create_title(self) -> None:
         """
         Test the creation of a title label with the correct text, style, and alignment.
         """
-        title_text = "Test Title"
+        title_text: str = "Test Title"
         title = create_title(title_text)
 
         # Verify that the title is an instance of QLabel
@@ -70,11 +70,11 @@ class TestStyles(unittest.TestCase):
         # Verify that the title has the correct style (font size and color)
         self.assertEqual(title.styleSheet(), "font-size: 30px; color: #333;")
 
-    def test_create_input_field(self):
+    def test_create_input_field(self) -> None:
         """
         Test the creation of a text input field with the specified placeholder and style.
         """
-        placeholder = "Enter your name"
+        placeholder: str = "Enter your name"
         input_field = create_input_field(placeholder)
 
         # Verify that the input field is an instance of QLineEdit
@@ -105,28 +105,28 @@ class TestStyles(unittest.TestCase):
         # Verify that the input field is not set to password mode
         self.assertEqual(input_field.echoMode(), QLineEdit.EchoMode.Normal)
 
-    def test_create_password_field(self):
+    def test_create_password_field(self) -> None:
         """
         Test the creation of a password input field, verifying that the text is hidden.
         """
-        placeholder = "Enter your password"
+        placeholder: str = "Enter your password"
         input_field = create_input_field(placeholder, is_password=True)
 
         # Verify that the input field is set to password mode (i.e., text is hidden)
         self.assertEqual(input_field.echoMode(), QLineEdit.EchoMode.Password)
 
-    def test_create_button(self):
+    def test_create_button(self) -> None:
         """
         Test the creation of a button with the correct text, style, and cursor.
         """
-        button_text = "Click Me"
+        button_text: str = "Click Me"
 
         # Dummy callback function to connect with the button's click signal
-        def dummy_callback():
+        def dummy_callback() -> None:
             """Placeholder function for button tests, performing no action."""
             pass
 
-        button = create_button(button_text, dummy_callback)
+        button: QPushButton = create_button(button_text, dummy_callback)
 
         # Verify that the button is an instance of QPushButton
         self.assertIsInstance(button, QPushButton)
@@ -154,12 +154,12 @@ class TestStyles(unittest.TestCase):
         # Verify that the button's cursor changes to a pointing hand on hover
         self.assertEqual(button.cursor().shape(), Qt.CursorShape.PointingHandCursor)
 
-    def test_style_feedback_label(self):
+    def test_style_feedback_label(self) -> None:
         """
         Test the feedback label styling with a success message and the corresponding style.
         """
-        label = QLabel()
-        message = "Success!"
+        label: QLabel = QLabel()
+        message: str = "Success!"
 
         # Call the function to style the label with a success message
         style_feedback_label(label, message, "success")
@@ -170,11 +170,11 @@ class TestStyles(unittest.TestCase):
         # Verify that the label's style sheet is set to the success style
         self.assertEqual(label.styleSheet(), "color: green; font-size: 16px;")
 
-    def test_invalid_message_type(self):
+    def test_invalid_message_type(self) -> None:
         """
         Test handling of an invalid message type by raising InputValidationError.
         """
-        label = QLabel()
+        label: QLabel = QLabel()
         with self.assertRaises(InputValidationError) as context:
             # Call the function with an invalid message type to raise an exception
             style_feedback_label(label, "Error message", "invalid_type")

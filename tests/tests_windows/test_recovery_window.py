@@ -58,7 +58,7 @@ class TestRecoveryWindow(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """
         Set up the QApplication instance for testing the RecoveryWindow.
         This is required by PySide6 to initialize the widgets correctly.
@@ -69,7 +69,7 @@ class TestRecoveryWindow(unittest.TestCase):
     # Patches the EMAIL_CONFIG_FILE constant to use a fake path during tests.
     @patch('FinalProject.windows.recovery_window.EMAIL_CONFIG_FILE',
            'C:/Users/David/PycharmProjects/PythonProject1/FinalProject/assets/email_config.json')
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Set up the RecoveryWindow instance for each test case.
         This function is called before each individual test method is executed.
@@ -77,7 +77,7 @@ class TestRecoveryWindow(unittest.TestCase):
         self.window = RecoveryWindow()
 
 
-    def test_initial_state(self):
+    def test_initial_state(self) -> None:
         """
         Test the initial state of the RecoveryWindow to ensure the window
         title and the email input field are set correctly when the window is first opened.
@@ -91,7 +91,7 @@ class TestRecoveryWindow(unittest.TestCase):
     @patch.object(EmailSender, 'send_recovery_email')
     @patch('FinalProject.windows.recovery_window.get_user_by_email')
     def test_recover_password_user_not_found(self, mock_get_user_by_email, mock_send_recovery_email,
-                                             mock_show_message):
+                                             mock_show_message) -> None:
         """
         Test the recovery process when the email provided is not found in the system.
         This test checks that the appropriate error message is displayed and
@@ -118,7 +118,7 @@ class TestRecoveryWindow(unittest.TestCase):
     @patch(
         'FinalProject.windows.recovery_window.show_message')
     def test_recover_password_success(self, mock_show_message, mock_send_recovery_email,
-                                      mock_get_user_by_email):
+                                      mock_get_user_by_email) -> None:
         """
         Test the recovery process when a valid user is found.
         This test checks that the recovery email is sent successfully and
@@ -138,13 +138,13 @@ class TestRecoveryWindow(unittest.TestCase):
                                              "A recovery email has been sent.")
 
 
-    def test_load_email_config_success(self):
+    def test_load_email_config_success(self) -> None:
         """
         Test loading the email configuration from a JSON file.
         This test ensures that the email configuration file is read correctly
         and the required values (email and password) are returned.
         """
-        fake_email_config = {
+        fake_email_config: dict[str, str] = {
             "sender_email": "sender@example.com",
             "sender_password": "password"
         }
@@ -163,7 +163,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
     # Patches the load_email_config function to mock its behavior for testing.
     @patch('FinalProject.windows.recovery_window.load_email_config')
-    def test_load_email_config_error(self, mock_load_email_config):
+    def test_load_email_config_error(self, mock_load_email_config) -> None:
         """
         Test the case when loading the email configuration fails.
         This test checks that an EmailConfigError is raised when the configuration
@@ -179,7 +179,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
     # Patches the smtplib.SMTP class to mock email sending behavior for testing.
     @patch('FinalProject.windows.recovery_window.smtplib.SMTP')
-    def test_send_recovery_email_success(self, mock_smtp):
+    def test_send_recovery_email_success(self, mock_smtp) -> None:
         """
         Test sending a recovery email successfully.
         This test ensures that the email is sent through SMTP when the recovery email
@@ -201,7 +201,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
     # Patches the smtplib.SMTP class to mock SMTP server interactions for email sending tests.
     @patch('FinalProject.windows.recovery_window.smtplib.SMTP')
-    def test_send_recovery_email_failure(self, mock_smtp):
+    def test_send_recovery_email_failure(self, mock_smtp) -> None:
         """
         Test the failure scenario for sending a recovery email.
         This test ensures that an EmailSendingError is raised when an SMTP error occurs

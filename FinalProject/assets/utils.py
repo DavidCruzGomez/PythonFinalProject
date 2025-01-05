@@ -33,13 +33,20 @@ def show_message(parent, title: str, message: str) -> None:
         print(f"❌ [ERROR] Failed to display message box. Error: {gen_err}")
 
 
-def read_xls_from_folder(folder_path=None):
+def read_xls_from_folder(folder_path: str = None) -> pd.DataFrame | None:
+    """
+    Reads the first .xls or .xlsx file from a given folder.
+
+    Args:
+        folder_path (str): Path to the folder where the files are located.
+
+    Returns:
+        pd.DataFrame: Dataframe containing the data from the Excel file.
+        None: If no valid Excel files are found or an error occurs.
+    """
     if folder_path is None:
         project_root = os.path.dirname(os.path.abspath(__file__))
-        folder_path = os.path.join(project_root,
-                                   'Exploring factors influencing the impulse buying'
-                                   ' behavior of Vietnamese students on TikTok Shop'
-                                   )
+        folder_path = os.path.join(project_root, 'impulse_buying_data')
 
     # Search for .xls or .xlsx files in the folder
     xls_files = [file for file in os.listdir(folder_path) if file.endswith('.xlsx')]
@@ -83,7 +90,7 @@ class ValidatorBase:
         validate_input(input_text, regex_list, validation_status): Validates the input based on
             regex rules.
     """
-    def __init__(self, requirements: list[str], timer_interval=2000):
+    def __init__(self, requirements: list[str], timer_interval=2000) -> None:
         """
         Initializes the validator with given requirements and timer interval.
 
@@ -92,12 +99,12 @@ class ValidatorBase:
             timer_interval (int): Interval in milliseconds to hide labels after inactivity.
                 Defaults to 2000ms.
         """
-        self._labels = []
-        self._timer = QTimer()
+        self._labels: list[QLabel] = []
+        self._timer: QTimer = QTimer()
         self._timer.setInterval(timer_interval) # Hide labels after inactivity
         self._timer.timeout.connect(self.hide_labels)
-        self._requirements = requirements # List of requirement descriptions
-        self._validation_state = [False] * len(requirements) # Store requirement´s validation
+        self._requirements: list[str] = requirements # List of requirement descriptions
+        self._validation_state: list[bool] = [False] * len(requirements) # Store requirement´s validation
         print(f"🔄 [INFO] Validator initialized with {len(requirements)} requirements.")
 
 
@@ -187,7 +194,7 @@ class ValidatorBase:
             Exception: If an unexpected error occurs during validation.
         """
         try:
-            all_requirements_met = True
+            all_requirements_met: bool = True
             for index, (regex, label) in enumerate(regex_list):
                 is_valid = bool(re.search(regex, input_text))
 
@@ -299,7 +306,7 @@ class UsernameValidator(ValidatorBase):
             "Starts with alphanumeric.",
             "Ends with alphanumeric."
         ])
-        self._validation_started = False
+        self._validation_started: bool = False
         print("🔄 [INFO] UsernameValidator initialized.")
 
     def validate_username(self, username: str) -> bool:

@@ -83,8 +83,8 @@ class RegistrationWindow(QWidget):
         self.setLayout(layout)
 
         # Flag to track if window is closing
-        self._is_closing = False
-        self._is_registered = False
+        self._is_closing: bool = False
+        self._is_registered: bool = False
 
         print("📝 [INFO] Registration Window Initialized.")
 
@@ -139,7 +139,7 @@ class RegistrationWindow(QWidget):
             # the registration is successful
             return
 
-        password = self.password_input.text().strip()
+        password: str = self.password_input.text().strip()
 
         # Show and validate password requirements
         self.password_validator.show_labels()
@@ -170,7 +170,7 @@ class RegistrationWindow(QWidget):
             # the registration is successful
             return
 
-        username = self.username_input.text().strip()
+        username: str = self.username_input.text().strip()
 
         # Show and validate username requirements
         self.username_validator.show_labels()
@@ -200,9 +200,9 @@ class RegistrationWindow(QWidget):
         Raises:
             ValueError: If user registration fails (e.g., due to database issues).
         """
-        username = self.username_input.text().strip()
-        email = self.email_input.text().strip()
-        password = self.password_input.text().strip()
+        username: str = self.username_input.text().strip()
+        email: str = self.email_input.text().strip()
+        password: str = self.password_input.text().strip()
 
         # Validate empty fields
         if not username or not email or not password:

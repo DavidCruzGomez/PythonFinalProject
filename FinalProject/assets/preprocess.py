@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from FinalProject.assets.utils import read_xls_from_folder
 
 # Reading data from the folder
-df = read_xls_from_folder()
+df: pd.DataFrame = read_xls_from_folder()
 if df is not None:
     print(df)
 
@@ -16,7 +16,7 @@ if df is not None:
 df = df.dropna()
 df = df.drop_duplicates()
 
-def calculate_entropy(series):
+def calculate_entropy(series: pd.Series) -> float:
     """
     Calculates the entropy of a column, which measures
     the uncertainty of the distribution of values in the column.
@@ -33,20 +33,20 @@ def calculate_entropy(series):
     # Drop missing values and calculate the value counts (probabilities)
     value_counts = series.dropna().value_counts(normalize=True)
     # Entropy formula: -sum(p * log2(p)) for each unique value's probability
-    entropy = -np.sum(value_counts * np.log2(value_counts))
+    entropy: float = -np.sum(value_counts * np.log2(value_counts))
     return entropy
 
 
-def summary(df):
+def summary(df: pd.DataFrame) -> pd.DataFrame:
     # Filter numeric and non-numeric columns
-    num_cols = df.select_dtypes(include=[np.number])
-    cat_cols = df.select_dtypes(exclude=[np.number])
+    num_cols: pd.DataFrame = df.select_dtypes(include=[np.number])
+    cat_cols: pd.DataFrame = df.select_dtypes(exclude=[np.number])
 
     # Display the shape of the data
     print(f'data shape: {df.shape}')
 
     # Initialize a summary DataFrame with the data types of each column
-    summ = pd.DataFrame(df.dtypes, columns=['Data Type'])
+    summ: pd.DataFrame = pd.DataFrame(df.dtypes, columns=['Data Type'])
 
     # Calculate missing data for each column
     summ['Missing#'] = df.isna().sum()
@@ -60,7 +60,7 @@ def summary(df):
 
     # Calculate descriptive statistics only for numeric columns
     if not num_cols.empty:
-        desc = num_cols.describe().transpose() # Get descriptive stats
+        desc: pd.DataFrame = num_cols.describe().transpose() # Get descriptive stats
         summ['Min'] = desc['min']
         summ['Max'] = desc['max']
         summ['Average'] = desc['mean']
@@ -94,7 +94,7 @@ def summary(df):
         ))
 
     # Handle the case of missing rows for first, second, and third values
-    first_values = df.head(3).values
+    first_values: np.ndarray = df.head(3).values
     for i, col in enumerate(df.columns):
         # Check the column's data type before assigning values
         if summ.at[col, 'Data Type'] in ['int64', 'float64']:
@@ -114,5 +114,12 @@ def summary(df):
 
     return summ
 
+# Save the processed data to a CSV file
+processed_data_path: str = os.path.join(os.path.dirname(__file__),
+                                        "impulse_buying_data",
+                                        "processed_data.csv"
+                                       )
+summary_df: pd.DataFrame = summary(df)
+summary_df.to_csv(processed_data_path, index=False)
 
-print(summary(df))
+print("Data preprocessing complete and saved to 'processed_data.csv'")

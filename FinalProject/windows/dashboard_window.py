@@ -120,7 +120,7 @@ class DashboardWindow(QMainWindow):
         # Display the first 5 rows of the XLSX file
         self.display_first_5_rows()
 
-    def download_xlsx(self):
+    def download_xlsx(self) -> None:
         """Call the download_files.py script to download the latest XLSX file."""
         try:
             # Get the directory where the script is being executed
@@ -150,7 +150,7 @@ class DashboardWindow(QMainWindow):
             QMessageBox.critical(self, "Error",
                                  f"Unexpected error")
 
-    def run_preprocessing(self):
+    def run_preprocessing(self) -> None:
         """Run the preprocessing script (preprocess.py)."""
         try:
             # Get the directory where the script is being executed
@@ -181,7 +181,7 @@ class DashboardWindow(QMainWindow):
             QMessageBox.critical(self, "Error",
                                  f"Unexpected error")
 
-    def display_first_5_rows(self):
+    def display_first_5_rows(self) -> None:
         """Read the first 5 rows of the XLSX file and display them in the table widget."""
         try:
             # Get the directory where the script is being executed
@@ -189,8 +189,7 @@ class DashboardWindow(QMainWindow):
 
             # Build the relative path to the XLSX file
             xlsx_path = os.path.join(current_dir, "..", "assets",
-                                     "Exploring factors influencing the impulse buying behavior"
-                                     " of Vietnamese students on TikTok Shop",
+                                     "impulse_buying_data",
                                      "Raw data_Impulse buying behavior.xlsx")
 
             # Read the XLSX file using pandas

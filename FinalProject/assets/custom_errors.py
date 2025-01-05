@@ -11,7 +11,7 @@ class DatabaseError(Exception):
         self._suggestion = suggestion
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"DatabaseError: {super().__str__()}\n"
             f" - Suggested action: {self._suggestion}"
@@ -31,12 +31,12 @@ class ValidationError(Exception):
                  message: str = "Validation failed.",
                  suggestion: str = "Check the field value and format."
                 ):
-        self._field = field
-        self._value = value
-        self._suggestion = suggestion
+        self._field: str = field
+        self._value: str = value
+        self._suggestion: str = suggestion
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"ValidationError: {super().__str__()}\n"
             f" - Field: {self._field}\n"
@@ -51,7 +51,7 @@ class WidgetError(Exception):
     def __init__(self, message: str = "An error occurred with the widget."):
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"WidgetError: {super().__str__()}"
 
 class InputValidationError(WidgetError):
@@ -65,11 +65,11 @@ class InputValidationError(WidgetError):
     """
     def __init__(self, input_value: any, message: str = "Invalid input provided in the widget.",
                  suggestion: str = "Check the input value and format."):
-        self._input_value = input_value
-        self._suggestion = suggestion
+        self._input_value: any = input_value
+        self._suggestion: str = suggestion
         WidgetError.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"InputValidationError: {self.args[0]}\n"
             f" - Input value: {self._input_value}\n"
@@ -87,11 +87,11 @@ class EmailConfigError(Exception):
     """
     def __init__(self, file_path: str, message: str = "Error in the email configuration.",
                  suggestion: str = "Verify the configuration file and its format."):
-        self._file_path = file_path
-        self._suggestion = suggestion
+        self._file_path: str = file_path
+        self._suggestion: str = suggestion
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"EmailConfigError: {super().__str__()}\n"
             f" - Configuration file: {self._file_path}\n"
@@ -110,12 +110,12 @@ class UserNotFoundError(Exception):
     def __init__(self, email: str,
                  suggestion: str = "Verify the email address and ensure it is registered."):
         # Construct the message directly in the initializer.
-        self._email = email # Still keep the email for potential logging or further handling.
-        self._suggestion = suggestion
+        self._email: str = email # Still keep the email for potential logging or further handling.
+        self._suggestion: str = suggestion
         message = f"User not found for email: {email}"
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         # Return a string representation that includes the message and the email.
         return (
             f"UserNotFoundError: {super().__str__()}\n"
@@ -134,11 +134,11 @@ class EmailSendingError(Exception):
     """
     def __init__(self, email: str, message: str = "Failed to send the email.",
                  suggestion: str = "Check the email address and server configuration."):
-        self._email = email
-        self._suggestion = suggestion
+        self._email: str = email
+        self._suggestion: str = suggestion
         Exception.__init__(self, message)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"EmailSendingError: {super().__str__()}\n"
             f" - Email: {self._email}\n"

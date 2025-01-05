@@ -73,7 +73,7 @@ class TestUsersDb(unittest.TestCase):
     # and simulates opening an empty file to test if it is handled correctly
     @patch("FinalProject.assets.users_db.os.path.exists")
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open, read_data='{}')
-    def test_load_users_db_file_not_found(self, mock_open, mock_exists):
+    def test_load_users_db_file_not_found(self, mock_open, mock_exists) -> None:
         """
         Test case for loading users database when the file does not exist.
 
@@ -81,27 +81,27 @@ class TestUsersDb(unittest.TestCase):
         and checks that the function correctly returns an empty dictionary.
         """
         mock_exists.return_value = False # Simulating that the file doesn't exist
-        users = load_users_db()
+        users: dict = load_users_db()
         self.assertEqual(users, {}) # Verifying that the loaded database is empty
 
 
     # Mocks opening a file with an empty users database to test successful loading
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open, read_data='{}')
-    def test_load_users_db_success(self, mock_open):
+    def test_load_users_db_success(self, mock_open) -> None:
         """
         Test case for successfully loading the user´s database.
 
         This test ensures that the users database is loaded correctly when the file exists
         and contains valid JSON data.
         """
-        users = load_users_db()
+        users: dict = load_users_db()
         self.assertEqual(users, {}) # Verifying that the loaded database is empty
 
 
     # Mocks loading data with invalid JSON to test error handling
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
     @patch("FinalProject.assets.users_db.json.load")
-    def test_load_users_db_invalid_json(self, mock_json_load, mock_open):
+    def test_load_users_db_invalid_json(self, mock_json_load, mock_open) -> None:
         """
         Test case for handling invalid JSON in the users database file.
 
@@ -111,7 +111,7 @@ class TestUsersDb(unittest.TestCase):
         # Simulating a JSON error
         mock_json_load.side_effect = json.JSONDecodeError("Expecting value", "", 0)
 
-        result = load_users_db()
+        result: dict = load_users_db()
         self.assertEqual(result, {}) # Verify error handling by returning an empty dictionary
 
 
@@ -119,21 +119,23 @@ class TestUsersDb(unittest.TestCase):
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
     @patch("FinalProject.assets.users_db.json.load",
            return_value={"user": {"email": "test@example.com"}})
-    def test_validate_users_db_valid(self, mock_json_load, mock_open):
+    def test_validate_users_db_valid(self, mock_json_load, mock_open) -> None:
         """
         Test case for validating a correctly structured user´s database.
 
         This test ensures that the `validate_users_db` function correctly validates the structure
         of the loaded database when all required fields are present.
         """
-        result = validate_users_db({"user": {"email": "test@example.com", "password_hash": "hash"}})
+        result: bool = validate_users_db(
+            {"user": {"email": "test@example.com", "password_hash": "hash"}}
+        )
         self.assertTrue(result) # Verifying that the database is validated correctly
 
 
     # Mocks validating a database with missing fields
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
     @patch("FinalProject.assets.users_db.json.load")
-    def test_validate_users_db_missing_fields(self, mock_json_load, mock_open):
+    def test_validate_users_db_missing_fields(self, mock_json_load, mock_open) -> None:
         """
         Test case for invalid users database with missing required fields.
 
@@ -147,7 +149,7 @@ class TestUsersDb(unittest.TestCase):
 
     # Mocks the function to save the users database
     @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
-    def test_save_users_db(self, mock_open):
+    def test_save_users_db(self, mock_open) -> None:
         """
         Test case for saving the user´s database.
 
@@ -164,7 +166,7 @@ class TestUsersDb(unittest.TestCase):
     # Mocks adding a new user to the database
     @patch("FinalProject.assets.users_db.load_users_db", return_value={})
     @patch("FinalProject.assets.users_db.save_users_db")
-    def test_add_user_to_db(self, mock_save_users_db, mock_load_users_db):
+    def test_add_user_to_db(self, mock_save_users_db, mock_load_users_db) -> None:
         """
         Test case for adding a new user to the user´s database.
 
@@ -178,7 +180,7 @@ class TestUsersDb(unittest.TestCase):
     # Mocks attempting to add a user with an existing username
     @patch("FinalProject.assets.users_db.load_users_db", return_value={
         "existinguser": {"email": "existinguser@example.com", "password_hash": "hash"}})
-    def test_add_user_to_db_existing_user(self, mock_load_users_db):
+    def test_add_user_to_db_existing_user(self, mock_load_users_db) -> None:
         """
         Test case for trying to add a user with an existing username.
 
@@ -193,7 +195,7 @@ class TestUsersDb(unittest.TestCase):
     # Mocks getting a user by their username
     @patch("FinalProject.assets.users_db.load_users_db",
            return_value={"user": {"email": "user@example.com", "password_hash": "hash"}})
-    def test_get_user_by_username(self, mock_load_users_db):
+    def test_get_user_by_username(self, mock_load_users_db) -> None:
         """
         Test case for retrieving a user by username.
 
@@ -207,7 +209,7 @@ class TestUsersDb(unittest.TestCase):
     # Mocks getting a user by their email address
     @patch("FinalProject.assets.users_db.load_users_db",
            return_value={"user": {"email": "user@example.com", "password_hash": "hash"}})
-    def test_get_user_by_email(self, mock_load_users_db):
+    def test_get_user_by_email(self, mock_load_users_db) -> None:
         """
         Test case for retrieving a user by email.
 
@@ -219,17 +221,19 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Verifies that the password matches its hash
-    def test_check_password_hash(self):
+    def test_check_password_hash(self) -> None:
         """
         Test case for checking if a password matches its hash.
 
         This test ensures that the `check_password_hash` function correctly verifies
         whether a given password matches the stored password hash.
         """
-        password = "Password1!"
+        password: str = "Password1!"
 
         # Generating the hash
-        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        password_hash: str = bcrypt.hashpw(
+            password.encode('utf-8'), bcrypt.gensalt()
+        ).decode('utf-8')
 
         # Verifying that the password matches the hash
         self.assertTrue(check_password_hash(password_hash, password))
@@ -239,7 +243,7 @@ class TestUsersDb(unittest.TestCase):
     @patch("FinalProject.assets.users_db.load_users_db",
            return_value={"existinguser": {"email": "existinguser@example.com",
                                           "password_hash": "hash"}})
-    def test_username_exists(self, mock_load_users_db):
+    def test_username_exists(self, mock_load_users_db) -> None:
         """
         Test case for checking if a username exists in the database.
 

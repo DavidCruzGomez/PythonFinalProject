@@ -12,10 +12,10 @@ from FinalProject.assets.custom_errors import DatabaseError, ValidationError, Us
 
 
 # Path to the file simulating the user's database
-DB_FILE = os.path.join(os.getcwd(), "assets", "users_db.json")
+DB_FILE: str = os.path.join(os.getcwd(), "assets", "users_db.json")
 
 
-def validate_users_db(users_db: dict) -> bool:
+def validate_users_db(users_db: dict[str, dict[str, str]]) -> bool:
     """
     Validates the structure of the user's database.
 
@@ -41,7 +41,7 @@ def validate_users_db(users_db: dict) -> bool:
     return True  # Return True if all users are valid
 
 
-def load_users_db() -> dict:
+def load_users_db() -> dict[str, dict[str, str]]:
     """
     Load the users database from a JSON file.
 
@@ -84,7 +84,7 @@ def load_users_db() -> dict:
         raise DatabaseError("Unexpected error while loading the database.") from gen_err
 
 
-def save_users_db(users_db: dict) -> None:
+def save_users_db(users_db: dict[str, dict[str, str]]) -> None:
     """
     Save the users database to a JSON file.
 
@@ -174,7 +174,7 @@ def add_user_to_db(username: str, email: str, password: str) -> None:
         raise RuntimeError("An unexpected error occurred while adding the user.") from gen_err
 
 
-def get_user_by_username(username: str) -> dict | None:
+def get_user_by_username(username: str) -> dict[str, str] | None:
     """
     Get the data of a user by their username.
 
@@ -204,7 +204,7 @@ def get_user_by_username(username: str) -> dict | None:
         return None
 
 
-def get_user_by_email(email: str) -> dict | None:
+def get_user_by_email(email: str) -> dict[str, str] | None:
     """
     Get the data of a user by their email.
 

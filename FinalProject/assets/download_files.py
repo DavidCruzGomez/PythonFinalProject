@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-def unzip_file(zip_file_path, extract_to_folder):
+def unzip_file(zip_file_path: str, extract_to_folder: str) -> None:
     """Unzips the specified ZIP file into the target folder."""
     try:
         if zipfile.is_zipfile(zip_file_path):
@@ -44,7 +44,21 @@ def unzip_file(zip_file_path, extract_to_folder):
         raise
 
 
-def setup_browser():
+def rename_folder(folder_path: str, new_folder_name: str) -> str | None:
+    """Renames the extracted folder."""
+    try:
+        parent_folder = os.path.dirname(folder_path)
+        new_folder_path = os.path.join(parent_folder, new_folder_name)
+
+        os.rename(folder_path, new_folder_path)
+        print(f"Folder has been renamed to: {new_folder_name}")
+        return new_folder_path
+    except Exception as rename_err:
+        print(f"Error renaming folder: {str(rename_err)}")
+        return None
+
+
+def setup_browser() -> webdriver.Chrome | None:
     """Sets up and returns a Chrome browser with specific preferences."""
     try:
         options = webdriver.ChromeOptions()
@@ -67,7 +81,7 @@ def setup_browser():
         return None
 
 
-def download_file(driver, sleep_time=10):
+def download_file(driver: webdriver.Chrome, sleep_time: int = 10) -> str | None:
     """Attempts to download the file from Kaggle."""
     try:
         driver.get("https://www.kaggle.com/")
@@ -130,7 +144,29 @@ if __name__ == "__main__":
             zip_file = download_file(driver)
             if zip_file:
                 zip_file_path = os.path.join(os.getcwd(), zip_file)
+
+                # Unzip the file
                 unzip_file(zip_file_path, os.getcwd())
+
+                # After extracting, find the folder
+                extracted_folder = os.path.join(os.getcwd(), "Exploring factors influencing"
+                                                             " the impulse buying behavior of"
+                                                             " Vietnamese students on TikTok Shop"
+                                                )
+
+                # Wait for the folder to exist
+                while not os.path.exists(extracted_folder):
+                    print(f"Waiting for the folder to be extracted: {extracted_folder}")
+                    time.sleep(2)
+
+                # Rename the extracted folder
+                new_folder_name = "impulse_buying_data"
+                renamed_folder_path = rename_folder(extracted_folder, new_folder_name)
+
+                if renamed_folder_path:
+                    print(f"Folder renamed successfully to: {new_folder_name}")
+                else:
+                    print("Error: The folder could not be renamed.")
             else:
                 print("Error: File could not be downloaded.")
         finally:

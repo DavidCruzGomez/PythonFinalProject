@@ -34,7 +34,7 @@ class TestEmailConfig(unittest.TestCase):
     and that the values for the sender's email and password match the expected values.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Set up the test by loading the email configuration file.
 
@@ -48,7 +48,7 @@ class TestEmailConfig(unittest.TestCase):
         with open(file_path, 'r') as file:
             self.config = json.load(file)
 
-    def test_sender_email(self):
+    def test_sender_email(self) -> None:
         """
         Test that the sender's email is correctly defined in the configuration file.
 
@@ -58,7 +58,7 @@ class TestEmailConfig(unittest.TestCase):
         self.assertIn('sender_email', self.config)
         self.assertEqual(self.config['sender_email'], "noreply.impulsebuying@gmail.com")
 
-    def test_sender_password(self):
+    def test_sender_password(self) -> None:
         """
         Test that the sender's password is correctly defined in the configuration file.
 

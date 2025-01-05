@@ -40,9 +40,9 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # References to other windows (Dashboard, Registration, Recovery)
-        self._dashboard_window = None
-        self._registration_window = None
-        self._recovery_window = None
+        self._dashboard_window: DashboardWindow | None = None
+        self._registration_window: RegistrationWindow | None = None
+        self._recovery_window: RecoveryWindow | None = None
 
         # Set the main window's properties (title and dimensions)
         self.setWindowTitle("Final project David Cruz Gómez")
@@ -114,8 +114,8 @@ class MainWindow(QMainWindow):
         """
         try:
             # Get user inputs (username/email and password)
-            username_or_email = self._username_input.text()
-            password = self._password_input.text()
+            username_or_email: str = self._username_input.text()
+            password: str = self._password_input.text()
 
             print(f"🔑 [INFO] Attempting to log in with Username/Email: '{username_or_email}' "
                   f"and Password: '[PROTECTED]'")
@@ -127,14 +127,14 @@ class MainWindow(QMainWindow):
 
             # Try to retrieve the user by their username or email
             try:
-                user = get_user_by_username(username_or_email)
+                user: dict | None = get_user_by_username(username_or_email)
             except Exception as gen_err:
                 print(f"❌ [ERROR] Failed to fetch user by username: {gen_err}")
                 user = None
 
             if not user:
                 try:
-                    user = get_user_by_email(username_or_email)
+                    user: dict | None = get_user_by_email(username_or_email)
                 except Exception as gen_err:
                     print(f"❌ [ERROR] Failed to fetch user by email: {gen_err}")
                     user = None

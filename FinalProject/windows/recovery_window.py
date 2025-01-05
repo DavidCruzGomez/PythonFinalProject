@@ -89,10 +89,10 @@ class EmailSender:
             f"🔄 [INFO] Initializing EmailSender with SMTP server {smtp_server} "
             f"and port {smtp_port}."
         )
-        self._smtp_server = smtp_server
-        self._smtp_port = smtp_port
-        self._sender_email = sender_email
-        self._sender_password = sender_password
+        self._smtp_server: str = smtp_server
+        self._smtp_port: int = smtp_port
+        self._sender_email: str = sender_email
+        self._sender_password: str = sender_password
 
     def _connect_and_send_email(self, recipient_email: str, msg: MIMEMultipart) -> None:
         """
@@ -207,9 +207,9 @@ class RecoveryWindow(QWidget):
 
         try:
             # Load email configuration from the config file
-            config = load_email_config()
-            sender_email = config.get("sender_email")
-            sender_password = config.get("sender_password")
+            config: dict = load_email_config()
+            sender_email: str = config.get("sender_email", "")
+            sender_password: str = config.get("sender_password", "")
 
             if not sender_email or not sender_password:
                 print("❌ [ERROR] Missing email or password in the configuration file.")
@@ -242,19 +242,20 @@ class RecoveryWindow(QWidget):
         checks if the user exists in the system, and if so, sends them a recovery email.
         If the email is not found, the user is notified and the input field is cleared.
         """
-        email = self._email_input.text() # Get the email entered by the user
+        email: str = self._email_input.text() # Get the email entered by the user
 
         # Check if the email is valid
-        user = get_user_by_email(email)
+        user: dict = get_user_by_email(email)
         if user:
             print(f"🔄 [INFO] Sending recovery email to {email}...")
             try:
                 # Send the recovery email
-                user_name = user.get("name", "User")  # Default to "User" if name is missing
+                user_name: str = user.get("name", "User")  # Default to "User" if name is missing
                 self._email_sender.send_recovery_email(email, user_name)
                 show_message(self, "Success", "A recovery email has been sent.")
                 self.close() # Close the recovery window after sending the email
                 print("📝 [INFO] Recovery window closed.")
+
             except Exception as email_err:
                 show_message(self, "Error", str(email_err))
                 print(f"❌ [ERROR] Failed to send recovery email: {email_err}")

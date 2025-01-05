@@ -44,7 +44,7 @@ class TestRegexPatterns(unittest.TestCase):
     It checks both valid and invalid inputs against each regex pattern to ensure correctness.
     """
 
-    def test_email_regex(self):
+    def test_email_regex(self) -> None:
         """
         Test the email regex pattern.
 
@@ -52,11 +52,11 @@ class TestRegexPatterns(unittest.TestCase):
         It tests both valid and invalid email addresses to ensure the regex correctly identifies
         valid emails and rejects invalid ones.
         """
-        valid_emails = [
+        valid_emails: list[str] = [
             "test@example.com", "user.name@domain.co", "user_name@domain.com",
             "user-name@domain.io", "user+name@domain.com"
         ]
-        invalid_emails = [
+        invalid_emails: list[str] = [
             "plainaddress", "@missingusername.com", "username@.com",
             "username@domain..com", "username@domain.c", "user@domain,com"
         ]
@@ -65,7 +65,7 @@ class TestRegexPatterns(unittest.TestCase):
         for email in invalid_emails:
             self.assertFalse(re.match(EMAIL_REGEX, email))
 
-    def test_password_regex(self):
+    def test_password_regex(self) -> None:
         """
         Test the password regex pattern.
 
@@ -73,10 +73,10 @@ class TestRegexPatterns(unittest.TestCase):
         It checks various valid and invalid passwords, verifying that the regex correctly identifies
         passwords that meet the required criteria (e.g., length, special characters, and numbers).
         """
-        valid_passwords = [
+        valid_passwords: list[str] = [
             "Password1!", "Strong$Pass2", "Val1d@Pass"
         ]
-        invalid_passwords = [
+        invalid_passwords: list[str] = [
             "short1!", "noSpecialChar1", "NoNumber!", "12345678", "ALLUPPERCASE1!", "alllowercase1!"
         ]
         for password in valid_passwords:
@@ -84,7 +84,7 @@ class TestRegexPatterns(unittest.TestCase):
         for password in invalid_passwords:
             self.assertFalse(re.match(PASSWORD_REGEX['all'], password))
 
-    def test_username_regex(self):
+    def test_username_regex(self) -> None:
         """
         Test the username regex pattern.
 
@@ -92,10 +92,10 @@ class TestRegexPatterns(unittest.TestCase):
         It tests valid usernames (with alphanumeric characters, underscores, hyphens, and periods)
         and invalid usernames (too short, too long, containing special characters).
         """
-        valid_usernames = [
+        valid_usernames: list[str] = [
             "user123", "username", "user.name", "user-name", "user_name"
         ]
-        invalid_usernames = [
+        invalid_usernames: list[str] = [
             "us", "a" * 19, "user@name", ".username", "username.", "-username", "username-"
         ]
         for username in valid_usernames:

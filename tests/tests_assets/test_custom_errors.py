@@ -58,7 +58,7 @@ class TestDatabaseError(unittest.TestCase):
     This class tests the default and custom error messages for the DatabaseError exception.
     """
 
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the DatabaseError exception.
 
@@ -71,7 +71,7 @@ class TestDatabaseError(unittest.TestCase):
                          "DatabaseError: An error occurred with the database.\n"
                          " - Suggested action: Check database connectivity and logs.")
 
-    def test_custom_message(self):
+    def test_custom_message(self) -> None:
         """
         Test the custom message for the DatabaseError exception.
 
@@ -91,7 +91,7 @@ class TestValidationError(unittest.TestCase):
     This class tests the error message format for the ValidationError exception, which includes the
     field and value information involved in the validation failure.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the ValidationError exception.
 
@@ -112,7 +112,7 @@ class TestWidgetError(unittest.TestCase):
 
     This class tests the default error message for the WidgetError exception.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the WidgetError exception.
 
@@ -130,7 +130,7 @@ class TestInputValidationError(unittest.TestCase):
     This class tests the error message format for the InputValidationError exception, which includes
     the input value causing the validation issue.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the InputValidationError exception.
 
@@ -151,7 +151,7 @@ class TestEmailConfigError(unittest.TestCase):
     This class tests the default error message for the EmailConfigError exception, which includes
     the configuration file path that caused the issue.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the EmailConfigError exception.
 
@@ -172,7 +172,7 @@ class TestUserNotFoundError(unittest.TestCase):
     This class tests the default error message for the UserNotFoundError exception, which includes
     the email address that was not found in the system.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the UserNotFoundError exception.
 
@@ -193,7 +193,7 @@ class TestEmailSendingError(unittest.TestCase):
     This class tests the default error message for the EmailSendingError exception, which includes
     the email address that failed during the sending process.
     """
-    def test_default_message(self):
+    def test_default_message(self) -> None:
         """
         Test the default message for the EmailSendingError exception.
 

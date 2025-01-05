@@ -1,6 +1,6 @@
 """
-Unit tests for the `unzip_file`, `setup_browser`, and `download_file` functions
-in the `FinalProject.assets.download_files` module.
+Unit tests for the `unzip_file`, `setup_browser`, `download_file`,
+and `rename_folder` functions in the `FinalProject.assets.download_files` module.
 
 This test suite ensures that the main file handling and browser interaction
 functions work correctly under various conditions.
@@ -9,27 +9,37 @@ that they behave as expected.
 
 Key tests include:
 
-- `TestUnzipFile`: Verifies the behavior of the `unzip_file` function,
-ensuring it can successfully handle valid ZIP files,
-properly reject invalid ones, and correctly handle corrupt ZIP files.
+- `TestUnzipFile`: Verifies the behavior of the `unzip_file` function. This includes:
+    - Handling valid ZIP files and extracting them correctly.
+    - Properly rejecting invalid ZIP files (e.g., non-ZIP files).
+    - Handling corrupt or broken ZIP files and raising the appropriate exceptions.
 
-- `TestSetupBrowser`: Tests the `setup_browser` function to ensure the browser
-(Chrome) is started successfully and handles failures.
+- `TestSetupBrowser`: Tests the `setup_browser` function to ensure:
+    - Successful initialization of the Chrome browser.
+    - Proper handling of browser initialization failures.
 
-- `TestDownloadFile`: Tests the `download_file` function to simulate scenarios
-where ZIP files are found or not found in the download directory.
+- `TestDownloadFile`: Simulates scenarios in the `download_file` function where:
+    - No ZIP files are found, ensuring the function returns `None` in such cases.
 
-Each test ensures that edge cases, error handling, and normal behavior
-are correctly addressed in the implementation of these functions.
+- `TestRenameFolder`: Validates the `rename_folder` function by testing:
+    - Successfully renaming a folder when it exists.
+    - Returning `None` if the folder to be renamed does not exist.
+    - Handling errors during the renaming process, such as `OSError`.
+
+Each test case is designed to address normal behavior, edge cases,
+and potential error conditions, ensuring that the functions are both reliable
+and resilient to unexpected situations.
 """
 
 # Standard library imports
-import zipfile
+import os
 import unittest
+import zipfile
 from unittest.mock import patch, MagicMock
 
 # Local imports
-from FinalProject.assets.download_files import unzip_file, setup_browser, download_file
+from FinalProject.assets.download_files import unzip_file, setup_browser, download_file, \
+    rename_folder
 
 
 class TestUnzipFile(unittest.TestCase):
@@ -45,7 +55,7 @@ class TestUnzipFile(unittest.TestCase):
     @patch("zipfile.ZipFile") # Mocking the ZipFile class
     @patch("zipfile.is_zipfile") # Mocking the is_zipfile function
     @patch("os.remove") # Mocking os.remove to prevent actual file deletion
-    def test_unzip_file_valid(self, mock_remove, mock_is_zipfile, mock_zipfile):
+    def test_unzip_file_valid(self, mock_remove, mock_is_zipfile, mock_zipfile) -> None:
         """
         Test the unzip_file function for a valid ZIP file.
         - Simulate a valid ZIP file scenario.
@@ -85,7 +95,7 @@ class TestUnzipFile(unittest.TestCase):
         print("Test for valid zip file passed.")
 
     @patch("zipfile.is_zipfile")
-    def test_unzip_file_invalid(self, mock_is_zipfile):
+    def test_unzip_file_invalid(self, mock_is_zipfile) -> None:
         """
         Test the unzip_file function for an invalid ZIP file.
         - Simulate an invalid ZIP file scenario.
@@ -104,7 +114,7 @@ class TestUnzipFile(unittest.TestCase):
 
 
     @patch("zipfile.is_zipfile")
-    def test_unzip_file_bad_zip(self, mock_is_zipfile):
+    def test_unzip_file_bad_zip(self, mock_is_zipfile) -> None:
         """
         Test the unzip_file function for a corrupt ZIP file.
         - Simulate a BadZipFile scenario.
@@ -134,7 +144,7 @@ class TestSetupBrowser(unittest.TestCase):
     """
     # Mocking the Chrome browser initialization
     @patch("selenium.webdriver.Chrome")
-    def test_setup_browser_success(self, mock_chrome):
+    def test_setup_browser_success(self, mock_chrome) -> None:
         """
         Test the setup_browser function to ensure the browser starts correctly.
         - Simulate the successful creation of a browser instance.
@@ -155,7 +165,7 @@ class TestSetupBrowser(unittest.TestCase):
 
     # Mocking the Chrome browser initialization
     @patch("selenium.webdriver.Chrome")
-    def test_setup_browser_failure(self, mock_chrome):
+    def test_setup_browser_failure(self, mock_chrome) -> None:
         """
         Test the setup_browser function when browser setup fails.
         - Simulate a failure scenario where the browser cannot be started.
@@ -184,7 +194,7 @@ class TestDownloadFile(unittest.TestCase):
     @patch("selenium.webdriver.Chrome")  # Mocking the Chrome browser initialization
     @patch("os.listdir")  # Mocking os.listdir to simulate the contents of a folder
     @patch("time.sleep", return_value=None)  # Skip the actual sleep for testing purposes
-    def test_download_file_no_zip(self, mock_sleep, mock_listdir, mock_chrome):
+    def test_download_file_no_zip(self, mock_sleep, mock_listdir, mock_chrome) -> None:
         """
         Test the download_file function when no ZIP file is found in the folder.
         - Simulate that the directory contains no ZIP files.
@@ -203,6 +213,80 @@ class TestDownloadFile(unittest.TestCase):
         self.assertIsNone(file_name)  # Ensure None is returned when no ZIP file is found
 
         print("Test for no ZIP file found passed.")
+
+
+class TestRenameFolder(unittest.TestCase):
+    """
+    Test suite for the `rename_folder` function in the `FinalProject.assets.download_files` module.
+
+    This test suite verifies the behavior of the `rename_folder` function under the following conditions:
+    - Folder rename success: Verifies that the folder is renamed correctly.
+    - Folder not found: Ensures that when the folder does not exist, the function returns `None`.
+    - Folder rename failure: Simulates a failure in renaming and checks
+        that the function handles the error properly.
+    """
+    @patch("os.rename")
+    @patch("os.path.exists")
+    def test_rename_folder_success(self, mock_exists, mock_rename) -> None:
+        """
+        Test the rename_folder function when renaming a folder is successful.
+        - Simulate that the folder exists and is renamed correctly.
+        """
+        # Arrange: Simulate that the folder exists
+        mock_exists.return_value = True
+        original_folder = "test_folder"
+        new_folder_name = "new_test_folder"
+
+        # Act: Call the rename_folder function
+        renamed_folder_path = rename_folder(original_folder, new_folder_name)
+
+        # Assert: Verify that os.rename was called with the correct arguments
+        mock_rename.assert_called_once_with(original_folder,
+                                            os.path.join(os.path.dirname(original_folder),
+                                                         new_folder_name))
+
+        # Ensure that the function returns the new folder path
+        self.assertEqual(renamed_folder_path,
+                         os.path.join(os.path.dirname(original_folder), new_folder_name))
+        print("Test for folder rename success passed.")
+
+    @patch("os.path.exists")
+    def test_rename_folder_folder_not_found(self, mock_exists) -> None:
+        """
+        Test the rename_folder function when the folder does not exist.
+        - Simulate that the folder doesn't exist, and verify that the function returns None.
+        """
+        # Arrange: Simulate that the folder doesn't exist
+        mock_exists.return_value = False
+        original_folder = "non_existent_folder"
+        new_folder_name = "new_folder"
+
+        # Act: Call the rename_folder function
+        renamed_folder_path = rename_folder(original_folder, new_folder_name)
+
+        # Assert: Verify that the folder does not get renamed
+        self.assertIsNone(renamed_folder_path)
+        print("Test for folder not found passed.")
+
+    @patch("os.rename")
+    @patch("os.path.exists")
+    def test_rename_folder_failure(self, mock_exists, mock_rename) -> None:
+        """
+        Test the rename_folder function when renaming a folder fails.
+        - Simulate a failure scenario in os.rename.
+        """
+        # Arrange: Simulate that the folder exists
+        mock_exists.return_value = True
+        original_folder = "test_folder"
+        new_folder_name = "new_test_folder"
+
+        # Simulate that os.rename raises an exception
+        mock_rename.side_effect = OSError("Failed to rename folder")
+
+        # Act & Assert: Ensure that the function handles the error and returns None
+        renamed_folder_path = rename_folder(original_folder, new_folder_name)
+        self.assertIsNone(renamed_folder_path)
+        print("Test for folder rename failure passed.")
 
 
 if __name__ == "__main__":
