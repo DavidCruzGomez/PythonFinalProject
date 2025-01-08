@@ -7,10 +7,51 @@ import matplotlib.pyplot as plt
 
 from FinalProject.assets.utils import read_xls_from_folder
 
+
+def remove_outliers(df: pd.DataFrame, threshold: float = 1.5) -> pd.DataFrame:
+    """
+    Removes outliers from numeric columns in the dataframe using the IQR method.
+
+    Args:
+        df (pd.DataFrame): The input dataframe.
+        threshold (float): The multiplier for the IQR to define outlier boundaries.
+
+    Returns:
+        pd.DataFrame: The dataframe with outliers removed.
+    """
+    num_cols = df.select_dtypes(include=[np.number])  # Select numeric columns
+    for col in num_cols.columns:
+        # Determinar el límite superior según la columna
+        if col == "Q3_SCHOOL":
+            upper_bound = 8  # Límite superior para 'Q3_SCHOOL'
+        else:
+            upper_bound = 5  # Límite superior para las demás columnas
+
+        # Identificar los outliers
+        outliers = df[(df[col] < 0) | (df[col] > upper_bound)][col]
+
+        # Imprimir los valores outliers
+        if not outliers.empty:
+            print(f"Outliers detected in column '{col}':\n{outliers.tolist()}")
+
+        # Filtrar las filas para eliminar los outliers
+        df = df[
+            (df[col] >= 0) & (df[col] <= upper_bound) if col != "Q3_SCHOOL" else (df[col] >= 0) & (
+                        df[col] <= 8)]
+
+    return df
+
+
 # Reading data from the folder
 df: pd.DataFrame = read_xls_from_folder()
 if df is not None:
+    print("Initial Dataframe:")
     print(df)
+
+# Remove outliers from the dataframe
+df = remove_outliers(df)
+print("DataFrame after outlier removal:")
+print(df)
 
 # Cleaning the data by removing rows with missing values and duplicates
 df = df.dropna()
@@ -113,6 +154,14 @@ def summary(df: pd.DataFrame) -> pd.DataFrame:
             summ.at[col, 'Third Value'] = str(first_values[2, i]) if len(first_values) > 2 else None
 
     return summ
+
+# Save the cleaned and transformed DataFrame to a CSV file
+cleaned_data_path: str = os.path.join(os.path.dirname(__file__),
+                                          "impulse_buying_data",
+                                          "cleaned_data.csv"
+                                         )
+df.to_csv(cleaned_data_path, index=False)
+print(f"Cleaned data saved to: {cleaned_data_path}")
 
 # Save the processed data to a CSV file
 processed_data_path: str = os.path.join(os.path.dirname(__file__),

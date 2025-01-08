@@ -71,7 +71,7 @@ STYLES = {
             border: 4px solid #8ED0F8;
             border-radius: 10px;
             max-width: 800px;
-            max-height: 200px;
+            max-height: 206px;
         }
     
         QTableWidget {
