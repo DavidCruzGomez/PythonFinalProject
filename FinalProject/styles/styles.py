@@ -238,6 +238,98 @@ STYLES = {
             opacity: 0.8; /* Visual effect when pressed */
         }
     """,
+
+    "combo_box": """
+        /* Estilo principal del QComboBox */
+        QComboBox {
+            background-color: white;
+            border: 2px solid #8ED0F8;
+            border-radius: 10px;
+            font-size: 18px;
+            padding: 10px;
+            min-width: 500px;
+            color: #333333;
+        }
+    
+        /* Estilo cuando el QComboBox es editable */
+        QComboBox:editable {
+            background-color: white;
+        }
+        
+        /* Estilo cuando el QComboBox está enfocado (cuando el usuario hace clic en él) */
+        QComboBox:focus {
+            border-color: #1A91DA;
+        }
+    
+        /* Estilo del botón desplegable dentro del QComboBox */
+        QComboBox::drop-down {
+            border-left: 1px solid #8ED0F8;
+            background-color: white;
+            width: 25px;
+        }
+    
+        /* Personalización de la flecha hacia abajo del QComboBox */
+        QComboBox::down-arrow {
+            width: 15px; /* El tamaño de la flecha */
+            height: 15px;
+        }
+    
+        /* Estilo de la lista que aparece al abrir el QComboBox */
+        QComboBox QAbstractItemView {
+            background-color: white;
+            border: 1px solid #8ED0F8;
+            selection-background-color: #8ED0F8;
+            selection-color: white;
+            font-size: 18px;
+        }
+    
+        /* Estilo de los ítems dentro de la lista del QComboBox */
+        QComboBox QAbstractItemView::item {
+            padding: 8px;
+        }
+    
+        QComboBox QAbstractItemView::item:selected {
+            background-color: #1A91DA;
+        }
+    
+        /* Estilo para la barra de desplazamiento vertical */
+        QComboBox QAbstractItemView QScrollBar:vertical {
+            background: #f2f2f2;
+            width: 12px;
+            border-radius: 6px;
+        }
+    
+        /* Estilo del "mango" o el control de la barra de desplazamiento vertical */
+        QComboBox QAbstractItemView QScrollBar::handle:vertical {
+            background: #8ED0F8;
+            border-radius: 6px;
+            min-height: 30px;
+        }
+    
+        QComboBox QAbstractItemView QScrollBar::handle:vertical:hover {
+            background: #1A91DA;
+        }
+    
+        /* Estilo de las líneas adicionales arriba y abajo de la barra de desplazamiento */
+        QComboBox QAbstractItemView QScrollBar::add-line:vertical {
+            border: none;
+            background: #f2f2f2;
+            height: 0px;
+        }
+    
+        QComboBox QAbstractItemView QScrollBar::sub-line:vertical {
+            border: none;
+            background: #f2f2f2;
+            height: 0px;
+        }
+    
+        /* Estilo de las flechas de la barra de desplazamiento vertical */
+        QComboBox QAbstractItemView QScrollBar::up-arrow:vertical, 
+        QComboBox QAbstractItemView QScrollBar::down-arrow:vertical {
+            border: none;
+            background: none;
+        }
+    """
 }
 
 # Constants for input fields and button sizes

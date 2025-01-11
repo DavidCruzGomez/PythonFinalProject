@@ -155,6 +155,7 @@ def summary(df: pd.DataFrame) -> pd.DataFrame:
 
     return summ
 
+
 # Save the cleaned and transformed DataFrame to a CSV file
 cleaned_data_path: str = os.path.join(os.path.dirname(__file__),
                                           "impulse_buying_data",

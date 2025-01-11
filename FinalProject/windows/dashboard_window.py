@@ -201,11 +201,11 @@ class DashboardWindow(QMainWindow):
         except FileNotFoundError:
             print("File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
-                                 f"File not found. Please check the path to the script.")
+                                 "File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
-                                 f"Unexpected error")
+                                 "Unexpected error")
 
     def run_preprocessing(self) -> None:
         """Run the preprocessing script (preprocess.py)."""
@@ -236,11 +236,11 @@ class DashboardWindow(QMainWindow):
         except FileNotFoundError:
             print("File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
-                                 f"File not found. Please check the path to the script.")
+                                 "File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
-                                 f"Unexpected error")
+                                 "Unexpected error")
 
     def display_tables(self) -> None:
         """Read the first 5 rows of the 'cleaned_data.csv' file and display them in the first table,
@@ -391,6 +391,9 @@ class DashboardWindow(QMainWindow):
         # Initially, hide the combobox
         self.question_combobox.setVisible(False)
 
+        # Set the style for the QComboBox
+        self.question_combobox.setStyleSheet(STYLES["combo_box"])
+
         # Add the combobox to the layout (below the welcome label)
         self.central_layout.addWidget(self.question_combobox)
 
@@ -399,14 +402,14 @@ class DashboardWindow(QMainWindow):
         """Function tha shows a graph when 'Graphs' is clicked in the menu."""
         selected_question_text = self.question_combobox.currentText()
 
-        # Obtén la clave de la pregunta seleccionada
+        # Get the selected question key
         selected_question_key = self.question_combobox.currentData()  # Esta es la clave (key)
 
-        # Imprime la clave y el texto de la pregunta
+        # Print the selected question key and text
         print(f"Selected question key: '{selected_question_key}'")
         print(f"Selected question text: '{selected_question_text}'")
 
-        # Llama a la función `question_plot` con la clave seleccionada
+        # Call the `question_plot` function with the selected key
         if selected_question_key:
             fig = question_plot(selected_question_key)
         else:
