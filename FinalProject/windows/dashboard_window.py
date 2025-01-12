@@ -1,4 +1,5 @@
 # Standard library imports
+import datetime
 import os
 import subprocess
 import sys
@@ -6,14 +7,14 @@ import sys
 # Third-party imports
 import pandas as pd
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QApplication,
-                               QMenuBar, QMessageBox, QWidgetAction, QPushButton,
-                               QTableWidget, QTableWidgetItem, QScrollArea,
-                               QSizePolicy, QComboBox)
+from PySide6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QMessageBox,
+                               QTableWidgetItem, QSizePolicy, QHBoxLayout)
+from matplotlib.backend_bases import MouseEvent
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
+from FinalProject.assets.dashboard_window_setup import (setup_dashboard_window, setup_dashboard_ui,
+                                                        setup_dashboard_menu, setup_graph_container)
 from FinalProject.assets.graphics import question_plot, create_question_combobox
-
 # Local project-specific imports
 from FinalProject.styles.styles import STYLES, style_feedback_label
 
@@ -26,6 +27,43 @@ class GraphWidget(FigureCanvas):
         # Configure the size and geometry of the widget
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.updateGeometry()
+        self.setFocusPolicy(Qt.StrongFocus)  # Make the canvas interactive
+        self.setFocus()  # Make it receive keyboard events
+
+        # Connect events for zoom and click
+        self.mpl_connect('button_press_event', self.on_click)
+        self.mpl_connect('scroll_event', self.on_scroll)
+
+    def on_click(self, event):
+        """Detect click on the graph and display the X-axis and Y-axis values."""
+        if event.inaxes:
+            # Get the X position where the click occurred
+            x_pos = event.xdata
+            # Get the Y value corresponding to the X position
+            y_pos = event.ydata
+
+            if x_pos is not None and y_pos is not None:
+                print(f"X Position: {x_pos}, Y Position: {y_pos}")
+
+    def on_scroll(self, event: MouseEvent):
+        """Detect scroll events for zooming."""
+        if event.inaxes:
+            xlim = event.inaxes.get_xlim()  # Get the X axis limits
+            ylim = event.inaxes.get_ylim()  # Get the Y axis limits
+
+            if event.button == 'up':
+                print("Zooming in")
+                # Scale the X and Y axis limits inward (e.g., multiply by 0.9)
+                event.inaxes.set_xlim([xlim[0] * 0.9, xlim[1] * 0.9])
+                event.inaxes.set_ylim([ylim[0] * 0.9, ylim[1] * 0.9])
+            elif event.button == 'down':
+                print("Zooming out")
+                # Scale the X and Y axis limits outward (e.g., multiply by 1.1)
+                event.inaxes.set_xlim([xlim[0] * 1.1, xlim[1] * 1.1])
+                event.inaxes.set_ylim([ylim[0] * 1.1, ylim[1] * 1.1])
+
+            event.canvas.draw()  # Redraw the canvas after modifying the limits
+
 
 class DashboardWindow(QMainWindow):
     """
@@ -40,141 +78,27 @@ class DashboardWindow(QMainWindow):
         """
         super().__init__()
 
-        # Set the dashboard window's properties
-        self.setWindowTitle("Final project David Cruz Gómez")
+        # Initialize the window
+        setup_dashboard_window(self)
 
-        # Get the screen size using QScreen
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.geometry()
-        screen_width, screen_height = screen_geometry.width(), screen_geometry.height()
+        # Create the UI components
+        setup_dashboard_ui(self)
 
-        # Set the window size as a relative value
-        window_width = int(screen_width * 0.8)
-        window_height = int(screen_height * 0.8)
+        # Set up the menu and actions
+        setup_dashboard_menu(self)
 
-        # Calculate the position to center the window
-        x_position = (screen_width - window_width) // 2
-        y_position = (screen_height - window_height) // 2
-
-        # Adjust for system taskbars or other offsets
-        x_position = max(0, x_position)  # Ensure it doesn't go outside the screen
-        y_position = max(0, y_position)  # Ensure it doesn't go outside the screen
-
-        # Set the geometry with the calculated position
-        self.setGeometry(x_position, y_position, window_width, window_height)
-
-        # Create a layout for the dashboard content
-        self.central_layout = QVBoxLayout()
-        self.central_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.central_layout.setContentsMargins(20, 20, 20,
-                                          20)  # Adjust margins (left, top, right, bottom)
-        self.central_layout.setSpacing(10)
-
-        # Add a welcome label
-        self.welcome_label = QLabel("Welcome to the Dashboard!")
-        self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.welcome_label.setStyleSheet(STYLES["title"])
-        self.central_layout.addWidget(self.welcome_label)
-
-        # Add a feedback label for displaying messages to the user (e.g., success or errors)
-        self._feedback_label = QLabel("")  # Initially empty
-        self._feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.central_layout.addWidget(self._feedback_label)
-
-        # Create a layout for the table
-        table_layout = QVBoxLayout()
-        table_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Create a scroll area to contain the table widget
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        self.table_widget = QTableWidget() # Create a table widget to display the XLSX data
-        self.scroll_area.setWidget(self.table_widget) # Set the table widget as the widget for the scroll area
-        table_layout.addWidget(self.scroll_area) # Add the scroll area to the layout
-
-        # Create the second scroll area for the second table
-        self.scroll_area_processed = QScrollArea()
-        self.scroll_area_processed.setWidgetResizable(True)
-        self.table_widget_processed = QTableWidget()
-        self.scroll_area_processed.setWidget(self.table_widget_processed)
-        table_layout.addWidget(self.scroll_area_processed)
-
-        # Add the table layout to the central layout
-        self.central_layout.addLayout(table_layout)
-
-        # Set the scroll area style
-        self.scroll_area.setStyleSheet(STYLES["scroll_area"])
-        self.scroll_area_processed.setStyleSheet(STYLES["scroll_area"])
-
-        # Set the layout to a central widget
-        central_widget = QWidget()
-        central_widget.setLayout(self.central_layout)
-        self.setCentralWidget(central_widget)
-
-        # Create a menu bar
-        menu_bar = QMenuBar(self)
-        self.setMenuBar(menu_bar)
-
-        # Add a "File" menu
-        file_menu = menu_bar.addMenu("File")
-        home_action = menu_bar.addAction("Home")
-        graphs_action = menu_bar.addAction("Graphs")
-
-        graphs_action.triggered.connect(self.hide_visibility)
-        graphs_action.triggered.connect(self.show_graph)
-
-        home_action.triggered.connect(self.hide_visibility)
-        home_action.triggered.connect(self.home_show_visibility)
-
-        # Create a custom widget action for the "Download XLSX" button
-        download_action = QWidgetAction(self)
-
-        # Create a custom QWidget (e.g., a button) to be added as an action
-        download_button = QPushButton("Download XLSX")
-        download_button.setStyleSheet(STYLES["menu_button"])
-
-        download_button.clicked.connect(self.download_xlsx)
-
-        # Set the widget (the button) into the QWidgetAction
-        download_action.setDefaultWidget(download_button)
-
-        # Add the action (button) to the "File" menu
-        file_menu.addAction(download_action)
-
-        # Create a custom widget action for the "Upload XLSX" button
-        preprocess_action = QWidgetAction(self)
-
-        # Create a custom QWidget (e.g., a button) to be added as an action
-        preprocess_button = QPushButton("Preprocess XLSX")
-        preprocess_button.setStyleSheet(STYLES["menu_button"])
-
-        preprocess_button.clicked.connect(self.run_preprocessing)
-
-        # Set the widget (the button) into the QWidgetAction
-        preprocess_action.setDefaultWidget(preprocess_button)
-
-        # Add the action (button) to the "File" menu
-        file_menu.addAction(preprocess_action)
-
-        # Set the style for the menu bar
-        menu_bar.setStyleSheet(STYLES["menu_bar"])
-
-        # Create a container for the graph within the main layout
-        self.graph_widget_container = QWidget(self)  # Container for the graph
-        self.graph_layout = QVBoxLayout(self.graph_widget_container)  # Layout for the graph
-        self.graph_widget_container.setLayout(self.graph_layout)  # Assign layout
-
-        # Initially, the graph container is not visible
-        self.graph_widget_container.setVisible(False)
-
-        # Add the graph container below the menu
-        self.central_layout.addWidget(self.graph_widget_container)
+        # Create container for the graph
+        setup_graph_container(self)
 
         # Display the first 5 rows of the XLSX file
         self.display_tables()
 
         # Initialize the QComboBox for selecting a question
         self.init_question_combobox()
+
+
+        self.fig1 = None
+        self.fig2 = None
 
 
     def download_xlsx(self) -> None:
@@ -411,43 +335,95 @@ class DashboardWindow(QMainWindow):
 
         # Call the `question_plot` function with the selected key
         if selected_question_key:
-            fig = question_plot(selected_question_key)
+            self.fig1 = question_plot(selected_question_key)
+            self.fig2 = question_plot(selected_question_key, distinction_by_gender=True)
         else:
-            fig = None
+            self.fig1 = None
+            self.fig2 = None
 
-        # Check if the figure is None
-        if fig is None:
-            print("The figure was not generated correctly.")
+        # Check if the figures are None
+        if self.fig1 is None or self.fig2 is None:
+            print("The figures were not generated correctly.")
             return
 
         # Display the graph container in the main window
         self.graph_widget_container.setVisible(True)
 
-        # Create a GraphWidget to display the graph
-        graph_widget = GraphWidget(fig)
+        # Create GraphWidgets to display the graphs
+        graph_widget1 = GraphWidget(self.fig1)
+        graph_widget2 = GraphWidget(self.fig2)
 
-        # Clear any previous graph from the layout and add the new one
-        for i in reversed(range(self.graph_layout.count())):
-            widget = self.graph_layout.itemAt(i).widget()
-            if widget is not None:
-                widget.deleteLater()  # Remove the previous widget
+        # Clear any previous widgets and layouts in the graph layout
+        while self.graph_layout.count():
+            item = self.graph_layout.takeAt(0)
+            # If the item is a widget, delete it
+            if item.widget():
+                item.widget().deleteLater()
+            # If the item is a layout, clear its content and delete it
+            elif item.layout():
+                while item.layout().count():
+                    sub_item = item.layout().takeAt(0)
+                    if sub_item.widget():
+                        sub_item.widget().deleteLater()
+                item.layout().deleteLater()
+
+        # Create a horizontal layout to place the graphs side by side
+        graphs_layout = QHBoxLayout()
+        graphs_layout.addWidget(graph_widget1)
+        graphs_layout.addWidget(graph_widget2)
 
         # Set the layout for the graph container
-        self.graph_layout.addWidget(graph_widget)
+        self.graph_layout.addLayout(graphs_layout)
 
         # Ensure the graph container and the graph adjust properly
         self.graph_layout.setContentsMargins(0, 0, 0, 0)  # Remove extra margins
         self.graph_layout.setSpacing(0)  # Remove space between widgets
 
-        # Make sure the graph widget occupies the entire available space
-        graph_widget.setMinimumSize(600, 400)  # Adjust the minimum size of the figure
+        # Make sure the graph widgets occupy the entire available space
+        graph_widget1.setMinimumSize(600, 400)  # Adjust the minimum size of the first figure
+        graph_widget2.setMinimumSize(600, 400)  # Adjust the minimum size of the second figure
 
-        # Ensure the graph widget expands both horizontally and vertically
-        graph_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        graph_widget.updateGeometry()  # Force the geometry update
+        # Ensure the graph widgets expand both horizontally and vertically
+        graph_widget1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        graph_widget2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        graph_widget1.updateGeometry()  # Force the geometry update
+        graph_widget2.updateGeometry()  # Force the geometry update
 
         # Adjust the size of the container if necessary
-        self.graph_widget_container.setMinimumSize(800, 600)  # Adjust minimum size of the container
+        self.graph_widget_container.setMinimumSize(1200,
+                                                   600)  # Adjust minimum size of the container
 
         # Show the combobox when the "Graphs" menu is clicked
         self.question_combobox.setVisible(True)
+
+    def export_graphs(self):
+        """Export the current graph as an image."""
+        try:
+            # Get the directory where the files will be saved
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            export_dir = os.path.join(current_dir, "..", "assets", "exported_graphs")
+
+            # Create the directory if it doesn't exist
+            os.makedirs(export_dir, exist_ok=True)
+
+            # Get the current date and time to avoid overwriting files
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            # Define the output file names with a unique timestamp
+            file_path1 = os.path.join(export_dir, f"graph1_{timestamp}.png")
+            file_path2 = os.path.join(export_dir, f"graph2_{timestamp}.png")
+
+            # Export the graphs using savefig()
+            if self.fig1 is not None:
+                self.fig1.savefig(file_path1)
+
+            if self.fig2 is not None:
+                self.fig2.savefig(file_path2)
+
+            # Notify the user that the graphs have been exported successfully
+            QMessageBox.information(self, "Export Successful",
+                                    f"The graphs have been exported to:\n{file_path1}\n{file_path2}")
+
+        except Exception as gen_err:
+            print(f"Error exporting graphs: {gen_err}")
+            QMessageBox.critical(self, "Error", "There was a problem exporting the graphs.")
