@@ -37,7 +37,7 @@ import unittest
 import zipfile
 from unittest.mock import patch, MagicMock
 
-# Local imports
+# Local project-specific imports
 from FinalProject.assets.download_files import unzip_file, setup_browser, download_file, \
     rename_folder
 
