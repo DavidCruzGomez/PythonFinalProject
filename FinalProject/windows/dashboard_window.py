@@ -8,61 +8,15 @@ import sys
 import pandas as pd
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QMessageBox,
-                               QTableWidgetItem, QSizePolicy, QHBoxLayout)
-from matplotlib.backend_bases import MouseEvent
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+                               QTableWidgetItem, QSizePolicy, QHBoxLayout, QPushButton)
 
 from FinalProject.assets.dashboard_window_setup import (setup_dashboard_window, setup_dashboard_ui,
                                                         setup_dashboard_menu, setup_graph_container)
+from FinalProject.assets.graph_widget import GraphWidget
 from FinalProject.assets.graphics import question_plot, create_question_combobox
 # Local project-specific imports
 from FinalProject.styles.styles import STYLES, style_feedback_label
-
-
-class GraphWidget(FigureCanvas):
-    def __init__(self, fig):
-        # Call the base constructor of FigureCanvas with the figure
-        super().__init__(fig)
-
-        # Configure the size and geometry of the widget
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.updateGeometry()
-        self.setFocusPolicy(Qt.StrongFocus)  # Make the canvas interactive
-        self.setFocus()  # Make it receive keyboard events
-
-        # Connect events for zoom and click
-        self.mpl_connect('button_press_event', self.on_click)
-        self.mpl_connect('scroll_event', self.on_scroll)
-
-    def on_click(self, event):
-        """Detect click on the graph and display the X-axis and Y-axis values."""
-        if event.inaxes:
-            # Get the X position where the click occurred
-            x_pos = event.xdata
-            # Get the Y value corresponding to the X position
-            y_pos = event.ydata
-
-            if x_pos is not None and y_pos is not None:
-                print(f"X Position: {x_pos}, Y Position: {y_pos}")
-
-    def on_scroll(self, event: MouseEvent):
-        """Detect scroll events for zooming."""
-        if event.inaxes:
-            xlim = event.inaxes.get_xlim()  # Get the X axis limits
-            ylim = event.inaxes.get_ylim()  # Get the Y axis limits
-
-            if event.button == 'up':
-                print("Zooming in")
-                # Scale the X and Y axis limits inward (e.g., multiply by 0.9)
-                event.inaxes.set_xlim([xlim[0] * 0.9, xlim[1] * 0.9])
-                event.inaxes.set_ylim([ylim[0] * 0.9, ylim[1] * 0.9])
-            elif event.button == 'down':
-                print("Zooming out")
-                # Scale the X and Y axis limits outward (e.g., multiply by 1.1)
-                event.inaxes.set_xlim([xlim[0] * 1.1, xlim[1] * 1.1])
-                event.inaxes.set_ylim([ylim[0] * 1.1, ylim[1] * 1.1])
-
-            event.canvas.draw()  # Redraw the canvas after modifying the limits
+from FinalProject.assets.graphics import pie_chart_by_school
 
 
 class DashboardWindow(QMainWindow):
@@ -96,9 +50,87 @@ class DashboardWindow(QMainWindow):
         # Initialize the QComboBox for selecting a question
         self.init_question_combobox()
 
-
         self.fig1 = None
         self.fig2 = None
+
+        # Add the buttons inside the graph container, below fig1
+        self.add_toggle_buttons()
+
+        # Keep track of the graph states
+        self.is_graph_displayed = False
+        self.current_graph = None  # Variable to track the current displayed graph
+
+    def add_toggle_buttons(self):
+        """Create the toggle buttons and add them inside the graph container, in the same row below fig1."""
+        # Create the buttons with smaller size
+        self.gender_button = QPushButton("Gender", self)
+        self.gender_button.setFixedSize(120, 30)  # Smaller button size
+        self.gender_button.clicked.connect(self.toggle_graph_by_gender)
+
+        self.school_button = QPushButton("School", self)
+        self.school_button.setFixedSize(120, 30)  # Smaller button size
+        self.school_button.clicked.connect(self.toggle_graph_by_school)
+
+        self.income_button = QPushButton("Income", self)
+        self.income_button.setFixedSize(120, 30)  # Smaller button size
+        self.income_button.clicked.connect(self.toggle_graph_by_income)
+
+        # Create a layout for the buttons (horizontal layout)
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(self.gender_button)
+        buttons_layout.addWidget(self.school_button)
+        buttons_layout.addWidget(self.income_button)
+
+        # Create a container for the buttons and add it to the graph container
+        buttons_container = QWidget(self)
+        buttons_container.setLayout(buttons_layout)
+        buttons_container.setSizePolicy(QSizePolicy.Expanding,
+                                        QSizePolicy.Fixed)  # Ensure it stretches horizontally but not vertically
+
+        # Add the buttons container to the graph layout
+        self.graph_layout.addWidget(buttons_container)
+
+    def toggle_graph_by_gender(self):
+        """Toggle between displaying graph by gender and the original graph."""
+        if self.current_graph == 'gender':
+            # If the graph is currently by gender, revert to the original graph
+            self.show_graph()  # Call show_graph without any distinction to show the original graph
+            self.current_graph = 'original'  # Set the current graph to original
+        else:
+            # If not, show the graph by gender
+            self.show_graph(distinction_by="gender")
+            self.current_graph = 'gender'  # Set the current graph to gender
+
+        # Toggle the state
+        self.is_graph_displayed = not self.is_graph_displayed
+
+    def toggle_graph_by_school(self):
+        """Toggle between displaying graph by school and the original graph."""
+        if self.current_graph == 'school':
+            # If the graph is currently by school, revert to the original graph
+            self.show_graph()
+            self.current_graph = 'original'  # Set the current graph to original
+        else:
+            # If not, show the graph by school
+            self.show_graph(distinction_by="school")
+            self.current_graph = 'school'  # Set the current graph to school
+
+        # Toggle the state
+        self.is_graph_displayed = not self.is_graph_displayed
+
+    def toggle_graph_by_income(self):
+        """Toggle between displaying graph by income and the original graph."""
+        if self.current_graph == 'income':
+            # If the current graph is by income, revert to the original graph
+            self.show_graph()  # Call show_graph without any distinction to show the original graph
+            self.current_graph = 'original'  # Set the current graph to original
+        else:
+            # If not, show the graph by income
+            self.show_graph(distinction_by="income")
+            self.current_graph = 'income'  # Set the current graph to income
+
+        # Toggle the state
+        self.is_graph_displayed = not self.is_graph_displayed
 
 
     def download_xlsx(self) -> None:
@@ -322,21 +354,31 @@ class DashboardWindow(QMainWindow):
         self.central_layout.addWidget(self.question_combobox)
 
 
-    def show_graph(self):
-        """Function tha shows a graph when 'Graphs' is clicked in the menu."""
+    def show_graph(self, distinction_by=None):
+        """Function that shows a graph when 'Graphs' is clicked in the menu or when a specific distinction (gender/school) is requested."""
         selected_question_text = self.question_combobox.currentText()
 
         # Get the selected question key
-        selected_question_key = self.question_combobox.currentData()  # Esta es la clave (key)
+        selected_question_key = self.question_combobox.currentData()
 
         # Print the selected question key and text
         print(f"Selected question key: '{selected_question_key}'")
         print(f"Selected question text: '{selected_question_text}'")
 
-        # Call the `question_plot` function with the selected key
+        # Determine which graph distinction to apply (gender, school, or none)
         if selected_question_key:
-            self.fig1 = question_plot(selected_question_key)
-            self.fig2 = question_plot(selected_question_key, distinction_by_gender=True)
+            if distinction_by == "gender":
+                self.fig1 = question_plot(selected_question_key, distinction_by_gender=True)
+            elif distinction_by == "school":
+                self.fig1 = question_plot(selected_question_key, distinction_by_school=True)
+            elif distinction_by == "income":
+                self.fig1 = question_plot(selected_question_key, distinction_by_income=True)
+            else:
+                self.fig1 = question_plot(selected_question_key)  # Default graph without distinction
+
+            # Optionally, you can keep the second graph for another distinction or leave it as None
+            self.fig2 = question_plot(selected_question_key, pie_chart=True)
+
         else:
             self.fig1 = None
             self.fig2 = None
@@ -346,7 +388,7 @@ class DashboardWindow(QMainWindow):
             print("The figures were not generated correctly.")
             return
 
-        # Display the graph container in the main window
+        # Ensure the graph container is visible
         self.graph_widget_container.setVisible(True)
 
         # Create GraphWidgets to display the graphs
@@ -375,6 +417,9 @@ class DashboardWindow(QMainWindow):
         # Set the layout for the graph container
         self.graph_layout.addLayout(graphs_layout)
 
+        # Add the toggle buttons below the graphs
+        self.add_toggle_buttons()
+
         # Ensure the graph container and the graph adjust properly
         self.graph_layout.setContentsMargins(0, 0, 0, 0)  # Remove extra margins
         self.graph_layout.setSpacing(0)  # Remove space between widgets
@@ -390,8 +435,7 @@ class DashboardWindow(QMainWindow):
         graph_widget2.updateGeometry()  # Force the geometry update
 
         # Adjust the size of the container if necessary
-        self.graph_widget_container.setMinimumSize(1200,
-                                                   600)  # Adjust minimum size of the container
+        self.graph_widget_container.setMinimumSize(1200, 600)  # Adjust minimum size of the container
 
         # Show the combobox when the "Graphs" menu is clicked
         self.question_combobox.setVisible(True)

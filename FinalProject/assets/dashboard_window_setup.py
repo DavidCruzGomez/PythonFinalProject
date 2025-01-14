@@ -122,7 +122,7 @@ def setup_dashboard_menu(self):
     file_menu.addAction(preprocess_action)
 
     export_action = QWidgetAction(self)
-    export_button = QPushButton("Export Graph")
+    export_button = QPushButton("Export All Graphs")
     export_button.setStyleSheet(STYLES["menu_button"])
     export_button.clicked.connect(self.export_graphs)  # Connect to the export function
     export_action.setDefaultWidget(export_button)
