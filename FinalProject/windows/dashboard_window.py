@@ -16,7 +16,6 @@ from FinalProject.assets.graph_widget import GraphWidget
 from FinalProject.assets.graphics import question_plot, create_question_combobox
 # Local project-specific imports
 from FinalProject.styles.styles import STYLES, style_feedback_label
-from FinalProject.assets.graphics import pie_chart_by_school
 
 
 class DashboardWindow(QMainWindow):
@@ -59,24 +58,34 @@ class DashboardWindow(QMainWindow):
         # Keep track of the graph states
         self.is_graph_displayed = False
         self.current_graph = None  # Variable to track the current displayed graph
+        self.current_distinction = None  # Track the current distinction (gender, school, income)
 
-    def add_toggle_buttons(self):
+    def add_toggle_buttons(self) -> None:
         """Create the toggle buttons and add them inside the graph container, in the same row below fig1."""
         # Create the buttons with smaller size
         self.gender_button = QPushButton("Gender", self)
-        self.gender_button.setFixedSize(120, 30)  # Smaller button size
+        self.gender_button.setFixedSize(120, 30)
+        self.gender_button.setStyleSheet(STYLES["toggle_button"])
         self.gender_button.clicked.connect(self.toggle_graph_by_gender)
 
         self.school_button = QPushButton("School", self)
-        self.school_button.setFixedSize(120, 30)  # Smaller button size
+        self.school_button.setFixedSize(120, 30)
+        self.school_button.setStyleSheet(STYLES["toggle_button"])
         self.school_button.clicked.connect(self.toggle_graph_by_school)
 
         self.income_button = QPushButton("Income", self)
-        self.income_button.setFixedSize(120, 30)  # Smaller button size
+        self.income_button.setFixedSize(120, 30)
+        self.income_button.setStyleSheet(STYLES["toggle_button"])
         self.income_button.clicked.connect(self.toggle_graph_by_income)
+
+        self.reset_button = QPushButton("Reset", self)
+        self.reset_button.setFixedSize(120, 30)
+        self.reset_button.setStyleSheet(STYLES["toggle_button"])
+        self.reset_button.clicked.connect(self.reset_graph_to_default)
 
         # Create a layout for the buttons (horizontal layout)
         buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(self.reset_button)
         buttons_layout.addWidget(self.gender_button)
         buttons_layout.addWidget(self.school_button)
         buttons_layout.addWidget(self.income_button)
@@ -90,44 +99,57 @@ class DashboardWindow(QMainWindow):
         # Add the buttons container to the graph layout
         self.graph_layout.addWidget(buttons_container)
 
-    def toggle_graph_by_gender(self):
+    def reset_graph_to_default(self) -> None:
+        """Reset the graph to its default state without any distinctions."""
+        self.show_graph()  # Call show_graph without any distinction to show the original graph
+        self.current_graph = 'original'  # Set the current graph to original
+        self.current_distinction = None  # Reset the distinction
+        self.is_graph_displayed = not self.is_graph_displayed  # Toggle the state
+
+    def toggle_graph_by_gender(self) -> None:
         """Toggle between displaying graph by gender and the original graph."""
         if self.current_graph == 'gender':
             # If the graph is currently by gender, revert to the original graph
             self.show_graph()  # Call show_graph without any distinction to show the original graph
             self.current_graph = 'original'  # Set the current graph to original
+            self.current_distinction = None  # Reset the distinction
         else:
             # If not, show the graph by gender
             self.show_graph(distinction_by="gender")
             self.current_graph = 'gender'  # Set the current graph to gender
+            self.current_distinction = "gender"  # Set the current distinction to gender
 
         # Toggle the state
         self.is_graph_displayed = not self.is_graph_displayed
 
-    def toggle_graph_by_school(self):
+    def toggle_graph_by_school(self) -> None:
         """Toggle between displaying graph by school and the original graph."""
         if self.current_graph == 'school':
             # If the graph is currently by school, revert to the original graph
             self.show_graph()
             self.current_graph = 'original'  # Set the current graph to original
+            self.current_distinction = None  # Reset the distinction
         else:
             # If not, show the graph by school
             self.show_graph(distinction_by="school")
             self.current_graph = 'school'  # Set the current graph to school
+            self.current_distinction = "school"  # Set the distinction to school
 
         # Toggle the state
         self.is_graph_displayed = not self.is_graph_displayed
 
-    def toggle_graph_by_income(self):
+    def toggle_graph_by_income(self) -> None:
         """Toggle between displaying graph by income and the original graph."""
         if self.current_graph == 'income':
             # If the current graph is by income, revert to the original graph
             self.show_graph()  # Call show_graph without any distinction to show the original graph
             self.current_graph = 'original'  # Set the current graph to original
+            self.current_distinction = None  # Reset the distinction
         else:
             # If not, show the graph by income
             self.show_graph(distinction_by="income")
             self.current_graph = 'income'  # Set the current graph to income
+            self.current_distinction = "income"  # Set the distinction to school
 
         # Toggle the state
         self.is_graph_displayed = not self.is_graph_displayed
@@ -339,7 +361,7 @@ class DashboardWindow(QMainWindow):
         self.processed_data_label.setVisible(True)
 
 
-    def init_question_combobox(self):
+    def init_question_combobox(self) -> None:
         """Create and initialize the QComboBox for selecting a question."""
         # Use the imported function to create the QComboBox
         self.question_combobox = create_question_combobox(self, self.show_graph)
@@ -354,7 +376,7 @@ class DashboardWindow(QMainWindow):
         self.central_layout.addWidget(self.question_combobox)
 
 
-    def show_graph(self, distinction_by=None):
+    def show_graph(self, distinction_by: str = None) -> None:
         """Function that shows a graph when 'Graphs' is clicked in the menu or when a specific distinction (gender/school) is requested."""
         selected_question_text = self.question_combobox.currentText()
 
@@ -365,19 +387,24 @@ class DashboardWindow(QMainWindow):
         print(f"Selected question key: '{selected_question_key}'")
         print(f"Selected question text: '{selected_question_text}'")
 
+        # If no distinction is provided, keep the previously selected distinction
+        if not distinction_by and self.current_distinction:
+            distinction_by = self.current_distinction
+
         # Determine which graph distinction to apply (gender, school, or none)
         if selected_question_key:
+            # Default graph (Bar Chart)
             if distinction_by == "gender":
                 self.fig1 = question_plot(selected_question_key, distinction_by_gender=True)
+                self.fig2 = question_plot(selected_question_key, pie_chart_by_gender=True)
             elif distinction_by == "school":
                 self.fig1 = question_plot(selected_question_key, distinction_by_school=True)
             elif distinction_by == "income":
                 self.fig1 = question_plot(selected_question_key, distinction_by_income=True)
             else:
-                self.fig1 = question_plot(selected_question_key)  # Default graph without distinction
-
-            # Optionally, you can keep the second graph for another distinction or leave it as None
-            self.fig2 = question_plot(selected_question_key, pie_chart=True)
+                self.fig1 = question_plot(selected_question_key) # Default graph without distinction
+                self.fig2 = question_plot(selected_question_key,
+                                      pie_chart=True)  # Regular pie chart without distinction
 
         else:
             self.fig1 = None
@@ -440,7 +467,7 @@ class DashboardWindow(QMainWindow):
         # Show the combobox when the "Graphs" menu is clicked
         self.question_combobox.setVisible(True)
 
-    def export_graphs(self):
+    def export_graphs(self) -> None:
         """Export the current graph as an image."""
         try:
             # Get the directory where the files will be saved

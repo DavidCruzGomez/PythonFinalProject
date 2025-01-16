@@ -141,6 +141,14 @@ class TestPreprocess(unittest.TestCase):
 
     @patch('FinalProject.assets.preprocess.read_xls_from_folder')
     def test_pipeline_end_to_end(self, mock_read_xls) -> None:
+        """
+        Test the `main` function to validate the end-to-end preprocessing pipeline.
+
+        Validates:
+        - The pipeline correctly processes numeric, categorical, and missing data.
+        - Cleaned and processed files are generated in the specified output directory.
+        - Temporary directories and files are cleaned up after execution.
+        """
         # Mock input data
         mock_read_xls.return_value = pd.DataFrame({
             'numeric_col': [1, 2, 3, 4, 100],
@@ -169,4 +177,3 @@ class TestPreprocess(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

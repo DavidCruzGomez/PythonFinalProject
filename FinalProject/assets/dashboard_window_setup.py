@@ -1,5 +1,43 @@
-# Standard library imports
+"""
+Dashboard Setup for PySide6 Application.
 
+This module contains functions to set up the dashboard for a PySide6 application.
+The dashboard includes user interface elements, a menu bar, table displays, and a
+graph container. Each function focuses on a specific aspect of the setup process.
+
+Key Features:
+-------------
+1. **Window Configuration**:
+   - Dynamically adjusts the window size and position based on the screen dimensions.
+   - Centers the window while accounting for taskbars and screen offsets.
+
+2. **User Interface Setup**:
+   - Creates a central layout with welcome and feedback labels.
+   - Adds table widgets within scrollable areas to display XLSX data.
+   - Applies custom styles using a centralized style dictionary.
+
+3. **Menu Bar with Actions**:
+   - Includes a "File" menu with actions for home, graphs, download, preprocessing, and export.
+   - Supports custom widgets like styled buttons within the menu.
+
+4. **Graph Container**:
+   - Adds a graph container to display visualizations.
+   - Initially hidden, but can be toggled dynamically.
+
+Functions:
+----------
+1. `setup_dashboard_window(self) -> None`:
+   - Configures the main window's properties, including title, size, and position.
+
+2. `setup_dashboard_ui(self) -> None`:
+   - Sets up the central layout, table widgets, and scrollable areas.
+
+3. `setup_dashboard_menu(self) -> None`:
+   - Creates and configures the menu bar, including actions and button-based widgets.
+
+4. `setup_graph_container(self) -> None`:
+   - Adds a graph container to the central layout for dynamic visualization.
+"""
 # Third-party imports
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (QLabel, QVBoxLayout, QWidget, QApplication,
@@ -10,7 +48,7 @@ from PySide6.QtWidgets import (QLabel, QVBoxLayout, QWidget, QApplication,
 from FinalProject.styles.styles import STYLES
 
 
-def setup_dashboard_window(self):
+def setup_dashboard_window(self) -> None:
     """Set up the main window's properties."""
     # Set the dashboard window's properties
     self.setWindowTitle("Final project David Cruz Gómez")
@@ -38,7 +76,7 @@ def setup_dashboard_window(self):
     print("✅ [SUCCESS] Window setup complete.")
 
 
-def setup_dashboard_ui(self):
+def setup_dashboard_ui(self) -> None:
     """Set up the user interface components for dashboard window."""
     # Create a layout for the dashboard content
     self.central_layout = QVBoxLayout()
@@ -92,7 +130,7 @@ def setup_dashboard_ui(self):
     print("✅ [SUCCESS] UI setup complete.")
 
 
-def setup_dashboard_menu(self):
+def setup_dashboard_menu(self) -> None:
     """Set up the menu bar and actions."""
     menu_bar = QMenuBar(self)
     self.setMenuBar(menu_bar)
@@ -139,7 +177,8 @@ def setup_dashboard_menu(self):
 
     print("✅ [SUCCESS] Menu setup complete.")
 
-def setup_graph_container(self):
+def setup_graph_container(self) -> None:
+    """Add a hidden graph container to the dashboard for visualizations. """
     # Create a container for the graph within the main layout
     self.graph_widget_container = QWidget(self)  # Container for the graph
     self.graph_layout = QVBoxLayout(self.graph_widget_container)  # Layout for the graph

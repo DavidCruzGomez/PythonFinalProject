@@ -33,8 +33,8 @@ and resilient to unexpected situations.
 
 # Standard library imports
 import os
-import unittest
 import zipfile
+import unittest
 from unittest.mock import patch, MagicMock
 
 # Local project-specific imports
@@ -219,7 +219,8 @@ class TestRenameFolder(unittest.TestCase):
     """
     Test suite for the `rename_folder` function in the `FinalProject.assets.download_files` module.
 
-    This test suite verifies the behavior of the `rename_folder` function under the following conditions:
+    This test suite verifies the behavior of the `rename_folder` function
+    under the following conditions:
     - Folder rename success: Verifies that the folder is renamed correctly.
     - Folder not found: Ensures that when the folder does not exist, the function returns `None`.
     - Folder rename failure: Simulates a failure in renaming and checks

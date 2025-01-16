@@ -1,3 +1,67 @@
+"""
+Automated File Download, Extraction, and Processing Script.
+
+This module provides a set of functions to automate downloading a dataset from Kaggle,
+extracting its contents, and performing necessary post-processing tasks such as renaming
+folders. The script integrates web automation using Selenium WebDriver and file operations
+with Python's standard libraries.
+
+Key Features:
+-------------
+1. **File Download Automation**:
+   - Automates the process of logging into Kaggle and downloading a dataset ZIP file.
+   - Uses Selenium WebDriver for interaction with the Kaggle website.
+
+2. **File Extraction**:
+   - Extracts the downloaded ZIP file to a specified directory.
+   - Handles corrupt ZIP files or invalid paths gracefully.
+   - Deletes the ZIP file after successful extraction.
+
+3. **Folder Management**:
+   - Renames the extracted folder to a user-defined name.
+   - Ensures smooth error handling during the renaming process.
+
+4. **WebDriver Configuration**:
+   - Configures a Chrome WebDriver instance with download preferences to avoid
+     prompts during file downloads.
+
+Functions:
+----------
+1. `unzip_file(zip_file_path: str, extract_to_folder: str) -> None`:
+   - Unzips a given ZIP file to the specified folder.
+   - Deletes the ZIP file after successful extraction.
+
+2. `rename_folder(folder_path: str, new_folder_name: str) -> str | None`:
+   - Renames a specified folder to a new name and returns the new path.
+
+3. `setup_browser() -> webdriver.Chrome | None`:
+   - Sets up and returns a Chrome WebDriver instance with configured preferences.
+
+4. `download_file(driver: webdriver.Chrome, sleep_time: int = 10) -> str | None`:
+   - Automates the download of a dataset ZIP file from Kaggle.
+
+Main Execution Workflow:
+------------------------
+1. **Setup**:
+   - Initializes the Chrome WebDriver with custom preferences.
+
+2. **Dataset Download**:
+   - Automates the login to Kaggle, navigates to the dataset page, and downloads the ZIP file.
+
+3. **File Extraction**:
+   - Extracts the contents of the downloaded ZIP file.
+
+4. **Folder Renaming**:
+   - Renames the extracted folder to a user-defined name.
+
+5. **Cleanup**:
+   - Closes the WebDriver instance and handles any cleanup tasks.
+
+Usage:
+------
+Execute the script directly, and follow the on-screen prompts for interaction with Kaggle.
+The dataset is downloaded, extracted, and prepared automatically.
+"""
 # Standard library imports
 import os
 import time

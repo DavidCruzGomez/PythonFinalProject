@@ -92,8 +92,8 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
 
             # Filter rows to exclude outliers:
             df = df[
-                (df[col] >= 0) & (df[col] <= upper_bound) if col != "Q3_SCHOOL" else (df[col] >= 0) & (
-                            df[col] <= 8)]
+                (df[col] >= 0) & (df[col] <= upper_bound) if col != "Q3_SCHOOL"
+                else (df[col] >= 0) & (df[col] <= 8)]
 
         # Print a success message once the process is complete
         print("✅ [SUCCESS] Outlier removal process completed successfully."
@@ -212,10 +212,12 @@ def summary(df: pd.DataFrame) -> pd.DataFrame:
                     summ[col] = summ[col].astype('object')
 
                 # Assign the values as strings
-                summ.at[col, 'First Value'] = str(first_values[0, i]) if len(first_values) > 0 else None
+                summ.at[col, 'First Value'] = str(first_values[0, i]) if len(
+                    first_values) > 0 else None
                 summ.at[col, 'Second Value'] = str(first_values[1, i]) if len(
                     first_values) > 1 else None
-                summ.at[col, 'Third Value'] = str(first_values[2, i]) if len(first_values) > 2 else None
+                summ.at[col, 'Third Value'] = str(first_values[2, i]) if len(
+                    first_values) > 2 else None
 
         print("✅ [SUCCESS] Dataset summary generated successfully.")
         return summ
@@ -248,9 +250,8 @@ def main(output_dir=None):
         if df is None:
             raise ValueError("No data was loaded. Please check the input folder.")
 
-        else:
-            print("Initial Dataframe:")
-            print(df)
+        print("Initial Dataframe:")
+        print(df)
 
         print("⏳ [INFO] Removing duplicates and cleaning missing data...")
         # Remove outliers from the dataframe

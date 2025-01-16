@@ -239,6 +239,22 @@ STYLES = {
         }
     """,
 
+    "toggle_button": """
+        QPushButton {
+            background-color: #8ED0F8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            padding: 5px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+        QPushButton:hover {
+            background-color: #1A91DA;
+        }
+    """,
+
     "combo_box": """
         /* Estilo principal del QComboBox */
         QComboBox {

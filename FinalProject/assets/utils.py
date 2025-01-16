@@ -104,7 +104,7 @@ class ValidatorBase:
         self._timer.setInterval(timer_interval) # Hide labels after inactivity
         self._timer.timeout.connect(self.hide_labels)
         self._requirements: list[str] = requirements # List of requirement descriptions
-        self._validation_state: list[bool] = [False] * len(requirements) # Store requirement´s validation
+        self._validation_state: list[bool] = [False] * len(requirements) # Store req´s validation
         print(f"🔄 [INFO] Validator initialized with {len(requirements)} requirements.")
 
 
