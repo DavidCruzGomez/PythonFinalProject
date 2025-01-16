@@ -100,7 +100,7 @@ def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
     for bar in axis.patches:
         value: int = int(bar.get_height())  # Get the height of the bar (frequency)
         axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                f'{value}', ha='center', va='bottom', color='black',
+                  f'{value}', ha='center', va='bottom', color='black',
                   fontsize=14, fontweight='bold'
                  )
 
@@ -182,7 +182,7 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
         height: int = int(bar.get_height())
         if height > 0:
             axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                    f'{height}', ha='center', va='bottom', color='black',
+                      f'{height}', ha='center', va='bottom', color='black',
                       fontsize=14, fontweight='bold'
                      )
 
@@ -355,7 +355,7 @@ def plot_question_data_by_income(df: pd.DataFrame, selected_question: str) -> Fi
         height: int = int(bar.get_height())
         if height > 0:
             axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                    f'{height}', ha='center', va='bottom', color='black',
+                      f'{height}', ha='center', va='bottom', color='black',
                       fontsize=14, fontweight='bold'
                      )
 
@@ -425,16 +425,17 @@ def create_pie_chart(df: pd.DataFrame, selected_question: str) -> Figure | None:
 
     # Create a single pie chart
     figure, axis = plt.subplots(figsize=(6, 6))
-    wedges, texts, autotexts = axis.pie(answer_counts,
-           labels=answer_counts.index,
-           autopct='%1.1f%%',
-           startangle=90,
-           colors=sns.color_palette('Set2', len(answer_counts)),
-           explode=explode,
-           wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
-           pctdistance=0.85,  # Adjusts the distance of the percentages from the center
-           labeldistance=1.1  # Moves labels slightly outward from the center
-          )
+    wedges, texts, autotexts = axis.pie(
+                                        answer_counts,
+                                        labels=answer_counts.index,
+                                        autopct='%1.1f%%',
+                                        startangle=90,
+                                        colors=sns.color_palette('Set2', len(answer_counts)),
+                                        explode=explode,
+                                        wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
+                                        pctdistance=0.85,  # Adjusts the distance of the percentages
+                                        labeldistance=1.1  # Moves labels slightly outward
+                                       )
 
     # Adjust the position of the percentages manually to prevent collisions
     for i, autotext in enumerate(autotexts):
@@ -511,15 +512,17 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
 
         # Create the pie chart
         wedges, texts, autotexts = axis.pie(answer_counts,
-                                          labels=answer_counts.index,
-                                          autopct='%1.1f%%',
-                                          startangle=90,
-                                          colors=sns.color_palette('Set2', len(answer_counts)),
-                                          explode=explode,
-                                          wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
-                                          pctdistance=0.85,
-                                          # Adjusts the distance of the percentages from the center
-                                          labeldistance=1.1)  # Moves labels slightly outward
+                                            labels=answer_counts.index,
+                                            autopct='%1.1f%%',
+                                            startangle=90,
+                                            colors=sns.color_palette('Set2',
+                                                                     len(answer_counts)
+                                                                    ),
+                                            explode=explode,
+                                            wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
+                                            pctdistance=0.85,
+                                            # Adjusts the distance of the percentages from the center
+                                            labeldistance=1.1)  # Moves labels slightly outward
 
         # Adjust the position of the percentages manually to prevent collisions
         for i, autotext in enumerate(autotexts):
@@ -552,13 +555,13 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
 
 
 def question_plot(
-        selected_question: str,
-        distinction_by_gender: bool = False,
-        distinction_by_school: bool = False,
-        distinction_by_income: bool = False,
-        pie_chart: bool = False,
-        pie_chart_by_gender: bool = False
-        ) -> Figure | None:
+                  selected_question: str,
+                  distinction_by_gender: bool = False,
+                  distinction_by_school: bool = False,
+                  distinction_by_income: bool = False,
+                  pie_chart: bool = False,
+                  pie_chart_by_gender: bool = False
+                 ) -> Figure | None:
     """Main function to generate the chart for a selected question."""
     survey_data: pd.DataFrame = load_data()  # Load the data
     if survey_data is None:
@@ -589,7 +592,7 @@ def question_plot(
         return plot_question_data(survey_data, selected_question)
 
 
-def create_question_combobox(parent, callback, current_distinction: str | None = None)\
+def create_question_combobox(parent, callback, current_distinction: str | None=None)\
         -> QComboBox | None:
     """Function to create a QComboBox for selecting a question."""
     try:
