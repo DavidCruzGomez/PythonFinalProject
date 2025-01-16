@@ -404,7 +404,7 @@ class DashboardWindow(QMainWindow):
             else:
                 self.fig1 = question_plot(selected_question_key) # Default graph without distinction
                 self.fig2 = question_plot(selected_question_key,
-                                      pie_chart=True)  # Regular pie chart without distinction
+                                          pie_chart=True)  # Regular pie chart without distinction
 
         else:
             self.fig1 = None

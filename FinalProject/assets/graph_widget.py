@@ -207,13 +207,13 @@ class GraphWidget(FigureCanvas):
                 dy: float = event.ydata - self._last_y
 
                 # Move the axis limits
-                ax = event.inaxes
-                xlim = ax.get_xlim()
-                ylim = ax.get_ylim()
+                axis = event.inaxes
+                xlim = axis.get_xlim()
+                ylim = axis.get_ylim()
 
                 # Adjust the axis limits to move the graph
-                ax.set_xlim(xlim[0] - dx, xlim[1] - dx)
-                ax.set_ylim(ylim[0] - dy, ylim[1] - dy)
+                axis.set_xlim(xlim[0] - dx, xlim[1] - dx)
+                axis.set_ylim(ylim[0] - dy, ylim[1] - dy)
 
                 # Update the last mouse position
                 self._last_x = event.xdata
@@ -239,15 +239,15 @@ class GraphWidget(FigureCanvas):
             dy: Vertical shift (positive for up, negative for down).
         """
         # Get the current axes
-        ax = self.figure.gca()
+        axis = self.figure.gca()
 
         # Get current limits of the axes
-        x_min, x_max = ax.get_xlim()
-        y_min, y_max = ax.get_ylim()
+        x_min, x_max = axis.get_xlim()
+        y_min, y_max = axis.get_ylim()
 
         # Adjust the axis limits based on the pan direction (dx, dy)
-        ax.set_xlim(x_min + dx, x_max + dx)
-        ax.set_ylim(y_min + dy, y_max + dy)
+        axis.set_xlim(x_min + dx, x_max + dx)
+        axis.set_ylim(y_min + dy, y_max + dy)
 
         # Redraw the canvas to reflect the change
         self.draw()
@@ -261,9 +261,9 @@ class GraphWidget(FigureCanvas):
         """
         try:
             if event.inaxes:  # Ensure the scroll occurs within the plot area
-                ax = event.inaxes
-                x_min, x_max = ax.get_xlim()
-                y_min, y_max = ax.get_ylim()
+                axis = event.inaxes
+                x_min, x_max = axis.get_xlim()
+                y_min, y_max = axis.get_ylim()
                 x_range = x_max - x_min
                 y_range = y_max - y_min
 
@@ -295,8 +295,8 @@ class GraphWidget(FigureCanvas):
                     return
 
                 # Apply the new limits
-                ax.set_xlim(new_xlim)
-                ax.set_ylim(new_ylim)
+                axis.set_xlim(new_xlim)
+                axis.set_ylim(new_ylim)
                 self.draw()
 
         except AttributeError as atr_err:
@@ -306,16 +306,16 @@ class GraphWidget(FigureCanvas):
 
     def reset_zoom(self) -> None:
         """Reset the graph zoom to fit the full data area."""
-        ax = self.figure.gca()
-        ax.autoscale()  # Matplotlib automatically adjust the limits
+        axis = self.figure.gca()
+        axis.autoscale()  # Matplotlib automatically adjust the limits
         self.draw()
 
     def toggle_grid(self) -> None:
         """Toggle the visibility of the grid on the graph"""
-        ax = self.figure.gca()
-        current_grid = ax._axisbelow
-        ax.grid(not current_grid)  # Toggle the grid state
-        ax._axisbelow = not current_grid
+        axis = self.figure.gca()
+        current_grid = axis._axisbelow
+        axis.grid(not current_grid)  # Toggle the grid state
+        axis._axisbelow = not current_grid
         self.draw()  # Redraw the plot
 
     def save_figure(self) -> None:

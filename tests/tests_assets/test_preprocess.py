@@ -97,7 +97,8 @@ class TestPreprocess(unittest.TestCase):
         # Test with a column that has equal probabilities
         series: pd.Series = pd.Series(['a', 'b', 'c', 'd'])
         entropy = calculate_entropy(series)
-        self.assertAlmostEqual(entropy, 2.0, places=1)  # 2 bits of entropy for 4 equally probable values
+        # 2 bits of entropy for 4 equally probable values
+        self.assertAlmostEqual(entropy, 2.0, places=1)
 
         # Test with a column that has a dominant value
         series = pd.Series(['a', 'a', 'a', 'b'])
@@ -137,7 +138,7 @@ class TestPreprocess(unittest.TestCase):
         self.assertGreater(summary_df.loc['string_col', 'Entropy'], 0.0)
 
         # Assert outlier counts are correct
-        self.assertEqual(summary_df.loc['numeric_col', 'Outliers'], 1)  # Only 100 is an outlier
+        self.assertEqual(summary_df.loc['numeric_col', 'Outliers'], 1) # Only 100 is outlier
 
     @patch('FinalProject.assets.preprocess.read_xls_from_folder')
     def test_pipeline_end_to_end(self, mock_read_xls) -> None:

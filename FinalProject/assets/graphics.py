@@ -71,7 +71,9 @@ def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
         return
 
     # Map the answers using the `answers` dictionary
-    mapped_answers_df: DataFrame = pd.DataFrame({selected_question: df[selected_question].map(answers)})
+    mapped_answers_df: DataFrame = pd.DataFrame(
+        {selected_question: df[selected_question].map(answers)}
+    )
 
     if mapped_answers_df[selected_question].isnull().any():
         print(f"Warning: There are null values for the question {selected_question}.")
@@ -98,10 +100,13 @@ def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
     for bar in axis.patches:
         value: int = int(bar.get_height())  # Get the height of the bar (frequency)
         axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                f'{value}', ha='center', va='bottom', color='black', fontsize=14, fontweight='bold')
+                f'{value}', ha='center', va='bottom', color='black',
+                  fontsize=14, fontweight='bold'
+                 )
 
     # Add the title and labels
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})")
     wrapped_title: str = textwrap.fill(question_title, width=40)
 
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
@@ -138,7 +143,9 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
         return
 
     if selected_question not in df.columns or 'Q2_GENDER' not in df.columns:
-        print(f"Error: The question {selected_question} or the column 'Q2_GENDER' is not found in the data.")
+        print(f"Error: The question {selected_question} or the column 'Q2_GENDER'"
+              " is not found in the data."
+             )
         return
 
     df['Q2_GENDER'] = df['Q2_GENDER'].map(gender)
@@ -153,8 +160,12 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
     custom_order: list[str] = ['Very disagree', 'Disagree', 'Normal', 'Agree', 'Very agree']
 
     # Count the number of answers for each category, grouped by gender
-    response_counts_by_gender: DataFrame = gender_mapped_answers_df.groupby(['Q2_GENDER', selected_question]).size().unstack(fill_value=0)
-    response_counts_by_gender = response_counts_by_gender.reindex(columns=custom_order, fill_value=0)
+    response_counts_by_gender: DataFrame = gender_mapped_answers_df.groupby(
+        ['Q2_GENDER', selected_question]
+    ).size().unstack(fill_value=0)
+    response_counts_by_gender = response_counts_by_gender.reindex(
+        columns=custom_order, fill_value=0
+    )
 
     if response_counts_by_gender.empty:
         print(f"Error: No responses were found for the question {selected_question}.")
@@ -162,17 +173,22 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
 
     # Create the chart
     figure, axis = plt.subplots(figsize=(10, 6))
-    response_counts_by_gender.T.plot(kind='bar', ax=axis, color=['pink', '#197CF4'], edgecolor='white')
+    response_counts_by_gender.T.plot(kind='bar', ax=axis,
+                                     color=['pink', '#197CF4'], edgecolor='white'
+                                    )
 
     # Add values on top of the bars
     for bar in axis.patches:
         height: int = int(bar.get_height())
         if height > 0:
             axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                    f'{height}', ha='center', va='bottom', color='black', fontsize=14, fontweight='bold')
+                    f'{height}', ha='center', va='bottom', color='black',
+                      fontsize=14, fontweight='bold'
+                     )
 
     # Add the title and labels
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})")
     wrapped_title: str = textwrap.fill(question_title, width=40)
 
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
@@ -212,7 +228,8 @@ def plot_question_data_by_school(df: DataFrame, selected_question: str) -> Figur
         return
 
     if selected_question not in df.columns or 'Q3_SCHOOL' not in df.columns:
-        print(f"Error: The question {selected_question} or the column 'Q3_SCHOOL' is not found in the data.")
+        print(f"Error: The question {selected_question} or the column 'Q3_SCHOOL'"
+              " is not found in the data.")
         return
 
     # Map the schools using the `school` dictionary
@@ -228,8 +245,12 @@ def plot_question_data_by_school(df: DataFrame, selected_question: str) -> Figur
     custom_order: list[str] = ['Very disagree', 'Disagree', 'Normal', 'Agree', 'Very agree']
 
     # Count the number of answers for each category, grouped by school
-    response_counts_by_school: DataFrame = school_mapped_answers_df.groupby(['Q3_SCHOOL', selected_question]).size().unstack(fill_value=0)
-    response_counts_by_school = response_counts_by_school.reindex(columns=custom_order, fill_value=0)
+    response_counts_by_school: DataFrame = school_mapped_answers_df.groupby(
+        ['Q3_SCHOOL', selected_question]
+    ).size().unstack(fill_value=0)
+    response_counts_by_school = response_counts_by_school.reindex(
+        columns=custom_order, fill_value=0
+    )
 
     if response_counts_by_school.empty:
         print(f"Error: No responses were found for the question {selected_question}.")
@@ -244,10 +265,14 @@ def plot_question_data_by_school(df: DataFrame, selected_question: str) -> Figur
         height: int = int(bar.get_height())
         if height > 0:
             axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                    f'{height}', ha='center', va='bottom', color='black', fontsize=14, fontweight='bold')
+                      f'{height}', ha='center', va='bottom', color='black',
+                      fontsize=14, fontweight='bold'
+                     )
 
     # Add the title and labels
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})"
+                          )
     wrapped_title: str = textwrap.fill(question_title, width=40)
 
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
@@ -288,7 +313,9 @@ def plot_question_data_by_income(df: pd.DataFrame, selected_question: str) -> Fi
 
     # Ensure the selected question and income column are in the data
     if selected_question not in df.columns or 'Q4_INCOME' not in df.columns:
-        print(f"Error: The question {selected_question} or the column 'Q4_INCOME' is not found in the data.")
+        print(f"Error: The question {selected_question} or the column 'Q4_INCOME'"
+              " is not found in the data."
+             )
         return
 
     # Map the income using the `income` dictionary (assuming it's imported or defined somewhere)
@@ -296,7 +323,8 @@ def plot_question_data_by_income(df: pd.DataFrame, selected_question: str) -> Fi
         income)  # You need to define or import the `income` dictionary
 
     # Ensure the 'Q4_INCOME' column is categorical and respects the order from the dictionary
-    income_order: list[str] = list(income.values())  # Use the ordered values from the `income` dictionary
+    # Use the ordered values from the `income` dictionary
+    income_order: list[str] = list(income.values())
     df['Q4_INCOME'] = pd.Categorical(df['Q4_INCOME'], categories=income_order, ordered=True)
 
     # Map the answers using the `answers` dictionary
@@ -309,7 +337,9 @@ def plot_question_data_by_income(df: pd.DataFrame, selected_question: str) -> Fi
     custom_order: list[str] = ['Very disagree', 'Disagree', 'Normal', 'Agree', 'Very agree']
 
     # Count the number of answers for each category, grouped by income
-    answer_counts_by_income: pd.DataFrame = question_answers_df.groupby(['Q4_INCOME', selected_question]).size().unstack(fill_value=0)
+    answer_counts_by_income: pd.DataFrame = question_answers_df.groupby(
+        ['Q4_INCOME', selected_question]
+    ).size().unstack(fill_value=0)
     answer_counts_by_income = answer_counts_by_income.reindex(columns=custom_order, fill_value=0)
 
     if answer_counts_by_income.empty:
@@ -325,10 +355,14 @@ def plot_question_data_by_income(df: pd.DataFrame, selected_question: str) -> Fi
         height: int = int(bar.get_height())
         if height > 0:
             axis.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1,
-                    f'{height}', ha='center', va='bottom', color='black', fontsize=14, fontweight='bold')
+                    f'{height}', ha='center', va='bottom', color='black',
+                      fontsize=14, fontweight='bold'
+                     )
 
     # Add the title and labels
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})"
+                          )
     wrapped_title: str = textwrap.fill(question_title, width=40)
 
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
@@ -368,7 +402,8 @@ def create_pie_chart(df: pd.DataFrame, selected_question: str) -> Figure | None:
         return
 
     if selected_question not in df.columns or 'Q3_SCHOOL' not in df.columns:
-        print(f"Error: The question {selected_question} or the column 'Q3_SCHOOL' is not found in the data.")
+        print(f"Error: The question {selected_question} or the column 'Q3_SCHOOL'"
+              " is not found in the data.")
         return
 
     # Map the answers using the `answers` dictionary
@@ -397,8 +432,8 @@ def create_pie_chart(df: pd.DataFrame, selected_question: str) -> Figure | None:
            colors=sns.color_palette('Set2', len(answer_counts)),
            explode=explode,
            wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
-           pctdistance = 0.85,  # Adjusts the distance of the percentages from the center
-           labeldistance = 1.1  # Moves labels slightly outward from the center
+           pctdistance=0.85,  # Adjusts the distance of the percentages from the center
+           labeldistance=1.1  # Moves labels slightly outward from the center
           )
 
     # Adjust the position of the percentages manually to prevent collisions
@@ -420,7 +455,9 @@ def create_pie_chart(df: pd.DataFrame, selected_question: str) -> Figure | None:
         text.set_fontweight('bold')
 
     # Add the title
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})"
+                          )
     wrapped_title: str = textwrap.fill(question_title, width=40)
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
 
@@ -438,7 +475,8 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
 
     if selected_question not in df.columns or 'Q2_GENDER' not in df.columns:
         print(
-            f"Error: The question {selected_question} or the column 'Q2_GENDER' is not found in the data.")
+            f"Error: The question {selected_question} or the column 'Q2_GENDER'"
+            " is not found in the data.")
         return
 
     # Map the answers using the `answers` dictionary
@@ -451,8 +489,9 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
     })
 
     # Count the number of answers for each category, grouped by gender
-    answer_counts_by_gender: pd.DataFrame = gender_answers_df.groupby(['Q2_GENDER', selected_question]).size().unstack(
-        fill_value=0)
+    answer_counts_by_gender: pd.DataFrame = gender_answers_df.groupby(
+        ['Q2_GENDER', selected_question]
+    ).size().unstack(fill_value=0)
 
     if answer_counts_by_gender.empty:
         print(f"Error: No responses were found for the question {selected_question}.")
@@ -466,7 +505,9 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
         answer_counts = answer_counts_by_gender.loc[gender_category]
 
         # Exploding the largest slice
-        explode: list[float] = [0.1 if i == answer_counts.idxmax() else 0 for i in answer_counts.index]
+        explode: list[float] = [0.1 if i == answer_counts.idxmax()
+                                else 0 for i in answer_counts.index
+                               ]
 
         # Create the pie chart
         wedges, texts, autotexts = axis.pie(answer_counts,
@@ -478,7 +519,7 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
                                           wedgeprops={'edgecolor': 'black', 'linewidth': 1.2},
                                           pctdistance=0.85,
                                           # Adjusts the distance of the percentages from the center
-                                          labeldistance=1.1)  # Moves labels slightly outward from the center
+                                          labeldistance=1.1)  # Moves labels slightly outward
 
         # Adjust the position of the percentages manually to prevent collisions
         for i, autotext in enumerate(autotexts):
@@ -498,7 +539,9 @@ def create_pie_chart_by_gender(df: pd.DataFrame, selected_question: str) -> Figu
             text.set_fontweight('bold')
 
     # Add the title
-    question_title: str = questions.get(selected_question, selected_question) + f" ({selected_question})"
+    question_title: str = (questions.get(selected_question, selected_question) +
+                           f" ({selected_question})"
+                          )
     wrapped_title: str = textwrap.fill(question_title, width=40)
     plt.title(wrapped_title, fontsize=18, fontweight='bold', color='navy')
 
@@ -546,7 +589,8 @@ def question_plot(
         return plot_question_data(survey_data, selected_question)
 
 
-def create_question_combobox(parent, callback, current_distinction: str | None = None) -> QComboBox | None:
+def create_question_combobox(parent, callback, current_distinction: str | None = None)\
+        -> QComboBox | None:
     """Function to create a QComboBox for selecting a question."""
     try:
         # Create the QComboBox
