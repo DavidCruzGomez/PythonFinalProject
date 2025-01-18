@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.3.2] - 2025-01-07
+The preprocessing function has been created, and it includes
+displaying a preview of the data and statistical information on the screen.
+
 ## [0.2.0] - 2024-12-30
 - The dashboard window has been created, and the automated function
 to download the XLSX file has been implemented.
