@@ -25,22 +25,22 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 .
 ├── FinalProject/
 │   ├── assets/
-│   │   ├── exported_graphs/
+│   │   ├── exported_graphs/            # Directory for exported graphs
 │   │   ├── impulse_buying_data/
-│   │   │   ├──cleaned_data.csv
-│   │   │   ├──data_dictionary.py
-│   │   │   ├──processed_data.csv
-│   │   │   ├──Questionnaire....pdf
-│   │   │   └──Raw data....xlsx
+│   │   │   ├── cleaned_data.csv        # Cleaned data CSV file
+│   │   │   ├── data_dictionary.py      # Data dictionary script
+│   │   │   ├── processed_data.csv      # Processed data CSV file
+│   │   │   ├── Questionnaire.pdf       # Questionnaire in PDF format
+│   │   │   └── Raw_data.xlsx           # Raw data in Excel format
 │   │   ├── custom_errors.py            # Custom error classes
-│   │   ├── dashboard_window_setup.py            
-│   │   ├── download_files.py            
-│   │   ├── email_cofig.json            
-│   │   ├── graph_widget.py                    
-│   │   ├── graphics.py                    
-│   │   ├── preprocess.py                    
+│   │   ├── dashboard_window_setup.py   # Dashboard window setup script
+│   │   ├── download_files.py           # Script for downloading files
+│   │   ├── email_config.json           # Email configuration (SMTP)
+│   │   ├── graph_widget.py             # Graph widget script
+│   │   ├── graphics.py                 # Graphics related functions
+│   │   ├── preprocess.py               # Data preprocessing script                    
 │   │   ├── regex.py                    # Regular expressions (e.g., for validating emails)
-│   │   ├── UMLDiagram.xml
+│   │   ├── UMLDiagram.xml              # UML Diagram in XML format
 │   │   ├── users_db.json               # User database
 │   │   ├── users_db.py                 # User database functions
 │   │   ├── utils.py                    # Utility functions (e.g., displaying messages)
@@ -59,7 +59,12 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 ├── tests/
 │   ├── tests_assets/
 │   │   ├── test_custom_errors.py       # Tests for custom errors
+│   │   ├── test_dashboard_window_setup.py        
+│   │   ├── test_download_files.py        
 │   │   ├── test_email_config.py        # Tests for email configuration
+│   │   ├── test_graph_widget.py        
+│   │   ├── test_graphics.py        
+│   │   ├── test_preprocess.py        
 │   │   ├── test_regex.py               # Tests for regular expressions
 │   │   ├── test_users_db.py            # Tests for user database functions
 │   │   ├── test_utils.py               # Tests for utility functions
@@ -68,6 +73,7 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 │   │   ├── test_styles.py              # Tests for the styles in `styles.py`
 │   │   └── __init__.py                 # Empty file to import the tests_styles module
 │   ├── tests_windows/
+│   │   ├── test_dashboard_window.py         
 │   │   ├── test_main_window.py         # Tests for the `main_window.py` (login window)
 │   │   ├── test_recovery_window.py     # Tests for the `recovery_window.py` (password recovery window)
 │   │   ├── test_registration_window.py # Tests for the `registration_window.py` (user registration window)         
