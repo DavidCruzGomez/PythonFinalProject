@@ -2,6 +2,6 @@
 
 __author__ = "David Cruz Gómez"
 __email__ = "david97torrejon@alumnos.cei.es"
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 PACKAGE_NAME = "FinalProject"
