@@ -39,7 +39,8 @@ ensuring an interactive and functional graphical experience.
 ![pythonfig](https://github.com/user-attachments/assets/822e0938-b1ba-45e4-90f7-6d0e9d63f311)
 ![python login](https://github.com/user-attachments/assets/7f21f0b5-a119-4057-96d1-a067db98698e)
 
-![Captura](https://github.com/user-attachments/assets/7a32399f-d6d9-4621-ac08-d3a288e6ccaf)
+![Captura](https://github.com/user-attachments/assets/076fe810-7585-4447-9ffd-98deaa76928a)
+
 
 
 ## Directory Structure
