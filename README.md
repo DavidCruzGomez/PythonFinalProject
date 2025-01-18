@@ -35,7 +35,7 @@ ensuring an interactive and functional graphical experience.
 - **seaborn**: For enhanced data visualization and statistical graphics.
 - **PyQt6**: Alternative Qt framework used in conjunction with PySide6 for GUI elements.
 - **openpyxl**: To read and write Excel files, enabling data import/export functionality.
-- **selenium**: For automating web browser interactions (e.g., scraping data for analysis).
+- **selenium**: For automating web browser interactions (download the data from web).
 
 
 
