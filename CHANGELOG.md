@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.1.5] - 2024-12-26
+- Created unit test and cleaned all code
+
 ## [0.1.3] - 2024-12-22
 - Added custom exceptions, made some methods protected and change general style
 
