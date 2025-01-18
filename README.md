@@ -25,9 +25,22 @@ for an online shopping platform, like TikTok Shop. The interface is developed wi
 .
 ├── FinalProject/
 │   ├── assets/
+│   │   ├── exported_graphs/
+│   │   ├── impulse_buying_data/
+│   │   │   ├──cleaned_data.csv
+│   │   │   ├──data_dictionary.py
+│   │   │   ├──processed_data.csv
+│   │   │   ├──Questionnaire....pdf
+│   │   │   └──Raw data....xlsx
 │   │   ├── custom_errors.py            # Custom error classes
-│   │   ├── email_cofig.json            # Email configuration (SMTP)
+│   │   ├── dashboard_window_setup.py            
+│   │   ├── download_files.py            
+│   │   ├── email_cofig.json            
+│   │   ├── graph_widget.py                    
+│   │   ├── graphics.py                    
+│   │   ├── preprocess.py                    
 │   │   ├── regex.py                    # Regular expressions (e.g., for validating emails)
+│   │   ├── UMLDiagram.xml
 │   │   ├── users_db.json               # User database
 │   │   ├── users_db.py                 # User database functions
 │   │   ├── utils.py                    # Utility functions (e.g., displaying messages)
