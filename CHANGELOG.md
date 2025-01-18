@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.0] - 2025-01-19
+Charts have been added, and the project has been reorganized to improve clarity.
+
 ## [0.3.2] - 2025-01-07
 The preprocessing function has been created, and it includes
 displaying a preview of the data and statistical information on the screen.
