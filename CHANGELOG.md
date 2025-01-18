@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.2.0] - 2024-12-30
+- The dashboard window has been created, and the automated function
+to download the XLSX file has been implemented.
+
 ## [0.1.5] - 2024-12-26
 - Created unit test and cleaned all code
 
