@@ -180,10 +180,12 @@ class DashboardWindow(QMainWindow):
             print("File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
                                  "File not found. Please check the path to the script.")
+            raise FileNotFoundError("File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
                                  "Unexpected error")
+            raise gen_err(f"Unexpected error: {gen_err}")
 
     def run_preprocessing(self) -> None:
         """Run the preprocessing script (preprocess.py)."""
@@ -215,10 +217,12 @@ class DashboardWindow(QMainWindow):
             print("File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
                                  "File not found. Please check the path to the script.")
+            raise FileNotFoundError("File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
                                  "Unexpected error")
+            raise gen_err(f"Unexpected error: {gen_err}")
 
     def display_tables(self) -> None:
         """Read the first 5 rows of the 'cleaned_data.csv' file and display them in the first table,

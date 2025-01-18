@@ -42,8 +42,6 @@ The tests use Python's `unittest` framework to simulate user actions
 and verify the UI behavior, without needing to run the application
 in a graphical environment.
 """
-
-
 # Standard library imports
 import unittest
 from unittest.mock import patch, MagicMock

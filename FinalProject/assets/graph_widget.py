@@ -78,7 +78,7 @@ class GraphWidget(FigureCanvas):
         self.mpl_connect('motion_notify_event', self.on_move)
         self.mpl_connect('scroll_event', self.on_scroll)
 
-        print(f"🔍 [DEBUG] GraphWidget initialized.")
+        print("🔍 [DEBUG] GraphWidget initialized.")
 
     def keyPressEvent(self, event) -> None:
         """

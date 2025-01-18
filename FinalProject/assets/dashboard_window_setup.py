@@ -181,6 +181,8 @@ def setup_graph_container(self) -> None:
     """Add a hidden graph container to the dashboard for visualizations. """
     # Create a container for the graph within the main layout
     self.graph_widget_container = QWidget(self)  # Container for the graph
+    self.graph_widget_container.setObjectName(
+        "graph_widget_container")  # Set object name for testing
     self.graph_layout = QVBoxLayout(self.graph_widget_container)  # Layout for the graph
     self.graph_widget_container.setLayout(self.graph_layout)  # Assign layout
 
