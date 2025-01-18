@@ -36,11 +36,22 @@ ensuring an interactive and functional graphical experience.
 - **PyQt6**: Alternative Qt framework used in conjunction with PySide6 for GUI elements.
 - **openpyxl**: To read and write Excel files, enabling data import/export functionality.
 - **selenium**: For automating web browser interactions (e.g., scraping data for analysis).
-![pythonfig](https://github.com/user-attachments/assets/822e0938-b1ba-45e4-90f7-6d0e9d63f311)
+
+## Windows:
+### Login Window
 ![python login](https://github.com/user-attachments/assets/7f21f0b5-a119-4057-96d1-a067db98698e)
 
-![Captura](https://github.com/user-attachments/assets/076fe810-7585-4447-9ffd-98deaa76928a)
+### Registration Window
+![registration window](https://github.com/user-attachments/assets/1e792be2-cec7-4c2d-b4f3-d25853c679a6)
 
+### Recovery Window
+![recovery window](https://github.com/user-attachments/assets/c918e023-2434-4cb8-b8b7-8e0956fd621c)
+
+### Dashboard Window Home
+![Home](https://github.com/user-attachments/assets/076fe810-7585-4447-9ffd-98deaa76928a)
+
+### Dashboard Window Graphs
+![graphs](https://github.com/user-attachments/assets/822e0938-b1ba-45e4-90f7-6d0e9d63f311)
 
 
 ## Directory Structure
