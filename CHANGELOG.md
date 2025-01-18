@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## [0.0.0] - 2024-12-10
-- Create project template and add project files.
+## [0.1.3] - 2024-12-22
+- Added custom exceptions, made some methods protected and change general style
 
-## [0.0.0] - 2024-12-18
+## [0.1.0] - 2024-12-18
+- Created a database, login, register and recover functions
+
+## [0.0.0] - 2024-12-10
 - Create project template and add project files.
