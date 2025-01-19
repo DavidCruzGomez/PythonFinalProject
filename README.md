@@ -133,7 +133,7 @@ ensuring an interactive and functional graphical experience.
 To install the project, follow these steps:
 1. Clone the repository:
     ```bash
-    git clone https://github.com/DavidCruzGomez/test2.git
+    git clone https://github.com/DavidCruzGomez/PythonFinalProject.git
    
 2. Navigate to the project directory:
     ```bash
