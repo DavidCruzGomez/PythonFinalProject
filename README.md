@@ -129,17 +129,30 @@ ensuring an interactive and functional graphical experience.
 └── Dockerfile                              # Docker configuration for the project
 ```
 
+## Installation
+To install the project, follow these steps:
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/DavidCruzGomez/test2.git
+   
+2. Navigate to the project directory:
+    ```bash
+    cd test2
+3. Install the required dependencies:
+    ```bash
+    pip install -r requirements.txt
+
 ## Usage
 To run the application, use the following command:
-```
-python FinalProject/main.py
+```bash
+  python FinalProject/main.py
 ```
 ## Testing
 To run the tests, use the following command:
+```bash
+  python -m unittest discover -s tests
 ```
-python -m unittest discover -s tests
-```
- <div style="border-left: 4px solid #8a2be2; padding: 1em; background: #f3f6fc;">
+<div style="border-left: 4px solid #8a2be2; padding: 1em; background: #f3f6fc;">
   <strong>⚠️ Important:</strong> You must disable manual login so that all tests work correctly.
 </div>
 
