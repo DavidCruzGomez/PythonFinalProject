@@ -156,8 +156,8 @@ def calculate_entropy(series: pd.Series) -> float:
 
         return entropy
 
-    except Exception as e:
-            print(f"❌ [ERROR] An error occurred while calculating entropy: {e}")
+    except Exception as gen_err:
+            print(f"❌ [ERROR] An error occurred while calculating entropy: {gen_err}")
             return 0.0  # Return 0 in case of any unexpected error
 
 def summary(df: pd.DataFrame) -> pd.DataFrame:
