@@ -141,6 +141,33 @@ class TestPreprocess(unittest.TestCase):
         entropy = calculate_entropy(series)
         self.assertEqual(entropy, 0.0)
 
+        # Test with a column that contains only NaN values
+        series = pd.Series([np.nan, np.nan, np.nan])
+        entropy = calculate_entropy(series)
+        self.assertEqual(entropy, 0.0)
+
+        # Test with a column that contains a single unique value
+        series = pd.Series(['a', 'a', 'a', 'a'])
+        entropy = calculate_entropy(series)
+        self.assertEqual(entropy, 0.0)  # Entropy should be 0 for a single value
+
+        # Test with a column that contains a mix of NaN and non-NaN values
+        series = pd.Series(['a', 'b', np.nan, 'a', 'b', np.nan])
+        entropy = calculate_entropy(series)
+        # Expected entropy for values 'a' and 'b' with equal probabilities
+        self.assertAlmostEqual(entropy, 1.0, places=1)
+
+        # Test with a column that contains only one non-NaN value
+        series = pd.Series([np.nan, np.nan, 'a', np.nan])
+        entropy = calculate_entropy(series)
+        self.assertEqual(entropy, 0.0)  # Entropy should be 0 for a single value
+
+        # Test with a column that contains a large number of unique values
+        series = pd.Series(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
+        entropy = calculate_entropy(series)
+        # Expected entropy for 10 equally probable values
+        self.assertAlmostEqual(entropy, np.log2(10), places=1)
+
     def test_summary(self) -> None:
         """
         Test the `summary` function to ensure it generates accurate statistics.
