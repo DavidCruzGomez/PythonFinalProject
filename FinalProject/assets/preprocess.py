@@ -60,28 +60,45 @@ import pandas as pd
 from FinalProject.assets.utils import read_xls_from_folder
 
 
-def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
+def remove_outliers(df: pd.DataFrame, outlier_thresholds: dict = None) -> pd.DataFrame:
     """
-    Removes outliers from numeric columns in the dataframe using the IQR method.
+    Removes outliers from numeric columns in the dataframe using the IQR method
+    or predefined thresholds.
 
     Args:
         df (pd.DataFrame): The input dataframe.
+        outlier_thresholds (dict): A dictionary with column names as keys
+        and upper bounds as values. If not provided, default thresholds will be used.
 
     Returns:
         pd.DataFrame: The dataframe with outliers removed.
     """
     try:
+        print("📂 Original DataFrame:")
+        print(df)
         print("⏳ [INFO] Starting outlier removal process...")
         # Select only numeric columns from the dataframe
         num_cols = df.select_dtypes(include=[np.number])
 
+        # Define default thresholds
+        default_thresholds = {col: 5 for col in num_cols.columns}
+        default_thresholds["Q3_SCHOOL"] = 8  # Specific threshold for 'Q3_SCHOOL'
+
+        # Combine default thresholds with custom thresholds (if provided)
+        if outlier_thresholds is not None:
+            # Update default thresholds with custom thresholds
+            default_thresholds.update(outlier_thresholds)
+
+        # Use the combined thresholds
+        outlier_thresholds = default_thresholds
+
+        print(f"📊 Outlier thresholds being used: {outlier_thresholds}")
+
         # Iterate over each numeric column
         for col in num_cols.columns:
-            # Define the upper bound for outliers based on the column name
-            if col == "Q3_SCHOOL":
-                upper_bound = 8  # Specific upper limit for the column 'Q3_SCHOOL'
-            else:
-                upper_bound = 5  # Default upper limit for other columns
+            # Get the upper bound for the current column
+            upper_bound = outlier_thresholds.get(col, 5)  # Default to 5 if no threshold is set
+            print(f"🔍 Processing column: {col}, Upper bound: {upper_bound}")
 
             # Identify outliers in the current column
             outliers = df[(df[col] < 0) | (df[col] > upper_bound)][col]
@@ -90,15 +107,18 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
             if not outliers.empty:
                 print(f"⚠️ [WARNING] Outliers detected in column '{col}':\n{outliers.tolist()}")
 
-            # Filter rows to exclude outliers:
-            df = df[
-                (df[col] >= 0) & (df[col] <= upper_bound) if col != "Q3_SCHOOL"
-                else (df[col] >= 0) & (df[col] <= 8)]
+            # Filter rows to exclude outliers
+            df = df[(df[col] >= 0) & (df[col] <= upper_bound)]
 
         # Print a success message once the process is complete
         print("✅ [SUCCESS] Outlier removal process completed successfully."
               f" The dataset now contains {len(df)} rows.")
+        print("🔄 DataFrame after removing outliers")
+        print(df)
+        return df
 
+    except KeyError as key_err:
+        print(f"❌ [ERROR] Column not found in DataFrame: {key_err}")
         return df
 
     except Exception as gen_err:
@@ -118,16 +138,27 @@ def calculate_entropy(series: pd.Series) -> float:
     series (pd.Series): The column from which the entropy will be calculated.
 
     Returns:
-    float: The entropy value of the column.
+    float: The entropy value of the column. Returns 0 if the series is empty
+    or contains only NaN values.
     """
-    # Drop missing values and calculate the value counts (probabilities)
-    value_counts = series.dropna().value_counts(normalize=True)
+    try:
+        # Drop missing values and calculate the value counts (probabilities)
+        value_counts = series.dropna().value_counts(normalize=True)
 
-    # Entropy formula: -sum(p * log2(p)) for each unique value's probability
-    entropy: float = -np.sum(value_counts * np.log2(value_counts))
+        # If the series is empty or contains only NaN values, return 0
+        if value_counts.empty:
+            return 0.0
 
-    return entropy
+        # Entropy formula: -sum(p * log2(p)) for each unique value's probability
+        # Avoid log2(0) by filtering out probabilities equal to 0
+        probabilities = value_counts[value_counts > 0]
+        entropy: float = -np.sum(probabilities * np.log2(probabilities))
 
+        return entropy
+
+    except Exception as e:
+            print(f"❌ [ERROR] An error occurred while calculating entropy: {e}")
+            return 0.0  # Return 0 in case of any unexpected error
 
 def summary(df: pd.DataFrame) -> pd.DataFrame:
     """
