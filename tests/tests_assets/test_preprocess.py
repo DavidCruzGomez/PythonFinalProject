@@ -168,6 +168,12 @@ class TestPreprocess(unittest.TestCase):
         # Expected entropy for 10 equally probable values
         self.assertAlmostEqual(entropy, np.log2(10), places=1)
 
+        # Test with an invalid input type (not a pandas Series).
+        invalid_input = [1, 2, 3, 4]  # Not a pandas Series
+        entropy = calculate_entropy(invalid_input)
+        # The function should return NaN for invalid input types
+        self.assertTrue(np.isnan(entropy))
+
     def test_summary(self) -> None:
         """
         Test the `summary` function to ensure it generates accurate statistics.

@@ -270,6 +270,10 @@ def summary(df: pd.DataFrame) -> pd.DataFrame:
         print("✅ [SUCCESS] Dataset summary generated successfully.")
         return summ
 
+    except KeyError as key_err:
+        print(f"❌ [ERROR] Column not found in DataFrame: {key_err}")
+        return pd.DataFrame()
+
     except Exception as gen_err:
         print(f"❌ [ERROR] An error occurred while generating the summary: {gen_err}")
         return pd.DataFrame()
