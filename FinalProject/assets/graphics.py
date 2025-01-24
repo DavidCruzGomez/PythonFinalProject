@@ -60,15 +60,16 @@ def load_data() -> DataFrame | None:
         print(f"Error loading data: {gen_err}")
         return None
 
-def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
+def plot_question_data(df: DataFrame, selected_question: str) -> plt.Figure | None:
     """Generate the bar chart for a selected question."""
-    if df is None:
+    # Validate input data
+    if df is None or df.empty:
         print("Error: Data is not available to plot the question.")
-        return
+        return None
 
     if selected_question not in df.columns:
         print(f"Error: The question {selected_question} is not found in the data.")
-        return
+        return None
 
     # Map the answers using the `answers` dictionary
     mapped_answers_df: DataFrame = pd.DataFrame(
@@ -89,9 +90,9 @@ def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
 
     if response_counts.empty:
         print(f"Error: No responses were found for the question {selected_question}.")
-        return
+        return None
 
-    # Create the chart
+    # Create the bar chart
     figure, axis = plt.subplots(figsize=(8, 6))
     axis = sns.barplot(x=response_counts.index, y=response_counts.values,
                      palette='Blues_d', edgecolor='white', hue=response_counts.index)
@@ -120,34 +121,34 @@ def plot_question_data(df: DataFrame, selected_question: str) -> Figure | None:
     max_y: int = response_counts.values.max()
     plt.yticks(range(0, max_y + 25, 25))
 
-    # Add grid lines to improve readability
+    # Add grid lines for better readability
     plt.grid(axis='y', linestyle='--', alpha=0.7)
 
     # Add a border to the chart
-    plt.gca().spines['top'].set_linewidth(1.5)
-    plt.gca().spines['right'].set_linewidth(1.5)
-    plt.gca().spines['bottom'].set_linewidth(1.5)
-    plt.gca().spines['left'].set_linewidth(1.5)
+    for spine in axis.spines.values():
+        spine.set_linewidth(1.5)
 
-    # Adjust space for the title
+    # Adjust layout to prevent overlap
     plt.tight_layout()
 
     # Display the chart
     return figure
 
 
-def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figure | None:
+def plot_question_data_by_gender(df: pd.DataFrame, selected_question: str) -> plt.Figure | None:
     """Generate the bar chart for a selected question, distinguishing by gender."""
-    if df is None:
-        print("Error: Data is not available to plot the question.")
-        return
+    # Input validation
+    if df is None or df.empty:
+        print("Error: Invalid or empty DataFrame provided.")
+        return None
 
-    if selected_question not in df.columns or 'Q2_GENDER' not in df.columns:
-        print(f"Error: The question {selected_question} or the column 'Q2_GENDER'"
-              " is not found in the data."
-             )
-        return
+    required_columns = [selected_question, 'Q2_GENDER']
+    missing_cols = [col for col in required_columns if col not in df.columns]
+    if missing_cols:
+        print(f"Error: Missing required columns - {', '.join(missing_cols)}")
+        return None
 
+    # Data preparation
     df['Q2_GENDER'] = df['Q2_GENDER'].map(gender)
 
     # Map the answers using the `answers` dictionary
@@ -156,15 +157,16 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
         selected_question: df[selected_question].map(answers)
     })
 
-    # Define the order of the categories
+    # Define category order and gender palette
     custom_order: list[str] = ['Very disagree', 'Disagree', 'Normal', 'Agree', 'Very agree']
+    gender_palette = {'Female': 'pink', 'Male': '#197CF4'}
 
     # Count the number of answers for each category, grouped by gender
-    response_counts_by_gender: DataFrame = gender_mapped_answers_df.groupby(
-        ['Q2_GENDER', selected_question]
-    ).size().unstack(fill_value=0)
-    response_counts_by_gender = response_counts_by_gender.reindex(
-        columns=custom_order, fill_value=0
+    response_counts_by_gender: DataFrame = (gender_mapped_answers_df.groupby(
+        ['Q2_GENDER', selected_question])
+    .size()
+    .unstack(fill_value=0)
+    .reindex(columns=custom_order, fill_value=0)
     )
 
     if response_counts_by_gender.empty:
@@ -174,7 +176,7 @@ def plot_question_data_by_gender(df: DataFrame, selected_question: str) -> Figur
     # Create the chart
     figure, axis = plt.subplots(figsize=(10, 6))
     response_counts_by_gender.T.plot(kind='bar', ax=axis,
-                                     color=['pink', '#197CF4'], edgecolor='white'
+                                     color=gender_palette, edgecolor='white'
                                     )
 
     # Add values on top of the bars
