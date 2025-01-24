@@ -15,7 +15,7 @@ STYLES = {
             font-size: 26px;
             padding: 8px;
             min-width: 500px;
-            cursor: pointer;
+            qproperty-cursor: "PointingHandCursor";
         }
         QPushButton:hover {
             background-color: #1A91DA;
@@ -248,7 +248,7 @@ STYLES = {
             font-size: 16px;
             padding: 5px;
             min-width: 120px;
-            cursor: pointer;
+            qproperty-cursor: "PointingHandCursor";
         }
         QPushButton:hover {
             background-color: #1A91DA;
