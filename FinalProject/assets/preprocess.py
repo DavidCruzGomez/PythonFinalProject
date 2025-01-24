@@ -142,6 +142,10 @@ def calculate_entropy(series: pd.Series) -> float:
     or contains only NaN values.
     """
     try:
+        # Check if the input is a pandas Series
+        if not isinstance(series, pd.Series):
+            raise TypeError("Input must be a pandas Series.")
+
         # Drop missing values and calculate the value counts (probabilities)
         value_counts = series.dropna().value_counts(normalize=True)
 
@@ -156,9 +160,22 @@ def calculate_entropy(series: pd.Series) -> float:
 
         return entropy
 
+    except TypeError as type_err:
+        print(f"❌ [ERROR] Invalid input type: {type_err}")
+        return np.nan  # Return NaN for invalid input type
+
+    except ValueError as val_err:
+        print(f"❌ [ERROR] Invalid values in the series: {val_err}")
+        return np.nan  # Return NaN for invalid values
+
+    except AttributeError as attr_err:
+        print(f"❌ [ERROR] Input does not have required attributes: {attr_err}")
+        return np.nan  # Return NaN for attribute errors
+
     except Exception as gen_err:
-            print(f"❌ [ERROR] An error occurred while calculating entropy: {gen_err}")
-            return 0.0  # Return 0 in case of any unexpected error
+        print(f"❌ [ERROR] An error occurred while calculating entropy: {gen_err}")
+        return np.nan  # Return NaN for any other unexpected errors
+
 
 def summary(df: pd.DataFrame) -> pd.DataFrame:
     """
