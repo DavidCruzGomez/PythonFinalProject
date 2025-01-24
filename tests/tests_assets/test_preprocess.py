@@ -76,19 +76,50 @@ class TestPreprocess(unittest.TestCase):
         """
         Test the `remove_outliers` function to ensure it removes outliers correctly.
         """
+        # Sample data with numeric and non-numeric columns
+        self.sample_data = pd.DataFrame({
+            'numeric_col': [1, 2, 3, 4, 100],  # 100 is an outlier (default threshold is 5)
+            'Q3_SCHOOL': [4, 5, 6, 10, 5],  # 10 is an outlier (specific threshold is 8)
+            'non_numeric_col': ['a', 'b', 'c', 'd', 'e']  # Non-numeric column (should not be affected)
+        })
+
         # Run the outlier removal function
         cleaned_df: pd.DataFrame = remove_outliers(self.sample_data.copy())
 
         # Assert that the outliers in numeric_col and Q3_SCHOOL are removed
-        self.assertNotIn(100, cleaned_df['numeric_col'].values)
-        self.assertNotIn(10, cleaned_df['Q3_SCHOOL'].values)
+        self.assertNotIn(100, cleaned_df['numeric_col'].values,
+                         "Outlier 100 was not removed correctly")
+        self.assertNotIn(10, cleaned_df['Q3_SCHOOL'].values, "Outlier 10 was not removed correctly")
 
         # Assert that non-outlier values are preserved
-        self.assertIn(1, cleaned_df['numeric_col'].values)
-        self.assertIn(4, cleaned_df['Q3_SCHOOL'].values)
+        self.assertIn(1, cleaned_df['numeric_col'].values, "Non-outlier value 1 was not preserved")
+        self.assertIn(4, cleaned_df['Q3_SCHOOL'].values, "Non-outlier value 4 was not preserved")
 
         # Assert the number of rows is reduced after outlier removal
-        self.assertLess(len(cleaned_df), len(self.sample_data))
+        self.assertLess(len(cleaned_df), len(self.sample_data),
+                        "Number of rows did not decrease after outlier removal")
+
+        # Assert that non-numeric columns are preserved for the remaining rows
+        # After removing outliers, the non-numeric column should only contain ['a', 'b', 'c']
+        expected_non_numeric_values = ['a', 'b', 'c']
+        self.assertListEqual(
+            cleaned_df['non_numeric_col'].tolist(),
+            expected_non_numeric_values,
+            "Non-numeric column was not preserved correctly after outlier removal"
+        )
+
+        # Test with custom thresholds (use a fresh copy of the original data)
+        custom_thresholds = {'numeric_col': 150}  # Increase the threshold for numeric_col
+        cleaned_df_custom = remove_outliers(self.sample_data.copy(),
+                                            outlier_thresholds=custom_thresholds)
+
+        # Assert that 100 is not considered an outlier with the custom threshold
+        self.assertIn(100, cleaned_df_custom['numeric_col'].values,
+                      "Value 100 should be preserved with the custom threshold for numeric_col")
+
+        # Assert that 10 is still removed from Q3_SCHOOL (specific threshold remains 8)
+        self.assertNotIn(10, cleaned_df_custom['Q3_SCHOOL'].values,
+                         "Outlier 10 was not removed correctly with custom threshold for Q3_SCHOOL")
 
     def test_calculate_entropy(self) -> None:
         """
