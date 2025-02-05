@@ -52,7 +52,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 
 # Local project-specific imports
-from FinalProject.windows.main_window import MainWindow
+from src.windows.main_window import MainWindow
 
 
 class TestMainWindow(unittest.TestCase):

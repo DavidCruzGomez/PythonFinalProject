@@ -42,7 +42,7 @@ from PySide6.QtWidgets import QApplication
 from matplotlib.figure import Figure
 
 # Local project-specific imports
-from FinalProject.assets.graph_widget import GraphWidget
+from src.assets.graph_widget import GraphWidget
 
 
 class TestGraphWidget(unittest.TestCase):

@@ -47,7 +47,7 @@ from unittest.mock import patch, mock_open
 from PySide6.QtWidgets import QApplication
 
 # Local project-specific imports
-from FinalProject.windows.recovery_window import RecoveryWindow, load_email_config, \
+from src.windows.recovery_window import RecoveryWindow, load_email_config, \
     EmailConfigError, EmailSender, EmailSendingError
 
 

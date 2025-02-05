@@ -46,7 +46,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 
 # Local project-specific imports
-from FinalProject.windows.registration_window import RegistrationWindow
+from src.windows.registration_window import RegistrationWindow
 
 
 class TestRegistrationWindow(unittest.TestCase):

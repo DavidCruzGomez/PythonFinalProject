@@ -48,7 +48,7 @@ import numpy as np
 import pandas as pd
 
 # Local project-specific imports
-from FinalProject.assets.preprocess import remove_outliers, calculate_entropy, summary, main
+from src.assets.preprocess import remove_outliers, calculate_entropy, summary, main
 
 
 class TestPreprocess(unittest.TestCase):

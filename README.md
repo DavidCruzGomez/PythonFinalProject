@@ -61,7 +61,7 @@ ensuring an interactive and functional graphical experience.
 
 ```plaintext
 .
-├── FinalProject/
+├── src/
 │   ├── assets/
 │   │   ├── exported_graphs/                # Directory for exported graphs
 │   │   ├── impulse_buying_data/
@@ -77,7 +77,7 @@ ensuring an interactive and functional graphical experience.
 │   │   ├── graph_widget.py                 # Graph widget script
 │   │   ├── graphics.py                     # Graphics related functions
 │   │   ├── preprocess.py                   # Data preprocessing script                    
-    │   │   ├── regex.py                    # Regular expressions (e.g., for validating emails)
+│   │   ├── regex.py                        # Regular expressions (e.g., for validating emails)
 │   │   ├── UMLDiagram.xml                  # UML Diagram in XML format
 │   │   ├── users_db.json                   # User database
 │   │   ├── users_db.py                     # User database functions
@@ -121,8 +121,8 @@ ensuring an interactive and functional graphical experience.
 ├── CHANGELOG.md                            # Project change log
 ├── LICENSE.md                              # License for the project
 ├── README.md                               # This file
-├── requeriments.txt                        # Project dependencies
-├── requeriments_dev.txt                    # Development dependencies
+├── requirements.txt                        # Project dependencies
+├── requirements_dev.txt                    # Development dependencies
 ├── setup.cfg                               # Configuration for packaging the project
 ├── setup.py                                # Script to install the project
 ├── VERSION.txt                             # Current version of the project

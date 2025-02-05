@@ -41,7 +41,7 @@ import unittest
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
 
 # Local project-specific imports
-from FinalProject.assets.dashboard_window_setup import (
+from src.assets.dashboard_window_setup import (
     setup_dashboard_window,
     setup_dashboard_ui,
     setup_dashboard_menu,

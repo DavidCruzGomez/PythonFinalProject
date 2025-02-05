@@ -27,9 +27,9 @@ import pandas as pd
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 # Local project-specific imports
-from FinalProject.assets.dashboard_window_setup import (setup_dashboard_ui, setup_dashboard_window,
-                                                        setup_dashboard_menu, setup_graph_container)
-from FinalProject.windows.dashboard_window import DashboardWindow
+from src.assets.dashboard_window_setup import (setup_dashboard_ui, setup_dashboard_window,
+                                               setup_dashboard_menu, setup_graph_container)
+from src.windows.dashboard_window import DashboardWindow
 
 
 class TestDashboardWindow(unittest.TestCase):
@@ -59,7 +59,7 @@ class TestDashboardWindow(unittest.TestCase):
         setup_dashboard_menu(self.dashboard_window)
         setup_graph_container(self.dashboard_window)
 
-        self.dashboard_window.init_question_combobox()
+        self.dashboard_window.initialize_question_selection()
 
 
     def test_initialization(self) -> None:

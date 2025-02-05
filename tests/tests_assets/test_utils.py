@@ -56,8 +56,8 @@ import pandas as pd
 from PySide6.QtWidgets import QApplication
 
 # Local imports
-from FinalProject.assets.utils import (show_message, ValidatorBase, PasswordValidator,
-                                       UsernameValidator, read_xls_from_folder)
+from src.assets.utils import (show_message, ValidatorBase, PasswordValidator,
+                              UsernameValidator, read_xls_from_folder)
 
 
 class TestUtils(unittest.TestCase):

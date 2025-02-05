@@ -53,8 +53,8 @@ from unittest.mock import patch, mock_open
 import bcrypt
 
 # Local imports
-from FinalProject.assets.custom_errors import DatabaseError, ValidationError
-from FinalProject.assets.users_db import (
+from src.assets.custom_errors import DatabaseError, ValidationError
+from src.assets.users_db import (
     validate_users_db, load_users_db, save_users_db, add_user_to_db,
     get_user_by_username, get_user_by_email, check_password_hash, username_exists
 )

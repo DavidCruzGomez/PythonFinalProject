@@ -16,25 +16,25 @@ Key tests include:
           in case of errors.
 
 - Plotting Functions:
-    - `plot_question_data`:
+    - `create_bar_chart_general`:
         - Verifies the generation of a plot for a specified question, ensuring that
           the figure is correctly created for valid data and that an appropriate
           response occurs when an invalid question is requested.
-    - `plot_question_data_by_gender`:
+    - `create_bar_chart_by_gender`:
         - Ensures that the plot is correctly generated when distinguishing data by gender.
-    - `plot_question_data_by_school`:
+    - `create_bar_chart_by_school`:
         - Verifies that the plot generation works when distinguishing data by school.
-    - `plot_question_data_by_income`:
+    - `create_bar_chart_by_income`:
         - Ensures proper plot generation when distinguishing data by income.
 
 - Pie Chart Creation:
-    - `create_pie_chart`:
+    - `create_pie_chart_general`:
         - Verifies that a pie chart is correctly created from the given data.
     - `create_pie_chart_by_gender`:
         - Ensures that pie charts are generated correctly when distinguishing data by gender.
 
 - Question Plot:
-    - `question_plot`:
+    - `visualize_survey_responses`:
         - Tests the generation of a plot based on user-specified questions, with
           distinction options such as gender.
         - Verifies that the plot is generated and displayed correctly when the function
@@ -51,15 +51,15 @@ from unittest.mock import patch
 import pandas as pd
 
 # Local project-specific imports
-from FinalProject.assets.graphics import (
+from src.assets.graphics import (
     load_data,
-    plot_question_data,
-    plot_question_data_by_gender,
-    plot_question_data_by_school,
-    plot_question_data_by_income,
-    create_pie_chart,
+    create_bar_chart_general,
+    create_bar_chart_by_gender,
+    create_bar_chart_by_school,
+    create_bar_chart_by_income,
+    create_pie_chart_general,
     create_pie_chart_by_gender,
-    question_plot,
+    visualize_survey_responses,
 )
 
 
@@ -72,13 +72,13 @@ class TestGraphics(unittest.TestCase):
 
     It includes tests for the following functionalities:
     - `load_data`: Tests for successfully loading data, handling file not found errors, empty files, and parsing issues.
-    - `plot_question_data`: Verifies the behavior of plotting data for a specific question.
-    - `plot_question_data_by_gender`: Tests plotting data for a specific question, distinguished by gender.
-    - `plot_question_data_by_school`: Tests plotting data for a specific question, distinguished by school.
-    - `plot_question_data_by_income`: Tests plotting data for a specific question, distinguished by income.
-    - `create_pie_chart`: Verifies the creation of pie charts based on question data.
+    - `create_bar_chart_general`: Verifies the behavior of plotting data for a specific question.
+    - `create_bar_chart_by_gender`: Tests plotting data for a specific question, distinguished by gender.
+    - `create_bar_chart_by_school`: Tests plotting data for a specific question, distinguished by school.
+    - `create_bar_chart_by_income`: Tests plotting data for a specific question, distinguished by income.
+    - `create_pie_chart_general`: Verifies the creation of pie charts based on question data.
     - `create_pie_chart_by_gender`: Verifies the creation of pie charts, distinguished by gender.
-    - `question_plot`: Tests the overall question plotting functionality, with support for distinction by gender.
+    - `visualize_survey_responses`: Tests the overall question plotting functionality, with support for distinction by gender.
 
     Mocking is used to simulate data loading and external dependencies, ensuring a controlled test environment.
     """
@@ -112,14 +112,14 @@ class TestGraphics(unittest.TestCase):
         df = pd.DataFrame({
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = plot_question_data(df, 'Q1')
+        figure = create_bar_chart_general(df, 'Q1')
         self.assertIsNotNone(figure)
 
     def test_plot_question_data_invalid_question(self) -> None:
         df = pd.DataFrame({
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = plot_question_data(df, 'Q2')
+        figure = create_bar_chart_general(df, 'Q2')
         self.assertIsNone(figure)
 
     def test_plot_question_data_by_gender(self) -> None:
@@ -127,7 +127,7 @@ class TestGraphics(unittest.TestCase):
             'Q2_GENDER': [1, 2, 1, 2, 1],
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = plot_question_data_by_gender(df, 'Q1')
+        figure = create_bar_chart_by_gender(df, 'Q1')
         self.assertIsNotNone(figure)
 
     def test_plot_question_data_by_school(self) -> None:
@@ -135,7 +135,7 @@ class TestGraphics(unittest.TestCase):
             'Q3_SCHOOL': [1, 2, 1, 2, 1],
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = plot_question_data_by_school(df, 'Q1')
+        figure = create_bar_chart_by_school(df, 'Q1')
         self.assertIsNotNone(figure)
 
     def test_plot_question_data_by_income(self) -> None:
@@ -143,7 +143,7 @@ class TestGraphics(unittest.TestCase):
             'Q4_INCOME': [1, 2, 1, 2, 1],
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = plot_question_data_by_income(df, 'Q1')
+        figure = create_bar_chart_by_income(df, 'Q1')
         self.assertIsNotNone(figure)
 
     def test_create_pie_chart(self) -> None:
@@ -151,7 +151,7 @@ class TestGraphics(unittest.TestCase):
             'Q3_SCHOOL': [1, 2, 1, 2, 1],
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = create_pie_chart(df, 'Q1')
+        figure = create_pie_chart_general(df, 'Q1')
         self.assertIsNotNone(figure)
 
     def test_create_pie_chart_by_gender(self) -> None:
@@ -168,7 +168,7 @@ class TestGraphics(unittest.TestCase):
             'Q2_GENDER': [1, 2, 1, 2, 1],
             'Q1': [1, 2, 3, 4, 5]
         })
-        figure = question_plot('Q1', distinction_by_gender=True)
+        figure = visualize_survey_responses('Q1', distinction_by_gender=True)
         self.assertIsNotNone(figure)
 
 if __name__ == '__main__':

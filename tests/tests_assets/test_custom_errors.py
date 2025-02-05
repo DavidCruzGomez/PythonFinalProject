@@ -45,7 +45,7 @@ are generated correctly for each custom exception class.
 import unittest
 
 # Local imports
-from FinalProject.assets.custom_errors import (
+from src.assets.custom_errors import (
     DatabaseError, ValidationError, WidgetError, InputValidationError,
     EmailConfigError, UserNotFoundError, EmailSendingError
 )

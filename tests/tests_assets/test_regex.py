@@ -29,7 +29,7 @@ import unittest
 import re
 
 # Local imports
-from FinalProject.assets.regex import EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX
+from src.assets.regex import EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX
 
 
 class TestRegexPatterns(unittest.TestCase):

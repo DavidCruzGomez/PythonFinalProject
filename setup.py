@@ -1,7 +1,7 @@
 import os
 import shutil
 from setuptools import setup, find_packages
-from FinalProject import PACKAGE_NAME, __email__, __author__
+from src import PACKAGE_NAME, __email__, __author__
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 

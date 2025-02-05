@@ -40,7 +40,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton
 
 # Local imports
-from FinalProject.styles.styles import create_title, create_input_field, create_button, \
+from src.styles.styles import create_title, create_input_field, create_button, \
     style_feedback_label, InputValidationError
 
 
