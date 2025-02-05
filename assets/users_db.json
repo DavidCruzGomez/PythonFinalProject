@@ -1,0 +1,6 @@
+{
+    "validuser": {
+        "email": "valid@example.com",
+        "password_hash": "$2b$12$AteWlgjGXFOZfgMUxY8r4.BVT/AxQZkmNlZGCWaPDIHTr6esjlLsC"
+    }
+}
