@@ -1,5 +1,5 @@
 """
-Unit tests for the style-related functions in the `FinalProject.styles.styles` module.
+Unit tests for the style-related functions in the `src.styles.styles` module.
 
 This test suite verifies that the graphical user interface (GUI) components,
 such as buttons, input fields, labels, and other UI elements,
@@ -144,7 +144,7 @@ class TestStyles(unittest.TestCase):
             font-size: 26px;
             padding: 8px;
             min-width: 500px;
-            cursor: pointer;
+            qproperty-cursor: "PointingHandCursor";
         }
         QPushButton:hover {
             background-color: #1A91DA;

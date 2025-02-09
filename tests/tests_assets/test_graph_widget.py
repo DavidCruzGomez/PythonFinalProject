@@ -1,5 +1,5 @@
 """
-Unit tests for the `GraphWidget` class in the `FinalProject.assets.graph_widget` module.
+Unit tests for the `GraphWidget` class in the `src.assets.graph_widget` module.
 
 This test suite ensures that the custom widget, which integrates a Matplotlib figure
 with PySide6 for user interactions, behaves as expected under various conditions.
@@ -117,7 +117,7 @@ class TestGraphWidget(unittest.TestCase):
         self.widget.pan_view.assert_called_with(1, 0)
 
 
-    @patch("FinalProject.assets.graph_widget.show_message")
+    @patch("src.assets.graph_widget.show_message")
     def test_show_help(self, mock_show_message: MagicMock) -> None:
         """
         Test that the help text is displayed correctly.

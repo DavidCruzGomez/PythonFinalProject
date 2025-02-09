@@ -86,6 +86,13 @@ ensuring an interactive and functional graphical experience.
 │   ├── styles/
 │   │   ├── styles.py                       # Styles for the GUI (buttons, text fields, etc.)
 │   │   └── __init__.py                     # Empty file to import the styles module
+│   ├── visualization/
+│   │   ├── charts/
+│   │   │   ├── __init__.py                 # Empty file to import the charts module
+│   │   │   ├── bar_charts.py               # Functions to create bar charts
+│   │   │   ├── base.py                     # Base functions for charts visualization
+│   │   │   └── pie_charts.py               # Functions to create pie charts
+│   │   └── __init__.py                     # Empty file to import the visualization module
 │   ├── windows/
 │   │   ├── main_window.py                  # Main window for login
 │   │   ├── dashboard_window.py             # User dashboard window
@@ -101,7 +108,6 @@ ensuring an interactive and functional graphical experience.
 │   │   ├── test_download_files.py          # Tests for file download functionality
 │   │   ├── test_email_config.py            # Tests for email configuration
 │   │   ├── test_graph_widget.py            # Tests for graph widget functionality
-│   │   ├── test_graphics.py                # Tests for graphics related functions
 │   │   ├── test_preprocess.py              # Tests for data preprocessing
 │   │   ├── test_regex.py                   # Tests for regular expressions
 │   │   ├── test_users_db.py                # Tests for user database functions
@@ -110,6 +116,13 @@ ensuring an interactive and functional graphical experience.
 │   ├── tests_styles/
 │   │   ├── test_styles.py                  # Tests for the styles in `styles.py`
 │   │   └── __init__.py                     # Empty file to import the tests_styles module
+│   ├── tests_visualization/
+│   │   ├── tests_charts/
+│   │   │   ├── __init__.py                 # Empty file to import the tests_charts module
+│   │   │   ├── test_bar_charts.py          # Tests for bar charts
+│   │   │   ├── test_base.py                # Tests for base visualization charts
+│   │   │   └── test_pie_charts.py          # Tests for pie charts 
+│   │   └── __init__.py                     # Empty file to import the tests_visualization module
 │   ├── tests_windows/
 │   │   ├── test_dashboard_window.py        # Tests for the `dashboard_window.py`     
 │   │   ├── test_main_window.py             # Tests for the `main_window.py` (login window)
@@ -137,7 +150,7 @@ To install the project, follow these steps:
    
 2. Navigate to the project directory:
     ```bash
-    cd test2
+    cd src
 3. Install the required dependencies:
     ```bash
     pip install -r requirements.txt

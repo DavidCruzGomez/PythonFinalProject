@@ -1,6 +1,6 @@
 """
 Unit tests for the `remove_outliers`, `calculate_entropy`, `summary`, and `main` functions
-in the `FinalProject.assets.preprocess` module.
+in the `src.assets.preprocess` module.
 
 This test suite ensures that the preprocessing utilities, including data cleaning,
 statistical analysis, and entropy calculations, function as expected under
@@ -53,7 +53,7 @@ from src.assets.preprocess import remove_outliers, calculate_entropy, summary, m
 
 class TestPreprocess(unittest.TestCase):
     """
-    Unit tests for the functions in the `FinalProject.assets.preprocess` module.
+    Unit tests for the functions in the `src.assets.preprocess` module.
 
     This class tests the following functions:
     - `remove_outliers`: Ensures outliers are correctly removed.
@@ -204,7 +204,7 @@ class TestPreprocess(unittest.TestCase):
         # Assert outlier counts are correct
         self.assertEqual(summary_df.loc['numeric_col', 'Outliers'], 1) # Only 100 is outlier
 
-    @patch('FinalProject.assets.preprocess.read_xls_from_folder')
+    @patch('src.assets.preprocess.read_xls_from_folder')
     def test_pipeline_end_to_end(self, mock_read_xls) -> None:
         """
         Test the `main` function to validate the end-to-end preprocessing pipeline.

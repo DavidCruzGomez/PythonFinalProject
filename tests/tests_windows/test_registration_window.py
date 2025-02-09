@@ -1,6 +1,6 @@
 """
 Unit tests for the user registration functionality in
-the `FinalProject.windows.registration_window` module.
+the `src.windows.registration_window` module.
 
 This test suite verifies the behavior of the registration window,
 including user input validation and the process of registering a new user.
@@ -90,8 +90,8 @@ class TestRegistrationWindow(unittest.TestCase):
 
     # Patches `add_user_to_db` to mock user registration and `show_message`
     # to mock message display during tests.
-    @patch('FinalProject.assets.users_db.add_user_to_db', return_value=None)
-    @patch('FinalProject.windows.registration_window.show_message')
+    @patch('src.assets.users_db.add_user_to_db', return_value=None)
+    @patch('src.windows.registration_window.show_message')
     def test_register_success(self, mock_show_message, mock_add_user_to_db) -> None:
         """
         Test the registration process when valid data is provided.
@@ -127,7 +127,7 @@ class TestRegistrationWindow(unittest.TestCase):
 
     # Patches the `show_message` function to mock message display
     # in the registration window during tests.
-    @patch('FinalProject.windows.registration_window.show_message')
+    @patch('src.windows.registration_window.show_message')
     def test_register_empty_fields(self, mock_show_message) -> None:
         """
         Test the registration process when one or more input fields are empty.
@@ -147,7 +147,7 @@ class TestRegistrationWindow(unittest.TestCase):
 
     # Mocks the `show_message` function to simulate message display
     # during registration process tests.
-    @patch('FinalProject.windows.registration_window.show_message')
+    @patch('src.windows.registration_window.show_message')
     def test_register_invalid_username(self, mock_show_message) -> None:
         """
         Test the registration process when the username does not meet the required validation rules.
@@ -174,7 +174,7 @@ class TestRegistrationWindow(unittest.TestCase):
 
     # Mocks the `show_message` function to test message display
     # without showing the actual UI message.
-    @patch('FinalProject.windows.registration_window.show_message')
+    @patch('src.windows.registration_window.show_message')
     def test_register_invalid_password(self, mock_show_message) -> None:
         """
         Test the registration process when the password is too short or invalid.

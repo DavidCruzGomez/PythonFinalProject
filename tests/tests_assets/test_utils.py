@@ -1,6 +1,6 @@
 """
 Unit tests for the utility functions and classes in
-the `FinalProject.assets.utils` module.
+the `src.assets.utils` module.
 
 This test suite ensures that various utility functions and validators
 work as expected.
@@ -62,7 +62,7 @@ from src.assets.utils import (show_message, ValidatorBase, PasswordValidator,
 
 class TestUtils(unittest.TestCase):
     """
-    Test suite for utility functions and classes in the FinalProject.
+    Test suite for utility functions and classes in the src.
 
     This class includes tests for the `show_message` function,
     `ValidatorBase`, `PasswordValidator`, and `UsernameValidator` classes.
@@ -94,7 +94,7 @@ class TestUtils(unittest.TestCase):
         cls.app.quit()
 
 
-    @patch('FinalProject.assets.utils.QMessageBox', autospec=True)  # patch the QMessageBox class
+    @patch('src.assets.utils.QMessageBox', autospec=True)  # patch the QMessageBox class
     def test_show_message(self, MockQMessageBox: MagicMock) -> None:
         """
         Test the show_message function.

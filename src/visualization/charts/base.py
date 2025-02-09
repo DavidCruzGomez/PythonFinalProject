@@ -1,7 +1,7 @@
 """
 Survey Visualization Controller Module
 
-This module serves as the central hub for managing survey data visualization operations,
+This module serves as the central hub for managing survey data tests_visualization operations,
 combining data loading, chart generation, and UI components into a cohesive interface.
 
 Key Components:
@@ -24,7 +24,7 @@ Key Components:
 
 Main Functions:
     load_data(): Handles data acquisition and initial processing
-    visualize_survey_responses(): Core visualization dispatcher
+    visualize_survey_responses(): Core tests_visualization dispatcher
     build_question_selector(): Creates interactive UI component
 
 Dependencies:
@@ -78,8 +78,8 @@ def load_data() -> DataFrame | None:
     """
     current_dir = os.path.dirname(os.path.abspath(__file__))
     cleaned_csv_path = os.path.join(
-        current_dir,    #charts
-        "..",           #visualization
+        current_dir,    #tests_charts
+        "..",           #tests_visualization
         "..",           #FinalProject
         "assets",
         "impulse_buying_data",
@@ -113,18 +113,18 @@ def load_data() -> DataFrame | None:
 
 
 def visualize_survey_responses(
-                  selected_question: str,
-                  distinction_by_gender: bool = False,
-                  distinction_by_school: bool = False,
-                  distinction_by_income: bool = False,
-                  pie_chart: bool = False,
-                  gender_filter: str = None,
-                  pie_chart_by_gender: bool = False,
-                  school_filter: str = None,
-                  pie_chart_by_school: bool = False,
-                  income_filter: str = None,
-                  pie_chart_by_income: bool = False
-                 ) -> Figure | None:
+    selected_question: str,
+    distinction_by_gender: bool = False,
+    distinction_by_school: bool = False,
+    distinction_by_income: bool = False,
+    pie_chart: bool = False,
+    gender_filter: str = None,
+    pie_chart_by_gender: bool = False,
+    school_filter: str = None,
+    pie_chart_by_school: bool = False,
+    income_filter: str = None,
+    pie_chart_by_income: bool = False
+) -> Figure | None:
     """
     Main controller for generating survey response visualizations.
 
@@ -133,7 +133,7 @@ def visualize_survey_responses(
         distinction_by_gender (bool): Generate gender-distinguished bar chart
         distinction_by_school (bool): Generate school-distinguished bar chart
         distinction_by_income (bool): Generate income-distinguished bar chart
-        pie_chart (bool): Generate general pie chart visualization
+        pie_chart (bool): Generate general pie chart tests_visualization
         gender_filter (str): Filter for gender-specific pie chart ('Male'/'Female')
         pie_chart_by_gender (bool): Generate gender-filtered pie chart
         school_filter (str): School filter from school dictionary values
@@ -145,10 +145,10 @@ def visualize_survey_responses(
         Figure | None: Matplotlib figure object if successful, None on error
 
     Raises:
-        KeyError: Missing required data columns for requested visualization
+        KeyError: Missing required data columns for requested tests_visualization
         ValueError: Invalid filter values or incompatible parameter combinations
         TypeError: Invalid input types for parameters
-        Exception: Unexpected errors during visualization generation
+        Exception: Unexpected errors during tests_visualization generation
 
     Notes:
         - Mutual exclusion: Only one distinction/pie_chart flag should be True

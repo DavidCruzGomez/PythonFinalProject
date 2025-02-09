@@ -1,6 +1,6 @@
 """
 Unit tests for the login functionality and UI interactions in
-the `FinalProject.windows.main_window` module.
+the `src.windows.main_window` module.
 
 This test suite verifies the behavior of the main window and login system,
 ensuring that user interactions are handled correctly and that the application
@@ -57,7 +57,7 @@ from src.windows.main_window import MainWindow
 
 class TestMainWindow(unittest.TestCase):
     """
-    Unit tests for the login window in the `FinalProject.windows.main_window` module.
+    Unit tests for the login window in the `src.windows.main_window` module.
 
     This suite verifies the behavior of the login process,
     including input validation, error handling, and UI interactions such
@@ -98,11 +98,11 @@ class TestMainWindow(unittest.TestCase):
 
 
     # Mocking the get_user_by_username function
-    @patch('FinalProject.windows.main_window.get_user_by_username')
+    @patch('src.windows.main_window.get_user_by_username')
     # Mocking the get_user_by_email function
-    @patch('FinalProject.windows.main_window.get_user_by_email')
+    @patch('src.windows.main_window.get_user_by_email')
     # Mocking the check_password_hash function
-    @patch('FinalProject.windows.main_window.check_password_hash')
+    @patch('src.windows.main_window.check_password_hash')
     def test_login_successful(
             self, mock_check_password_hash, mock_get_user_by_email, mock_get_user_by_username
     ) -> None:
@@ -171,7 +171,7 @@ class TestMainWindow(unittest.TestCase):
         self.window._password_input.setText("wrongpassword")
 
         # Mock the response from get_user_by_username to return None, simulating a user not found
-        with patch('FinalProject.windows.main_window.get_user_by_username', return_value=None):
+        with patch('src.windows.main_window.get_user_by_username', return_value=None):
 
             # Patch the setText method of the feedback label to check the message
             with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
@@ -183,7 +183,7 @@ class TestMainWindow(unittest.TestCase):
 
 
     # Mock the get_user_by_email function
-    @patch('FinalProject.windows.main_window.get_user_by_email')
+    @patch('src.windows.main_window.get_user_by_email')
     def test_handle_login_error_incorrect_password(self, mock_get_user_by_email) -> None:
         """
         Test that simulates a login attempt with a valid username and an incorrect password.
@@ -197,7 +197,7 @@ class TestMainWindow(unittest.TestCase):
         mock_get_user_by_email.return_value = {"password_hash": "hashed_password"}
 
         # Mock the password hash check to return False, simulating an incorrect password
-        with patch('FinalProject.windows.main_window.check_password_hash', return_value=False):
+        with patch('src.windows.main_window.check_password_hash', return_value=False):
 
             # Patch the setText method of the feedback label to check the message
             with patch.object(self.window._feedback_label, 'setText') as mock_set_text:
@@ -208,7 +208,7 @@ class TestMainWindow(unittest.TestCase):
 
 
     # Patching the RegistrationWindow to simulate opening the registration window.
-    @patch('FinalProject.windows.main_window.RegistrationWindow')
+    @patch('src.windows.main_window.RegistrationWindow')
     def test_open_registration_window(self, MockRegistrationWindow) -> None:
         """
         Test to verify that the registration window opens correctly.
@@ -224,7 +224,7 @@ class TestMainWindow(unittest.TestCase):
 
 
     # Patching the RecoveryWindow to simulate opening the recovery window.
-    @patch('FinalProject.windows.main_window.RecoveryWindow')
+    @patch('src.windows.main_window.RecoveryWindow')
     def test_open_recovery_window(self, MockRecoveryWindow) -> None:
         """
         Test to verify that the password recovery window opens correctly.

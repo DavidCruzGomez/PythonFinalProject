@@ -13,10 +13,10 @@ Key Features:
 - Publication-ready styling with corporate branding
 
 Main Functions:
-    create_bar_chart_general: Base visualization for response distributions
+    create_bar_chart_general: Base tests_visualization for response distributions
     create_bar_chart_by_gender: Gender-comparative analysis
     create_bar_chart_by_school: School-based response breakdown
-    create_bar_chart_by_income: Income-level specific visualization
+    create_bar_chart_by_income: Income-level specific tests_visualization
 
 Dependencies:
     Core: pandas, matplotlib, seaborn
@@ -86,7 +86,7 @@ def create_bar_chart_general(
     Notes:
         - Maps responses using the `answers` dictionary
         - Supports custom category ordering
-        - Handles null values and excludes them from visualization
+        - Handles null values and excludes them from tests_visualization
         - Adds value labels on top of bars for clarity
     """
     try:
@@ -262,7 +262,7 @@ def create_bar_chart_by_gender(
 
     Notes:
         - Maps responses using the `answers` and `gender` dictionaries
-        - Groups data by gender for visualization
+        - Groups data by gender for tests_visualization
         - Supports custom category ordering
         - Adds value labels on top of bars for clarity
     """
@@ -450,7 +450,7 @@ def create_bar_chart_by_school(
 
     Notes:
         - Maps responses using the `answers` and `school` dictionaries
-        - Groups data by school for visualization
+        - Groups data by school for tests_visualization
         - Supports custom category ordering
         - Adds value labels on top of bars for clarity
     """
@@ -637,7 +637,7 @@ def create_bar_chart_by_income(
 
     Notes:
         - Maps responses using the `answers` and `income` dictionaries
-        - Groups data by income level for visualization
+        - Groups data by income level for tests_visualization
         - Supports custom category ordering
         - Adds value labels on top of bars for clarity
     """

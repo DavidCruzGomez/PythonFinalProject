@@ -1,6 +1,6 @@
 """
 Unit tests for the password recovery functionality and email handling in
-the `FinalProject.windows.recovery_window` module.
+the `src.windows.recovery_window` module.
 
 This test suite verifies the behavior of the recovery window,
 email configuration loading, and the process of sending recovery emails.
@@ -67,8 +67,8 @@ class TestRecoveryWindow(unittest.TestCase):
 
 
     # Patches the EMAIL_CONFIG_FILE constant to use a fake path during tests.
-    @patch('FinalProject.windows.recovery_window.EMAIL_CONFIG_FILE',
-           'C:/Users/David/PycharmProjects/PythonProject1/FinalProject/assets/email_config.json')
+    @patch('src.windows.recovery_window.EMAIL_CONFIG_FILE',
+           'C:/Users/David/PycharmProjects/PythonProject1/src/assets/email_config.json')
     def setUp(self) -> None:
         """
         Set up the RecoveryWindow instance for each test case.
@@ -87,9 +87,9 @@ class TestRecoveryWindow(unittest.TestCase):
 
     # Patches the show_message function, the send_recovery_email method,
     # and the get_user_by_email function for testing.
-    @patch('FinalProject.windows.recovery_window.show_message')
+    @patch('src.windows.recovery_window.show_message')
     @patch.object(EmailSender, 'send_recovery_email')
-    @patch('FinalProject.windows.recovery_window.get_user_by_email')
+    @patch('src.windows.recovery_window.get_user_by_email')
     def test_recover_password_user_not_found(self, mock_get_user_by_email, mock_send_recovery_email,
                                              mock_show_message) -> None:
         """
@@ -113,10 +113,10 @@ class TestRecoveryWindow(unittest.TestCase):
 
     # Patches the get_user_by_email function, the send_recovery_email method,
     # and the show_message function for testing.
-    @patch('FinalProject.windows.recovery_window.get_user_by_email')
+    @patch('src.windows.recovery_window.get_user_by_email')
     @patch.object(EmailSender, 'send_recovery_email')
     @patch(
-        'FinalProject.windows.recovery_window.show_message')
+        'src.windows.recovery_window.show_message')
     def test_recover_password_success(self, mock_show_message, mock_send_recovery_email,
                                       mock_get_user_by_email) -> None:
         """
@@ -162,7 +162,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
 
     # Patches the load_email_config function to mock its behavior for testing.
-    @patch('FinalProject.windows.recovery_window.load_email_config')
+    @patch('src.windows.recovery_window.load_email_config')
     def test_load_email_config_error(self, mock_load_email_config) -> None:
         """
         Test the case when loading the email configuration fails.
@@ -178,7 +178,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
 
     # Patches the smtplib.SMTP class to mock email sending behavior for testing.
-    @patch('FinalProject.windows.recovery_window.smtplib.SMTP')
+    @patch('src.windows.recovery_window.smtplib.SMTP')
     def test_send_recovery_email_success(self, mock_smtp) -> None:
         """
         Test sending a recovery email successfully.
@@ -200,7 +200,7 @@ class TestRecoveryWindow(unittest.TestCase):
 
 
     # Patches the smtplib.SMTP class to mock SMTP server interactions for email sending tests.
-    @patch('FinalProject.windows.recovery_window.smtplib.SMTP')
+    @patch('src.windows.recovery_window.smtplib.SMTP')
     def test_send_recovery_email_failure(self, mock_smtp) -> None:
         """
         Test the failure scenario for sending a recovery email.

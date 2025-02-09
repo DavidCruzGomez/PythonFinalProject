@@ -198,11 +198,11 @@ class DashboardWindow(QMainWindow):
 
         main_layout = main_item.layout()
 
-        # Properly find the charts container
+        # Properly find the tests_charts container
         charts_container = None
         for i in range(main_layout.count()):
             item = main_layout.itemAt(i)
-            if isinstance(item, QHBoxLayout):  # The layout that contains the charts
+            if isinstance(item, QHBoxLayout):  # The layout that contains the tests_charts
                 charts_container = item
                 break
 
@@ -284,7 +284,7 @@ class DashboardWindow(QMainWindow):
 
         # Get the graphs container
         main_layout = self.graph_layout.itemAt(0).layout()  # Main layout (QHBoxLayout)
-        graphs_container = main_layout.itemAt(0).layout()  # First child: QHBoxLayout of charts
+        graphs_container = main_layout.itemAt(0).layout()  # First child: QHBoxLayout of tests_charts
 
         # Remove the old pie chart (position 1)
         if graphs_container.count() >= 2:
@@ -420,20 +420,20 @@ class DashboardWindow(QMainWindow):
 
         except subprocess.CalledProcessError as subpr_err:
             # If an error occurs during the script execution
-            print(f"An error occurred while downloading the file: {subpr_err}")
+            print(f"❌ [ERROR] An error occurred while downloading the file: {subpr_err}")
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while downloading the file: {subpr_err}")
 
         except FileNotFoundError:
-            print("File not found. Please check the path to the script.")
+            print("❌ [ERROR] File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
                                  "File not found. Please check the path to the script.")
-            raise FileNotFoundError("File not found. Please check the path to the script.")
+            raise FileNotFoundError("❌ [ERROR] File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
                                  "Unexpected error")
-            raise gen_err(f"Unexpected error: {gen_err}")
+            raise gen_err(f"❌ [ERROR] Unexpected error: {gen_err}")
 
     def run_preprocessing(self) -> None:
         """Run the preprocessing script (preprocess.py)."""
@@ -457,20 +457,20 @@ class DashboardWindow(QMainWindow):
 
         except subprocess.CalledProcessError as subpr_err:
             # If an error occurs during the script execution
-            print(f"An error occurred while running preprocessing: {subpr_err}")
+            print(f"❌ [ERROR] An error occurred while running preprocessing: {subpr_err}")
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while running preprocessing: {subpr_err}")
 
         except FileNotFoundError:
-            print("File not found. Please check the path to the script.")
+            print("❌ [ERROR] File not found. Please check the path to the script.")
             QMessageBox.critical(self, "Error",
                                  "File not found. Please check the path to the script.")
-            raise FileNotFoundError("File not found. Please check the path to the script.")
+            raise FileNotFoundError("❌ [ERROR] File not found. Please check the path to the script.")
         except Exception as gen_err:
             print(f"Unexpected error: {gen_err}")
             QMessageBox.critical(self, "Error",
                                  "Unexpected error")
-            raise gen_err(f"Unexpected error: {gen_err}")
+            raise gen_err(f"❌ [ERROR] Unexpected error: {gen_err}")
 
     def display_tables(self) -> None:
         """Read the first 5 rows of the 'cleaned_data.csv' file and display them in the first table,
@@ -579,9 +579,9 @@ class DashboardWindow(QMainWindow):
                                      "The processed dataset has not been found", "error")
 
         except Exception as gen_err:
-            print(f"An error occurred while reading the CSV files: {gen_err}")
+            print(f"❌ [ERROR] An error occurred while reading the CSV files: {gen_err}")
             QMessageBox.critical(self, "Error",
-                                 f"An error occurred while reading the CSV files: {gen_err}")
+                                 f"❌ [ERROR] An error occurred while reading the CSV files: {gen_err}")
 
 
     def hide_visibility(self) -> None:
@@ -644,7 +644,7 @@ class DashboardWindow(QMainWindow):
         self._log_selection(selected_question_key, selected_question_text)
         distinction_by = distinction_by if distinction_by is not None else self.current_distinction
 
-        # Generate visualization figures
+        # Generate tests_visualization figures
         self._generate_visualization_figures(selected_question_key, distinction_by, gender_filter)
         if not self._validate_figure_creation():
             return
@@ -669,7 +669,7 @@ class DashboardWindow(QMainWindow):
             school_filter: str = None,
             income_filter: str = None
     ) -> None:
-        """Generates visualization figures based on current parameters."""
+        """Generates tests_visualization figures based on current parameters."""
         # Main chart configuration
         if distinction == "gender":
             self.fig1 = visualize_survey_responses(question_key, distinction_by_gender=True)
@@ -706,7 +706,7 @@ class DashboardWindow(QMainWindow):
     def _validate_figure_creation(self) -> bool:
         """Validates successful figure generation."""
         if None in (self.fig1, self.fig2):
-            print("Error: Failed to generate visualization figures")
+            print("❌ [ERROR] Error: Failed to generate tests_visualization figures")
             return False
         return True
 
@@ -716,7 +716,7 @@ class DashboardWindow(QMainWindow):
         self._clear_previous_visualizations()
 
     def _clear_previous_visualizations(self) -> None:
-        """Clears existing visualization elements from layout."""
+        """Clears existing tests_visualization elements from layout."""
         while self.graph_layout.count():
             item = self.graph_layout.takeAt(0)
             if widget := item.widget():
@@ -742,7 +742,7 @@ class DashboardWindow(QMainWindow):
         # Build main layout structure
         main_layout = QHBoxLayout()
 
-        # Horizontal layout for charts
+        # Horizontal layout for tests_charts
         charts_layout = QHBoxLayout()
         charts_layout.addWidget(graph_widgets[0])
         charts_layout.addWidget(graph_widgets[1])
@@ -828,5 +828,5 @@ class DashboardWindow(QMainWindow):
                                     f"The graphs have been exported to:\n{file_path1}\n{file_path2}")
 
         except Exception as gen_err:
-            print(f"Error exporting graphs: {gen_err}")
+            print(f"❌ [ERROR] Error exporting graphs: {gen_err}")
             QMessageBox.critical(self, "Error", "There was a problem exporting the graphs.")

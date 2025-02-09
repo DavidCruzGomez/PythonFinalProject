@@ -36,7 +36,7 @@ Functions:
    - Creates and configures the menu bar, including actions and button-based widgets.
 
 4. `setup_graph_container(self) -> None`:
-   - Adds a graph container to the central layout for dynamic visualization.
+   - Adds a graph container to the central layout for dynamic tests_visualization.
 """
 # Third-party imports
 from PySide6.QtCore import Qt

@@ -13,10 +13,10 @@ Key Features:
 - Cross-platform compatible figure output
 
 Main Functions:
-    create_pie_chart_general: Primary pie chart visualization for overall response distribution
+    create_pie_chart_general: Primary pie chart tests_visualization for overall response distribution
     create_pie_chart_by_gender: Gender-segmented comparative analysis
     create_pie_chart_by_school: School-affiliation based breakdown
-    create_pie_chart_by_income: Income-bracket specific visualization
+    create_pie_chart_by_income: Income-bracket specific tests_visualization
 
 Dependencies:
     Data Dictionaries: questions, answers, gender, school, income
@@ -237,7 +237,7 @@ def create_pie_chart_by_gender(
         palette: str = "Set2",
         min_percentage: float = DEFAULT_MIN_PERCENTAGE
 ) -> Figure | None:
-    """Generates comparative pie charts segmented by gender demographics.
+    """Generates comparative pie tests_charts segmented by gender demographics.
 
     Creates either a single filtered pie chart or side-by-side comparisons
     for male/female responses based on filter parameter.
@@ -248,7 +248,7 @@ def create_pie_chart_by_gender(
         gender_filter: Optional filter to show only 'Male' or 'Female' responses.
             Default: None shows both genders
         figsize: Output figure dimensions. Default: (6, 6)
-        palette: Color scheme for visualization. Default: 'Set2'
+        palette: Color scheme for tests_visualization. Default: 'Set2'
         min_percentage: Threshold for individual slice visibility. Default: 3.0%
 
     Returns:
@@ -415,10 +415,10 @@ def create_pie_chart_by_gender(
             axis.legend(
                 wedges,
                 filtered_labels,
-                title="Categories",         # Legend title
-                loc="center left",          # Position
-                bbox_to_anchor=(1, 0.5),    # Placement outside chart
-                fontsize=10                 # Legend text size
+                title="Categories",             # Legend title
+                loc="center left",              # Position
+                bbox_to_anchor=(1.1, 0.5),      # Placement outside chart
+                fontsize=10                     # Legend text size
             )
 
         # Display the chart
@@ -453,7 +453,7 @@ def create_pie_chart_by_school(
         palette: str = "Set2",
         min_percentage: float = DEFAULT_MIN_PERCENTAGE
 ) -> Figure | None:
-    """Generates pie charts segmented by academic school affiliation.
+    """Generates pie tests_charts segmented by academic school affiliation.
 
     Creates either a single filtered pie chart or side-by-side comparisons
     for school responses based on filter parameter.
@@ -465,7 +465,7 @@ def create_pie_chart_by_school(
             Valid options: school dictionary values
             Default: None shows all schools
         figsize: Output figure dimensions. Default: (6, 6)
-         palette: Color scheme for visualization. Default: 'Set2'
+         palette: Color scheme for tests_visualization. Default: 'Set2'
         min_percentage: Threshold for individual slice visibility. Default: 3.0%
 
     Returns:
@@ -519,6 +519,13 @@ def create_pie_chart_by_school(
 
         # Apply school filter
         if school_filter:
+            # If the filter is a numeric ID, convert it to the corresponding name
+            if school_filter.isdigit():  # Check if it's a number
+                school_filter = school.get(int(school_filter))
+                if not school_filter:
+                    raise ValueError(f"❌ [ERROR] Invalid school ID: {school_filter}")
+
+            # Validate that the filter is one of the valid values
             valid_schools = list(school.values())
             if school_filter not in valid_schools:
                 raise ValueError(f"❌ [ERROR] Invalid school_filter. Valid options: {valid_schools}")
@@ -633,10 +640,10 @@ def create_pie_chart_by_school(
             axis.legend(
                 wedges,
                 filtered_labels,
-                title="Categories",         # Legend title
-                loc="center left",          # Position
-                bbox_to_anchor=(1, 0.5),    # Placement outside chart
-                fontsize=10                 # Legend text size
+                title="Categories",             # Legend title
+                loc="center left",              # Position
+                bbox_to_anchor=(1.1, 0.5),      # Placement outside chart
+                fontsize=10                     # Legend text size
             )
 
         # Display the chart
@@ -673,7 +680,7 @@ def create_pie_chart_by_income(
         palette: str = "Set2",
         min_percentage: float = DEFAULT_MIN_PERCENTAGE
 ) -> Figure | None:
-    """Generates income-bracketed pie charts for response analysis.
+    """Generates income-bracketed pie tests_charts for response analysis.
 
     Creates either a single filtered pie chart or side-by-side comparisons
     for income responses based on filter parameter.
@@ -685,7 +692,7 @@ def create_pie_chart_by_income(
             Valid options: income dictionary values
             Default: None shows all income
         figsize: Output figure dimensions. Default: (6, 6)
-         palette: Color scheme for visualization. Default: 'Set2'
+         palette: Color scheme for tests_visualization. Default: 'Set2'
         min_percentage: Threshold for individual slice visibility. Default: 3.0%
 
     Returns:
@@ -739,10 +746,21 @@ def create_pie_chart_by_income(
 
         # Apply income filter if provided
         if income_filter:
+            # If the filter is a numeric ID, convert it to the corresponding name
+            if income_filter.isdigit():  # Check if it's a number
+                income_filter = income.get(int(income_filter))
+                if not income_filter:
+                    raise ValueError(f"❌ [ERROR] Invalid school ID: {income_filter}")
+
+            # Validate that the filter is one of the valid values
             valid_incomes = list(income.values())
             if income_filter not in valid_incomes:
                 raise ValueError(f"❌ [ERROR] Invalid income_filter. Valid options: {valid_incomes}")
             processed_df = processed_df[processed_df['Q4_INCOME'] == income_filter]
+
+            # Check for empty data after filtering
+            if processed_df.empty:
+                return None  # Return None if no data is available
 
         # Group data by income
         grouped_data = (processed_df
@@ -852,10 +870,10 @@ def create_pie_chart_by_income(
             axis.legend(
                 wedges,
                 filtered_labels,
-                title="Categories",         # Legend title
-                loc="center left",          # Position
-                bbox_to_anchor=(1, 0.5),    # Placement outside chart
-                fontsize=10                 # Legend text size
+                title="Categories",             # Legend title
+                loc="center left",              # Position
+                bbox_to_anchor=(1.1, 0.5),      # Placement outside chart
+                fontsize=10                     # Legend text size
             )
 
         # Display the chart

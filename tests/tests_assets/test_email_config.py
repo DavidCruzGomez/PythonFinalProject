@@ -43,7 +43,7 @@ class TestEmailConfig(unittest.TestCase):
         the test methods.
         """
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-        file_path = os.path.join(base_dir, 'FinalProject', 'assets', 'email_config.json')
+        file_path = os.path.join(base_dir, 'src', 'assets', 'email_config.json')
         print(f"Attempting to open: {os.path.abspath(file_path)}")
         with open(file_path, 'r') as file:
             self.config = json.load(file)

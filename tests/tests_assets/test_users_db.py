@@ -71,8 +71,8 @@ class TestUsersDb(unittest.TestCase):
 
     # Mocks the check for whether the database file exists
     # and simulates opening an empty file to test if it is handled correctly
-    @patch("FinalProject.assets.users_db.os.path.exists")
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open, read_data='{}')
+    @patch("src.assets.users_db.os.path.exists")
+    @patch("src.assets.users_db.open", new_callable=mock_open, read_data='{}')
     def test_load_users_db_file_not_found(self, mock_open, mock_exists) -> None:
         """
         Test case for loading users database when the file does not exist.
@@ -86,7 +86,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks opening a file with an empty users database to test successful loading
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open, read_data='{}')
+    @patch("src.assets.users_db.open", new_callable=mock_open, read_data='{}')
     def test_load_users_db_success(self, mock_open) -> None:
         """
         Test case for successfully loading the user´s database.
@@ -99,8 +99,8 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks loading data with invalid JSON to test error handling
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
-    @patch("FinalProject.assets.users_db.json.load")
+    @patch("src.assets.users_db.open", new_callable=mock_open)
+    @patch("src.assets.users_db.json.load")
     def test_load_users_db_invalid_json(self, mock_json_load, mock_open) -> None:
         """
         Test case for handling invalid JSON in the users database file.
@@ -116,8 +116,8 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks validating a correctly structured users database
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
-    @patch("FinalProject.assets.users_db.json.load",
+    @patch("src.assets.users_db.open", new_callable=mock_open)
+    @patch("src.assets.users_db.json.load",
            return_value={"user": {"email": "test@example.com"}})
     def test_validate_users_db_valid(self, mock_json_load, mock_open) -> None:
         """
@@ -133,8 +133,8 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks validating a database with missing fields
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
-    @patch("FinalProject.assets.users_db.json.load")
+    @patch("src.assets.users_db.open", new_callable=mock_open)
+    @patch("src.assets.users_db.json.load")
     def test_validate_users_db_missing_fields(self, mock_json_load, mock_open) -> None:
         """
         Test case for invalid users database with missing required fields.
@@ -148,7 +148,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks the function to save the users database
-    @patch("FinalProject.assets.users_db.open", new_callable=mock_open)
+    @patch("src.assets.users_db.open", new_callable=mock_open)
     def test_save_users_db(self, mock_open) -> None:
         """
         Test case for saving the user´s database.
@@ -164,8 +164,8 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks adding a new user to the database
-    @patch("FinalProject.assets.users_db.load_users_db", return_value={})
-    @patch("FinalProject.assets.users_db.save_users_db")
+    @patch("src.assets.users_db.load_users_db", return_value={})
+    @patch("src.assets.users_db.save_users_db")
     def test_add_user_to_db(self, mock_save_users_db, mock_load_users_db) -> None:
         """
         Test case for adding a new user to the user´s database.
@@ -178,7 +178,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks attempting to add a user with an existing username
-    @patch("FinalProject.assets.users_db.load_users_db", return_value={
+    @patch("src.assets.users_db.load_users_db", return_value={
         "existinguser": {"email": "existinguser@example.com", "password_hash": "hash"}})
     def test_add_user_to_db_existing_user(self, mock_load_users_db) -> None:
         """
@@ -193,7 +193,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks getting a user by their username
-    @patch("FinalProject.assets.users_db.load_users_db",
+    @patch("src.assets.users_db.load_users_db",
            return_value={"user": {"email": "user@example.com", "password_hash": "hash"}})
     def test_get_user_by_username(self, mock_load_users_db) -> None:
         """
@@ -207,7 +207,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks getting a user by their email address
-    @patch("FinalProject.assets.users_db.load_users_db",
+    @patch("src.assets.users_db.load_users_db",
            return_value={"user": {"email": "user@example.com", "password_hash": "hash"}})
     def test_get_user_by_email(self, mock_load_users_db) -> None:
         """
@@ -240,7 +240,7 @@ class TestUsersDb(unittest.TestCase):
 
 
     # Mocks checking if a username already exists in the database
-    @patch("FinalProject.assets.users_db.load_users_db",
+    @patch("src.assets.users_db.load_users_db",
            return_value={"existinguser": {"email": "existinguser@example.com",
                                           "password_hash": "hash"}})
     def test_username_exists(self, mock_load_users_db) -> None:
