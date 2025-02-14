@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QMessa
 from src.assets.dashboard_window_setup import (setup_dashboard_window, setup_dashboard_ui,
                                                setup_dashboard_menu, setup_graph_container)
 from src.assets.graph_widget import GraphWidget
-from src.assets.impulse_buying_data.data_dictionary import school, income
+from src.assets.impulse_buying_data.data_dictionary import school, income, gender
 from src.styles.styles import STYLES, style_feedback_label
 from src.visualization.charts.base import visualize_survey_responses, build_question_selector
 
@@ -307,19 +307,19 @@ class DashboardWindow(QMainWindow):
         self.gender_button = QPushButton("Gender", self)
         self.gender_button.setFixedSize(120, 30)
         self.gender_button.setStyleSheet(STYLES["toggle_button"])
-        self.gender_button.clicked.connect(self.toggle_graph_by_gender)
+        self.gender_button.clicked.connect(lambda: self.toggle_graph("gender", gender))
         self.gender_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         self.school_button = QPushButton("School", self)
         self.school_button.setFixedSize(120, 30)
         self.school_button.setStyleSheet(STYLES["toggle_button"])
-        self.school_button.clicked.connect(self.toggle_graph_by_school)
+        self.school_button.clicked.connect(lambda: self.toggle_graph("school", school))
         self.school_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         self.income_button = QPushButton("Income", self)
         self.income_button.setFixedSize(120, 30)
         self.income_button.setStyleSheet(STYLES["toggle_button"])
-        self.income_button.clicked.connect(self.toggle_graph_by_income)
+        self.income_button.clicked.connect(lambda: self.toggle_graph("income", income))
         self.income_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         self.reset_button = QPushButton("Reset", self)
@@ -351,56 +351,39 @@ class DashboardWindow(QMainWindow):
         self.show_graph(
             distinction_by=None)  # Call show_graph without any distinction to show the original graph
 
-    def toggle_graph_by_gender(self) -> None:
-        """Toggle between displaying graph by gender and the original graph."""
-        if self.current_graph == 'gender':
-            # If already in gender, revert to the original graph
+    def toggle_graph(self, graph_type: str, filters: dict) -> None:
+        """
+        Toggle between displaying a specialized graph view and the original/default view.
+        Handles graph state management and UI synchronization for filter controls.
+        :param graph_type: Type of distinction to apply.
+            Valid values: 'gender', 'school', 'income'
+        :param filters: Dictionary containing default filter values for each graph type.
+            Format: {graph_type: default_filter_value}
+        """
+        # Check if requested graph type is already active
+        if self.current_graph == graph_type:
+            # If already in the specified graph type, revert to the original graph
             self.current_graph = 'original'
-            self.current_distinction = None
+            self.current_distinction = None # Clear active distinction
             self.show_graph()
-
         else:
-            # Otherwise, display the graph by gender
-            self.current_graph = 'gender'
-            self.current_distinction = "gender"
-            self.show_graph(distinction_by="gender", gender_filter="Male")
+            # Otherwise, display the graph by the specified type
+            self.current_graph = graph_type         # Set current active graph type
+            self.current_distinction = graph_type   # Track active distinction category
 
-            # Force initial style on gender buttons
-            self._handle_gender_filter("Male")
+            # Get the default filter value for the graph type
+            default_filter_value = list(filters.values())[0]
 
-
-    def toggle_graph_by_school(self) -> None:
-        """Toggle between displaying graph by school and the original graph."""
-        if self.current_graph == 'school':
-            # If the graph is currently by school, revert to the original graph
-            self.current_graph = 'original'  # Set the current graph to original
-            self.current_distinction = None  # Reset the distinction
-            self.show_graph()
-
-        else:
-            # If not, show the graph by school
-            self.current_graph = 'school'  # Set the current graph to school
-            self.current_distinction = "school"  # Set the distinction to school
-            default_school = list(school.values())[0]
-            self.show_graph(distinction_by="school", school_filter=default_school)
-            # Update combobox with default value
-            if hasattr(self, 'school_combobox'):
-                self.school_combobox.setCurrentText(default_school)
-
-
-    def toggle_graph_by_income(self) -> None:
-        """Toggle between displaying graph by income and the original graph."""
-        if self.current_graph == 'income':
-            # If the current graph is by income, revert to the original graph
-            self.current_graph = 'original'  # Set the current graph to original
-            self.current_distinction = None  # Reset the distinction
-            self.show_graph()  # Call show_graph without any distinction to show the original graph
-        else:
-            # If not, show the graph by income
-            self.current_graph = 'income'  # Set the current graph to income
-            self.current_distinction = "income"  # Set the distinction to income
-            default_income = list(income.values())[0]
-            self.show_graph(distinction_by="income", income_filter=default_income)
+            # Show the graph with the default filter
+            self.show_graph(
+                distinction_by=graph_type,
+                **{f"{graph_type}_filter": default_filter_value}
+            )
+            # Handle UI updates based on the graph type
+            if graph_type == "gender":
+                self._handle_gender_filter("Male")
+            elif graph_type == "school" and hasattr(self, 'school_combobox'):
+                self.school_combobox.setCurrentText(default_filter_value)
 
 
     def download_xlsx(self) -> None:
