@@ -78,7 +78,6 @@ ensuring an interactive and functional graphical experience.
 │   │   ├── graphics.py                     # Graphics related functions
 │   │   ├── preprocess.py                   # Data preprocessing script                    
 │   │   ├── regex.py                        # Regular expressions (e.g., for validating emails)
-│   │   ├── UMLDiagram.xml                  # UML Diagram in XML format
 │   │   ├── users_db.json                   # User database
 │   │   ├── users_db.py                     # User database functions
 │   │   ├── utils.py                        # Utility functions (e.g., displaying messages)
@@ -130,6 +129,8 @@ ensuring an interactive and functional graphical experience.
 │   │   ├── test_registration_window.py     # Tests for the `registration_window.py` (user registration window)         
 │   │   └── __init__.py                     # Empty file to import the tests_windows module
 │   └── __init__.py                         # Empty file to import the tests package
+├── docs/
+│   └── UMLDiagram.xml                      # UML Diagram in XML format
 │ 
 ├── CHANGELOG.md                            # Project change log
 ├── LICENSE.md                              # License for the project
