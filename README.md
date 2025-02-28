@@ -1,8 +1,21 @@
 # Impulse Buying Factors on TikTok Shop
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-DavidCruzGomez-blue?logo=github&logoColor=white)](https://github.com/DavidCruzGomez)
 
 
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Project Features](#project-features)
+3. [Technologies Used](#technologies-used)
+4. [Windows](#windows)
+5. [Directory Structure](#directory-structure)
+6. [Installation](#installation)
+7. [Usage](#usage)
+8. [Testing](#testing)
+9. [Owner](#owner)
+
+## Introduction
 This is a Final Project created by David Cruz Gómez.
 Project Description: This project, is an application that simulates
 a login system, user registration, and password recovery for a data
@@ -14,19 +27,19 @@ ensuring an interactive and functional graphical experience.
 ## Project Features:
 
 ### User Management:
-- **Registration**: Allows users to create an account by providing basic information.
-- **Login**: Secure access to the system using credentials.
-- **Password Recovery**: Offers a process to recover passwords in case of loss.
+- 💼**Registration**: Allows users to create an account by providing basic information.
+- 🔒**Login**: Secure access to the system using credentials.
+- 🔑**Password Recovery**: Offers a process to recover passwords in case of loss.
 
 ### Data Analysis Interface:
-- **Data Preview**: Displays a quick preview of the DataFrame related to impulse buying factors.
-- **Descriptive Statistics**: Provides a statistical summary (mean, median, standard deviation, etc.).
-- **Data Download**: Users can download the data file if it's not already available.
-- **Data Preprocessing**: Tools for cleaning the DataFrame (handling missing values, removing duplicates, etc.).
+- 📊**Data Preview**: Displays a quick preview of the DataFrame related to impulse buying factors.
+- 📈**Descriptive Statistics**: Provides a statistical summary (mean, median, standard deviation, etc.).
+- 📥**Data Download**: Users can download the data file if it's not already available.
+- 🛠️**Data Preprocessing**: Tools for cleaning the DataFrame (handling missing values, removing duplicates, etc.).
 
 ### Graph Visualization:
-- **Customizable Graphs**: Create customizable graphs based on the DataFrame.
-- **Graph Exporting**: Users can save the generated graphs in formats like PNG or JPG.
+- 📉**Customizable Graphs**: Create customizable graphs based on the DataFrame.
+- 🖼️**Graph Exporting**: Users can save the generated graphs in formats like PNG or JPG.
 
 ## Technologies Used:
 - **PySide6**: For creating the graphical user interface (GUI).
