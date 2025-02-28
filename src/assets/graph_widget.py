@@ -34,7 +34,7 @@ Key Features:
 """
 # Third-party imports
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QSizePolicy, QFileDialog)
+from PySide6.QtWidgets import (QSizePolicy, QFileDialog, QInputDialog)
 from matplotlib.backend_bases import MouseEvent
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
@@ -71,6 +71,7 @@ class GraphWidget(FigureCanvas):
         self._dragging: bool = False
         self._last_x: float | None = None
         self._last_y: float | None = None
+        self._annotations: dict = {}
 
         # Connect mouse events for click, release, and movement
         self.mpl_connect('button_press_event', self.on_click)
@@ -90,6 +91,9 @@ class GraphWidget(FigureCanvas):
         - H: Show help instructions
         - T: Toggle grid visibility
         - Arrow keys: Pan the graph (Up, Down, Left, Right)
+        - A: Add an annotation to the graph
+        - D: Delete the last added annotation
+        - L: Toggle the visibility of the graph legend
         """
         if event.key() == Qt.Key_R:  # Reset view
             self.reset_zoom()
@@ -123,6 +127,16 @@ class GraphWidget(FigureCanvas):
             self.pan_view(1, 0)
             print("➡️ [MOVE] Panned right.")
 
+        elif event.key() == Qt.Key_A:  # Add annotation
+            self.add_annotation()
+
+        elif event.key() == Qt.Key_D:  # Delete last annotation
+            self.delete_last_annotation()
+
+        elif event.key() == Qt.Key_L:  # Toggle legend
+            self.toggle_legend()
+
+
     def show_help(self) -> None:
         """
         Display a help dialog showing keyboard shortcuts and instructions
@@ -136,6 +150,9 @@ class GraphWidget(FigureCanvas):
         - Press 'R' to reset the zoom to the full data area.
         - Press 'S' to save the current graph as an image.
         - Press 'T' to toggle the grid visibility.
+        - Press 'A' to add annotation
+        - Press 'D' to delete last annotation
+        - Press 'L' to Toggle legend
         - Click on the graph to see the X and Y positions at the mouse location.
         - Drag the mouse to pan the graph.
 
@@ -317,6 +334,48 @@ class GraphWidget(FigureCanvas):
         axis.grid(not current_grid)  # Toggle the grid state
         axis._axisbelow = not current_grid
         self.draw()  # Redraw the plot
+
+
+    def add_annotation(self) -> None:
+        """Add a text annotation at the clicked position."""
+        text, ok = QInputDialog.getText(self, 'Add Annotation', 'Enter annotation text:')
+        if ok and text:
+            axis = self.figure.gca()
+            if self._last_x is not None and self._last_y is not None:
+                annotation = axis.annotate(
+                    text,
+                    xy=(self._last_x, self._last_y),
+                    xytext=(10, 10),
+                    textcoords='offset points',
+                    bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5),
+                    arrowprops=dict(arrowstyle='->')
+                )
+                self._annotations[text] = annotation
+                self.draw()
+                print(f"📝 [INFO] Added annotation: {text}")
+
+
+    def delete_last_annotation(self) -> None:
+        """Remove the last added annotation."""
+        if self._annotations:
+            last_key = list(self._annotations.keys())[-1]
+            annotation = self._annotations.pop(last_key)
+            annotation.remove()
+            self.draw()
+            print("🗑️ [INFO] Removed last annotation")
+
+
+    def toggle_legend(self) -> None:
+        """Toggle the visibility of the graph legend."""
+        axis = self.figure.gca()
+        legend = axis.get_legend()
+        if legend is None:
+            axis.legend()
+        else:
+            legend.remove()
+        self.draw()
+        print("📊 [INFO] Toggled legend visibility")
+
 
     def save_figure(self) -> None:
         """Open a file dialog to save the current graph as an image file."""
